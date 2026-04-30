@@ -116,9 +116,22 @@ Edit `@theme` tokens in `src/styles/global.css`.
 
 Run `pnpm install` first. If those errors persist after install, delete `node_modules` and `.astro/`, then reinstall.
 
-### Editor flags `import.meta.env` errors but `pnpm typecheck` is clean
+### Editor flags `import.meta.env` errors (TS1343) but `pnpm typecheck` is clean
 
-The editor's TypeScript language server is using its default config, not Astro's. `astro check` is the source of truth. Restart the TS server in your editor or run `pnpm exec astro sync` to regenerate `.astro/types.d.ts`.
+`astro check` is the source of truth. The editor's TypeScript language server isn't picking up `"module": "ESNext"` from Astro's preset (it lives in `node_modules/astro/tsconfigs/base.json`, two `extends` levels deep). First try restarting the TS server and `pnpm exec astro sync`. If the noise persists, set the value directly in `tsconfig.json` to override Astro's preset for the LSP:
+
+```json
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler"
+    // …existing options
+  }
+}
+```
+
+This duplicates settings that `astro check` already gets right, so only do it if the editor warning is bothering you.
 
 ### Inquiry form returns `500 {"error":"Server misconfigured"}`
 
