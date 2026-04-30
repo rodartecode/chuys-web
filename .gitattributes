@@ -1,0 +1,16 @@
+# Normalize line endings to LF in the repo (silences CRLF warnings on WSL/Windows checkouts)
+* text=auto eol=lf
+
+# Collapse the lockfile in PR diffs and exclude from GitHub language stats
+pnpm-lock.yaml linguist-generated
+
+# Force-binary common asset types so git never tries to diff or normalize them
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.avif  binary
+*.gif   binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
