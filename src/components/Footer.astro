@@ -1,0 +1,153 @@
+---
+// TODO: fill in real socials, phone, email, address
+const phone = "+15555555555";
+const phoneDisplay = "(555) 555-5555";
+const email = "hello@chuys-tacos.example.com";
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="brand-block">
+      <span class="brand-mark" aria-hidden="true">CT</span>
+      <p class="brand-name">Chuy's Tacos</p>
+      <p class="tagline">Tacos hechos con cariño.</p>
+    </div>
+
+    <div class="links">
+      <h4>Visit</h4>
+      <ul>
+        <li>123 Main Street</li>
+        <li>City, ST 00000</li>
+        <li>
+          <a href={`tel:${phone}`}>{phoneDisplay}</a>
+        </li>
+        <li>
+          <a href={`mailto:${email}`}>{email}</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="links">
+      <h4>Explore</h4>
+      <ul>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#catering">Catering</a></li>
+        <li><a href="#contact">Request a Quote</a></li>
+      </ul>
+    </div>
+
+    <div class="links">
+      <h4>Follow</h4>
+      <ul>
+        {/* TODO: replace # with real social URLs */}
+        <li><a href="#">Instagram</a></li>
+        <li><a href="#">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="legal">
+    <p>© {year} Chuy's Tacos. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--color-charcoal);
+    color: color-mix(in srgb, var(--color-cream) 85%, transparent);
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .brand-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-cream);
+    margin: 0 0 0.4rem;
+  }
+
+  .tagline {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-cream) 65%, transparent);
+    font-style: italic;
+  }
+
+  .links h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--color-mustard);
+    margin: 0 0 0.75rem;
+    font-family: var(--font-body);
+    font-weight: 700;
+  }
+
+  .links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-size: 0.92rem;
+  }
+
+  .links a {
+    color: color-mix(in srgb, var(--color-cream) 80%, transparent);
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    color: var(--color-mustard);
+  }
+
+  .legal {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid color-mix(in srgb, var(--color-cream) 12%, transparent);
+    font-size: 0.85rem;
+    color: color-mix(in srgb, var(--color-cream) 55%, transparent);
+  }
+
+  .legal p {
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

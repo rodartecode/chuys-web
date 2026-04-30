@@ -1,0 +1,201 @@
+---
+// TODO: replace every placeholder with real values
+const address = {
+  line1: "123 Main Street",
+  line2: "Suite 100",
+  city: "City",
+  state: "ST",
+  zip: "00000",
+};
+const phone = "+15555555555";
+const phoneDisplay = "(555) 555-5555";
+const email = "hello@chuys-tacos.example.com";
+
+const hours = [
+  { day: "Mon – Thu", value: "11:00 AM – 9:00 PM" },
+  { day: "Fri – Sat", value: "11:00 AM – 10:00 PM" },
+  { day: "Sunday", value: "12:00 PM – 8:00 PM" },
+];
+
+const mapsQuery = encodeURIComponent(
+  `${address.line1}, ${address.city}, ${address.state} ${address.zip}`
+);
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
+---
+
+<section id="visit" class="visit">
+  <div class="container">
+    <div class="info">
+      <p class="eyebrow">Visit Us</p>
+      <h2>Find the trompo.</h2>
+
+      <address>
+        <strong>{address.line1}</strong><br />
+        {address.line2 && <>{address.line2}<br /></>}
+        {address.city}, {address.state} {address.zip}
+      </address>
+
+      <p class="contact-line">
+        <a href={`tel:${phone}`}>{phoneDisplay}</a>
+        <span aria-hidden="true">·</span>
+        <a href={`mailto:${email}`}>{email}</a>
+      </p>
+
+      <a class="directions" href={mapsUrl} target="_blank" rel="noreferrer noopener">
+        Get Directions
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+
+    <div class="hours">
+      <h3>Hours</h3>
+      <ul>
+        {
+          hours.map((row) => (
+            <li>
+              <span class="day">{row.day}</span>
+              <span class="value">{row.value}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="note">
+        Closed for major holidays. Catering available 7 days a week —
+        <a href="#contact">request a quote</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .visit {
+    padding: 5rem 1.5rem;
+  }
+
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-terracotta);
+    margin: 0 0 0.75rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    margin: 0 0 1.5rem;
+  }
+
+  address {
+    font-style: normal;
+    line-height: 1.6;
+    color: var(--color-charcoal-soft);
+    font-size: 1.05rem;
+    margin: 0 0 1rem;
+  }
+
+  .contact-line {
+    margin: 0 0 1.5rem;
+    color: var(--color-muted);
+  }
+
+  .contact-line a {
+    color: var(--color-terracotta);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .contact-line span {
+    margin: 0 0.5rem;
+    color: var(--color-muted);
+  }
+
+  .directions {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--color-charcoal);
+    color: var(--color-cream);
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .directions:hover {
+    background: var(--color-charcoal-soft);
+  }
+
+  .hours {
+    background: var(--color-cream-card);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+    border-radius: 1rem;
+    padding: 1.75rem;
+  }
+
+  .hours h3 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+  }
+
+  .hours ul {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hours li {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed color-mix(in srgb, var(--color-charcoal) 12%, transparent);
+  }
+
+  .hours li:last-of-type {
+    border-bottom: none;
+  }
+
+  .day {
+    color: var(--color-muted);
+    font-size: 0.95rem;
+  }
+
+  .value {
+    color: var(--color-charcoal);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .note {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .note a {
+    color: var(--color-terracotta);
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>

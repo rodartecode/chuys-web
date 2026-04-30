@@ -1,0 +1,139 @@
+---
+// TODO: replace tel: number with real business phone
+const phone = "+15555555555";
+const phoneDisplay = "(555) 555-5555";
+---
+
+<section class="hero" id="top">
+  <div class="bg" aria-hidden="true"></div>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <div class="content">
+    <p class="eyebrow">Family-owned · Catering · Authentic Tacos</p>
+    <h1>
+      Tacos hechos<br />
+      <span class="accent">con cariño</span>
+    </h1>
+    <p class="lede">
+      Authentic tacos and full-service catering for weddings, corporate events, and backyard
+      parties — from our family kitchen to yours.
+    </p>
+
+    <div class="cta-row">
+      <a class="cta-primary" href="#contact">Request a Catering Quote</a>
+      <a class="cta-secondary" href={`tel:${phone}`}>
+        <span aria-hidden="true">📞</span>
+        {phoneDisplay}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: clamp(32rem, 78vh, 44rem);
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* TODO: swap .bg for an actual <Image /> when hero photo is provided. Solid gradient placeholder for now. */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-mustard) 70%, transparent), transparent 55%),
+      radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--color-terracotta) 75%, transparent), transparent 60%),
+      linear-gradient(135deg, var(--color-charcoal) 0%, var(--color-charcoal-soft) 100%);
+    z-index: -2;
+  }
+
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(31, 22, 17, 0.15) 0%,
+      rgba(31, 22, 17, 0.55) 100%
+    );
+    z-index: -1;
+  }
+
+  .content {
+    max-width: 56rem;
+    padding: 4rem 1.5rem 5rem;
+    text-align: center;
+    color: var(--color-cream);
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-mustard);
+    margin: 0 0 1.25rem;
+  }
+
+  h1 {
+    font-size: clamp(2.6rem, 6vw, 4.75rem);
+    line-height: 1.05;
+    margin: 0 0 1.25rem;
+    color: var(--color-cream);
+  }
+
+  .accent {
+    color: var(--color-mustard);
+    font-style: italic;
+  }
+
+  .lede {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    line-height: 1.55;
+    max-width: 38rem;
+    margin: 0 auto 2rem;
+    color: color-mix(in srgb, var(--color-cream) 88%, transparent);
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .cta-primary,
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.5rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: transform 150ms ease, background-color 150ms ease;
+  }
+
+  .cta-primary {
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+  }
+
+  .cta-primary:hover {
+    background: var(--color-terracotta-dark);
+    transform: translateY(-1px);
+  }
+
+  .cta-secondary {
+    background: color-mix(in srgb, var(--color-cream) 12%, transparent);
+    color: var(--color-cream);
+    border: 1px solid color-mix(in srgb, var(--color-cream) 30%, transparent);
+  }
+
+  .cta-secondary:hover {
+    background: color-mix(in srgb, var(--color-cream) 20%, transparent);
+  }
+</style>

@@ -1,0 +1,314 @@
+---
+const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fundraiser", "Other"];
+---
+
+<section id="contact" class="contact">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">Get in Touch</p>
+      <h2>Request a catering quote.</h2>
+      <p class="sub">
+        Tell us about your event and we'll get back to you within 1 business day with a tailored
+        menu and quote.
+      </p>
+    </header>
+
+    <form class="inquiry-form" data-testid="inquiry-form" novalidate>
+      {/* Honeypot — bots fill this; humans don't see it */}
+      <div class="sr-only" aria-hidden="true">
+        <label for="company">Leave this field empty</label>
+        <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="name">Name <span class="req">*</span></label>
+          <input id="name" name="name" type="text" required autocomplete="name" />
+        </div>
+        <div class="field">
+          <label for="email">Email <span class="req">*</span></label>
+          <input id="email" name="email" type="email" required autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="eventDate">Event date <span class="req">*</span></label>
+          <input id="eventDate" name="eventDate" type="date" required />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="guestCount">Guest count <span class="req">*</span></label>
+          <input id="guestCount" name="guestCount" type="number" min="1" max="2000" required />
+        </div>
+        <div class="field">
+          <label for="eventType">Event type</label>
+          <select id="eventType" name="eventType">
+            {eventTypes.map((t) => <option value={t}>{t}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Anything else we should know?</label>
+        <textarea id="message" name="message" rows="5"
+          placeholder="Dietary needs, venue, time of day, anything fun about the event…"
+        ></textarea>
+      </div>
+
+      <button type="submit" class="submit">
+        <span class="submit-label">Send Inquiry</span>
+        <span class="submit-loading" aria-hidden="true">Sending…</span>
+      </button>
+
+      <div class="status" role="status" aria-live="polite">
+        <p class="status-success">Thanks! We've got your inquiry and will reply within 1 business day.</p>
+        <p class="status-error">
+          Something went wrong. Please try again or email us directly.
+        </p>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding: 5rem 1.5rem;
+    background: var(--color-charcoal);
+    color: var(--color-cream);
+  }
+
+  .container {
+    max-width: 44rem;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-mustard);
+    margin: 0 0 0.75rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    margin: 0 0 0.75rem;
+    color: var(--color-cream);
+  }
+
+  .sub {
+    color: color-mix(in srgb, var(--color-cream) 75%, transparent);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .inquiry-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: color-mix(in srgb, var(--color-cream) 85%, transparent);
+  }
+
+  .req {
+    color: var(--color-mustard);
+  }
+
+  input,
+  select,
+  textarea {
+    background: color-mix(in srgb, var(--color-cream) 6%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-cream) 18%, transparent);
+    color: var(--color-cream);
+    border-radius: 0.6rem;
+    padding: 0.7rem 0.85rem;
+    font: inherit;
+    font-size: 0.95rem;
+    transition: border-color 150ms ease, background 150ms ease;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--color-mustard);
+    background: color-mix(in srgb, var(--color-cream) 10%, transparent);
+    outline: none;
+  }
+
+  input.invalid,
+  textarea.invalid,
+  select.invalid {
+    border-color: #e87a5d;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 7rem;
+  }
+
+  .submit {
+    align-self: flex-start;
+    background: var(--color-mustard);
+    color: var(--color-charcoal);
+    border: none;
+    padding: 0.95rem 1.75rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+    min-width: 12rem;
+    transition: transform 150ms ease, background-color 150ms ease;
+  }
+
+  .submit:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--color-mustard) 88%, white);
+  }
+
+  .submit:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .submit-loading {
+    display: none;
+  }
+
+  .submit.is-loading .submit-label {
+    display: none;
+  }
+
+  .submit.is-loading .submit-loading {
+    display: inline;
+  }
+
+  .status p {
+    display: none;
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border-radius: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  .status.show-success .status-success {
+    display: block;
+    background: color-mix(in srgb, var(--color-leaf) 35%, transparent);
+    color: var(--color-cream);
+  }
+
+  .status.show-error .status-error {
+    display: block;
+    background: color-mix(in srgb, #b34a2a 35%, transparent);
+    color: var(--color-cream);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+    .submit {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const form = document.querySelector(".inquiry-form") as HTMLFormElement | null;
+  if (form) {
+    const submit = form.querySelector(".submit") as HTMLButtonElement;
+    const status = form.querySelector(".status") as HTMLElement;
+
+    const markValidity = (field: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
+      if (!field.checkValidity()) {
+        field.classList.add("invalid");
+        return false;
+      }
+      field.classList.remove("invalid");
+      return true;
+    };
+
+    form.querySelectorAll<HTMLInputElement>("input, select, textarea").forEach((field) => {
+      field.addEventListener("blur", () => {
+        if (field.value) markValidity(field);
+      });
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      status.classList.remove("show-success", "show-error");
+
+      const required = form.querySelectorAll<HTMLInputElement>("[required]");
+      let ok = true;
+      required.forEach((field) => {
+        if (!markValidity(field)) ok = false;
+      });
+      if (!ok) return;
+
+      const fd = new FormData(form);
+      const payload = Object.fromEntries(fd.entries());
+
+      submit.classList.add("is-loading");
+      submit.disabled = true;
+
+      try {
+        const res = await fetch("/api/inquiry", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const json = (await res.json().catch(() => ({}))) as { ok?: boolean };
+        if (!res.ok || !json.ok) throw new Error("inquiry failed");
+
+        status.classList.add("show-success");
+        form.reset();
+      } catch {
+        status.classList.add("show-error");
+      } finally {
+        submit.classList.remove("is-loading");
+        submit.disabled = false;
+      }
+    });
+  }
+</script>

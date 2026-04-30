@@ -1,0 +1,214 @@
+---
+const navLinks = [
+  { href: "#menu", label: "Menu" },
+  { href: "#about", label: "About" },
+  { href: "#catering", label: "Catering" },
+  { href: "#visit", label: "Visit" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<header class="site-header">
+  <div class="bar">
+    <a href="#top" class="brand" aria-label="Chuy's Tacos — home">
+      <span class="brand-mark" aria-hidden="true">CT</span>
+      <span class="brand-name">Chuy's Tacos</span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Primary">
+      <ul>
+        {
+          navLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <a class="cta" href="#contact">Request a Quote</a>
+
+    <details class="nav-mobile" aria-label="Primary navigation">
+      <summary aria-label="Open menu">
+        <span class="bar-icon" aria-hidden="true"></span>
+        <span class="bar-icon" aria-hidden="true"></span>
+        <span class="bar-icon" aria-hidden="true"></span>
+      </summary>
+      <ul>
+        {
+          navLinks.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="cta cta-mobile" href="#contact">
+            Request a Quote
+          </a>
+        </li>
+      </ul>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: color-mix(in srgb, var(--color-cream) 92%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+  }
+
+  .bar {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 0.875rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--color-charcoal);
+  }
+
+  .brand-mark {
+    display: inline-grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .brand-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+
+  .nav-desktop {
+    margin-left: auto;
+  }
+
+  .nav-desktop ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .nav-desktop a {
+    color: var(--color-charcoal-soft);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .nav-desktop a:hover {
+    color: var(--color-terracotta);
+  }
+
+  .cta {
+    display: inline-block;
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background-color 150ms ease;
+  }
+
+  .cta:hover {
+    background: var(--color-terracotta-dark);
+  }
+
+  .nav-mobile {
+    display: none;
+    margin-left: auto;
+    position: relative;
+  }
+
+  .nav-mobile summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .nav-mobile summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .bar-icon {
+    width: 22px;
+    height: 2px;
+    background: var(--color-charcoal);
+    border-radius: 2px;
+  }
+
+  .nav-mobile ul {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+    background: var(--color-cream-card);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 10%, transparent);
+    border-radius: 0.75rem;
+    min-width: 12rem;
+    box-shadow: 0 16px 40px -16px rgba(31, 22, 17, 0.25);
+  }
+
+  .nav-mobile li + li {
+    margin-top: 0.15rem;
+  }
+
+  .nav-mobile a {
+    display: block;
+    padding: 0.6rem 0.75rem;
+    color: var(--color-charcoal);
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-size: 0.95rem;
+  }
+
+  .nav-mobile a:hover {
+    background: color-mix(in srgb, var(--color-terracotta) 10%, transparent);
+  }
+
+  .cta-mobile {
+    margin-top: 0.4rem;
+    text-align: center;
+    color: var(--color-cream) !important;
+    background: var(--color-terracotta);
+  }
+
+  @media (max-width: 768px) {
+    .nav-desktop,
+    .bar > .cta {
+      display: none;
+    }
+    .nav-mobile {
+      display: block;
+    }
+  }
+</style>

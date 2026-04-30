@@ -1,0 +1,204 @@
+---
+// TODO: confirm package names, descriptions, and pricing with the owners
+const packages = [
+  {
+    name: "Taco Bar",
+    blurb:
+      "Build-your-own taco station with two proteins, fresh tortillas, salsas, and all the fixings. Great for weddings and big parties.",
+    minGuests: "25+ guests",
+    pricing: "Starting at $TBD / person",
+  },
+  {
+    name: "Party Pack",
+    blurb:
+      "Pre-portioned trays of tacos, rice, beans, and chips. Easy drop-off, serves a crowd, ready to set out.",
+    minGuests: "10+ guests",
+    pricing: "Starting at $TBD / person",
+  },
+  {
+    name: "Corporate Lunch",
+    blurb:
+      "Boxed taco meals delivered to the office, complete with sides, salsa, and dessert. Vegetarian options included.",
+    minGuests: "12+ guests",
+    pricing: "Starting at $TBD / person",
+  },
+];
+---
+
+<section id="catering" class="catering">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">Catering</p>
+      <h2>We bring the taqueria to you.</h2>
+      <p class="sub">
+        Three ways to cater your event. Every package is fully customizable — tell us about your
+        event and we'll build a menu around it.
+      </p>
+    </header>
+
+    <ul class="grid">
+      {
+        packages.map((pkg) => (
+          <li class="card">
+            <h3>{pkg.name}</h3>
+            <p class="blurb">{pkg.blurb}</p>
+            <ul class="meta">
+              <li>{pkg.minGuests}</li>
+              <li>{pkg.pricing}</li>
+            </ul>
+            <a class="card-cta" href="#contact">
+              Request this package →
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="banner">
+      <div>
+        <h3>Don't see what you need?</h3>
+        <p>
+          We do weddings, quinceañeras, taco bars, fundraisers — and a lot of things in between.
+        </p>
+      </div>
+      <a class="banner-cta" href="#contact">Tell us about your event</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .catering {
+    padding: 5rem 1.5rem;
+    background:
+      linear-gradient(180deg, var(--color-cream) 0%, color-mix(in srgb, var(--color-mustard) 12%, var(--color-cream)) 100%);
+  }
+
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    text-align: center;
+    max-width: 38rem;
+    margin: 0 auto 3rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-terracotta);
+    margin: 0 0 0.75rem;
+  }
+
+  .section-head h2 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .section-head .sub {
+    color: var(--color-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .grid {
+    list-style: none;
+    margin: 0 0 3rem;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--color-cream-card);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+    border-radius: 1rem;
+    padding: 1.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .card h3 {
+    font-size: 1.5rem;
+    margin: 0;
+    color: var(--color-charcoal);
+  }
+
+  .blurb {
+    color: var(--color-charcoal-soft);
+    line-height: 1.55;
+    margin: 0;
+    flex: 1;
+  }
+
+  .meta {
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+  }
+
+  .meta li::before {
+    content: "•";
+    color: var(--color-terracotta);
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+
+  .card-cta {
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    color: var(--color-terracotta);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .card-cta:hover {
+    color: var(--color-terracotta-dark);
+  }
+
+  .banner {
+    background: var(--color-charcoal);
+    color: var(--color-cream);
+    border-radius: 1rem;
+    padding: 2rem 2.25rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .banner h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.4rem;
+  }
+
+  .banner p {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-cream) 80%, transparent);
+  }
+
+  .banner-cta {
+    background: var(--color-mustard);
+    color: var(--color-charcoal);
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 150ms ease;
+  }
+
+  .banner-cta:hover {
+    transform: translateY(-1px);
+  }
+</style>

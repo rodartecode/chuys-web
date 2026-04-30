@@ -1,0 +1,144 @@
+---
+import { menuHighlights } from "@data/menu";
+---
+
+<section id="menu" class="menu">
+  <div class="container">
+    <header class="section-head">
+      <p class="eyebrow">From the Kitchen</p>
+      <h2>Signature tacos</h2>
+      <p class="sub">
+        Six tacos, six personalities. Every one made with masa pressed in-house and salsas built
+        from scratch.
+      </p>
+    </header>
+
+    <ul class="grid">
+      {
+        menuHighlights.map((item) => (
+          <li class="card">
+            <div class="thumb" aria-hidden="true">
+              <span>{item.name.charAt(0)}</span>
+            </div>
+            <div class="body">
+              <h3>{item.name}</h3>
+              <p>{item.description}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="footer-note">
+      {/* TODO: link to a downloadable PDF menu when available */}
+      Want the full menu? <a href="#contact">Get in touch</a> and we'll send it over.
+    </p>
+  </div>
+</section>
+
+<style>
+  .menu {
+    padding: 5rem 1.5rem;
+  }
+
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+  }
+
+  .section-head {
+    text-align: center;
+    max-width: 38rem;
+    margin: 0 auto 3rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-terracotta);
+    margin: 0 0 0.75rem;
+  }
+
+  .section-head h2 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    margin: 0 0 0.75rem;
+  }
+
+  .section-head .sub {
+    color: var(--color-muted);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .card {
+    background: var(--color-cream-card);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+    border-radius: 1rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px -22px rgba(31, 22, 17, 0.35);
+  }
+
+  /* TODO: replace .thumb placeholder with <Image /> using item.imagePath */
+  .thumb {
+    aspect-ratio: 4 / 3;
+    background:
+      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--color-mustard) 60%, transparent), transparent 60%),
+      linear-gradient(135deg, var(--color-terracotta) 0%, var(--color-terracotta-dark) 100%);
+    display: grid;
+    place-items: center;
+  }
+
+  .thumb span {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-cream);
+    opacity: 0.85;
+  }
+
+  .body {
+    padding: 1.1rem 1.25rem 1.4rem;
+  }
+
+  .body h3 {
+    font-size: 1.25rem;
+    margin: 0 0 0.4rem;
+    color: var(--color-charcoal);
+  }
+
+  .body p {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .footer-note {
+    text-align: center;
+    margin-top: 2.5rem;
+    color: var(--color-muted);
+  }
+
+  .footer-note a {
+    color: var(--color-terracotta);
+    font-weight: 600;
+  }
+</style>

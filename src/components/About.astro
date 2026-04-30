@@ -1,0 +1,108 @@
+---
+// TODO: replace placeholder story with the real family origin story and founding year
+const foundingYear = "TODO";
+---
+
+<section id="about" class="about">
+  <div class="container">
+    <div class="text">
+      <p class="eyebrow">Our Story</p>
+      <h2>A family recipe, served at your table.</h2>
+      <p>
+        Chuy's Tacos has been a family kitchen since {foundingYear}. What started as a backyard
+        taquiza for friends and neighbors grew into a small business — same masa, same salsas, same
+        people behind the trompo.
+      </p>
+      <p>
+        Whether you're stopping in for lunch or hosting 200 guests, we cook every taco like
+        we're cooking for family. Because most days, we are.
+      </p>
+    </div>
+
+    <div class="aside" aria-hidden="true">
+      <span class="quote-mark">"</span>
+      <p class="quote">
+        TODO: insert a short pull quote — something the owner said once, or a customer review.
+      </p>
+      <p class="quote-attribution">— TODO Attribution</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    padding: 5rem 1.5rem;
+    background: var(--color-cream-card);
+  }
+
+  .container {
+    max-width: 72rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-terracotta);
+    margin: 0 0 0.75rem;
+  }
+
+  h2 {
+    font-size: clamp(2rem, 3.5vw, 2.75rem);
+    margin: 0 0 1.25rem;
+    line-height: 1.15;
+  }
+
+  .text p {
+    color: var(--color-charcoal-soft);
+    line-height: 1.65;
+    margin: 0 0 1rem;
+  }
+
+  .aside {
+    background: var(--color-cream);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 8%, transparent);
+    border-left: 4px solid var(--color-terracotta);
+    border-radius: 0.75rem;
+    padding: 2rem 1.75rem;
+    position: relative;
+  }
+
+  .quote-mark {
+    position: absolute;
+    top: -0.5rem;
+    left: 1.25rem;
+    font-family: var(--font-display);
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--color-mustard);
+  }
+
+  .quote {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--color-charcoal);
+    margin: 0 0 0.75rem;
+    font-style: italic;
+  }
+
+  .quote-attribution {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+</style>
