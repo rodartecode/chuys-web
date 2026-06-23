@@ -4,31 +4,29 @@ export interface MenuItem {
   imagePath: string;
 }
 
-// TODO: replace placeholder copy and imagePath values with real content
+// Owner-supplied menu (CONTENT.md §4). TODO: photos still pending — styled
+// placeholder thumbs show until imagePath assets are added. Descriptions are
+// owner's words, lightly cleaned; flag if a longer copy pass is wanted.
 export const menuHighlights: MenuItem[] = [
   {
-    name: "Al Pastor",
-    description:
-      "Marinated pork shoulder shaved off the trompo, crowned with charred pineapple, onion, and cilantro.",
-    imagePath: "/images/menu-al-pastor.svg",
-  },
-  {
-    name: "Carnitas",
-    description:
-      "Slow-braised pork, crisped on the plancha. Served on a double corn tortilla with salsa verde.",
-    imagePath: "/images/menu-carnitas.svg",
-  },
-  {
     name: "Carne Asada",
-    description:
-      "Grilled skirt steak marinated in citrus and garlic, finished with onion, cilantro, and lime.",
+    description: "Our special blend of tri-tip, brisket, and chuck.",
     imagePath: "/images/menu-carne-asada.svg",
   },
   {
-    name: "Pollo Asado",
-    description:
-      "Achiote-marinated chicken, grilled over an open flame and served with avocado salsa.",
-    imagePath: "/images/menu-pollo-asado.svg",
+    name: "Al Pastor",
+    description: "Marinated pork.",
+    imagePath: "/images/menu-al-pastor.svg",
+  },
+  {
+    name: "Chorizo",
+    description: "Locally sourced.",
+    imagePath: "/images/menu-chorizo.svg",
+  },
+  {
+    name: "Pollo Asada",
+    description: "Grilled chicken.",
+    imagePath: "/images/menu-pollo-asada.svg",
   },
   {
     name: "Birria",
@@ -36,8 +34,13 @@ export const menuHighlights: MenuItem[] = [
     imagePath: "/images/menu-birria.svg",
   },
   {
-    name: "Veggie",
-    description: "Roasted seasonal vegetables, black beans, queso fresco, and house salsa macha.",
-    imagePath: "/images/menu-veggie.svg",
+    name: "Barbacoa",
+    description: "Super tender stewed cabeza, cachete, and labio.",
+    imagePath: "/images/menu-barbacoa.svg",
+  },
+  {
+    name: "Shrimp",
+    description: "Grilled shrimp — also available spicy, cooked with our homemade salsa.",
+    imagePath: "/images/menu-shrimp.svg",
   },
 ];
