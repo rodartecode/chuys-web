@@ -1,17 +1,22 @@
 ---
-// TODO: replace placeholder story with the real family origin story and founding year
-const foundingYear = "TODO";
+// TODO(owner): replace the first paragraph with the real family origin story and founding year.
+// TODO(owner): add a pull quote (owner line or customer review) — the aside stays hidden until set.
+interface Quote {
+  text: string;
+  attribution: string;
+}
+// Set to { text: "…", attribution: "…" } to show the aside.
+const quote = undefined as Quote | undefined;
 ---
 
 <section id="about" class="about">
-  <div class="container">
+  <div class:list={["container", { "no-quote": !quote }]}>
     <div class="text">
       <p class="eyebrow">Our Story</p>
       <h2>A family recipe, served at your table.</h2>
       <p>
-        Chuy's Tacos has been a family kitchen since {foundingYear}. What started as a backyard
-        taquiza for friends and neighbors grew into a small business — same masa, same salsas, same
-        people behind the trompo.
+        Chuy's Tacos is a family kitchen through and through — family recipes, salsas made in
+        house, and the same people behind the trompo every day.
       </p>
       <p>
         Whether you're stopping in for lunch or hosting 200 guests, we cook every taco like
@@ -19,13 +24,15 @@ const foundingYear = "TODO";
       </p>
     </div>
 
-    <div class="aside" aria-hidden="true">
-      <span class="quote-mark">"</span>
-      <p class="quote">
-        TODO: insert a short pull quote — something the owner said once, or a customer review.
-      </p>
-      <p class="quote-attribution">— TODO Attribution</p>
-    </div>
+    {
+      quote && (
+        <figure class="aside">
+          <span class="quote-mark" aria-hidden="true">"</span>
+          <blockquote class="quote">{quote.text}</blockquote>
+          <figcaption class="quote-attribution">— {quote.attribution}</figcaption>
+        </figure>
+      )
+    }
   </div>
 </section>
 
@@ -72,6 +79,7 @@ const foundingYear = "TODO";
     border-radius: 0.75rem;
     padding: 2rem 1.75rem;
     position: relative;
+    margin: 0;
   }
 
   .quote-mark {
@@ -97,6 +105,10 @@ const foundingYear = "TODO";
     font-size: 0.85rem;
     color: var(--color-muted);
     margin: 0;
+  }
+
+  .container.no-quote {
+    grid-template-columns: minmax(0, 48rem);
   }
 
   @media (max-width: 768px) {

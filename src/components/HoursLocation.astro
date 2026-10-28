@@ -1,23 +1,17 @@
 ---
+import { business } from "@data/business";
+
+const { phone, phoneDisplay, email, hours } = business;
+const { street, suite, note, city, state, zip } = business.address;
 const address = {
-  line1: "365 West Bedford Ave",
-  line2: "Suite 105 (around the back!)",
-  city: "Fresno",
-  state: "CA",
-  zip: "93711",
+  line1: street,
+  line2: note ? `${suite} (${note})` : suite,
+  city,
+  state,
+  zip,
 };
-const phone = "+15592854374";
-const phoneDisplay = "(559) 285-4374";
-const email = "chuy@chuystacos.com";
 
-const hours = [
-  { day: "Mon – Fri", value: "10:00 AM – 6:00 PM" },
-  { day: "Sat – Sun", value: "Closed" },
-];
-
-const mapsQuery = encodeURIComponent(
-  `${address.line1}, ${address.city}, ${address.state} ${address.zip}`
-);
+const mapsQuery = encodeURIComponent(`${street}, ${city}, ${state} ${zip}`);
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${mapsQuery}`;
 ---
 

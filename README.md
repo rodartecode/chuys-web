@@ -47,12 +47,14 @@ Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secre
 ## Editing content
 
 - **Section copy** — directly in the section's `.astro` file under `src/components/`.
-- **Menu highlights** — `src/data/menu.ts` (typed array, six entries).
-- **Catering packages** — `src/components/Catering.astro`, `packages` array in the frontmatter.
-- **Hours, address, phone** — `src/components/HoursLocation.astro` and `src/components/Footer.astro`.
+- **Menu highlights**: `src/data/menu.ts`, a typed array with one entry per taco.
+- **Catering packages**: the `packages` array in the frontmatter of `src/components/Catering.astro`. `pricing` is optional, and the line is hidden while it's unset.
+- **Contact, address, hours, social links**: `src/data/business.ts`. Hero, Visit, Footer and the `Restaurant` JSON-LD all read from it. If you change `hours`, update `openingHours` too.
+- **Pull quote**: `quote` in `src/components/About.astro`. The aside is hidden while it's `undefined`.
+- **Social share card**: `public/og.png` (1200×630) and `public/apple-touch-icon.png`.
 - **Theme tokens** — `src/styles/global.css` under `@theme` (colors, fonts).
 
-Search for `TODO` in the repo to find every placeholder.
+Run `grep -rn "TODO(owner)" src/` to find content that's still waiting on the owners. Every placeholder has a graceful fallback, so nothing unfinished shows on the page.
 
 ## Deployment
 
@@ -65,10 +67,11 @@ See [`docs/00-overview/README.md`](./docs/00-overview/README.md) for a doc-tree 
 ```
 src/
 ├── components/      # Section components (.astro)
-├── data/menu.ts     # Menu highlights
+├── data/          # business.ts (contact/hours/inquiry), menu.ts
 ├── layouts/         # BaseLayout.astro
 ├── pages/
 │   ├── index.astro
+│   ├── 404.astro
 │   └── api/inquiry.ts
 ├── styles/global.css
 └── env.d.ts

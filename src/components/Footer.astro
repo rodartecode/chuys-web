@@ -1,13 +1,13 @@
 ---
-// TODO: fill in real social URLs (Instagram/Facebook below)
-const phone = "+15592854374";
-const phoneDisplay = "(559) 285-4374";
-const email = "chuy@chuystacos.com";
+import { business } from "@data/business";
+
+const { phone, phoneDisplay, email, social } = business;
+const { street, suite, city, state, zip } = business.address;
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container">
+  <div class:list={["container", { "no-social": social.length === 0 }]}>
     <div class="brand-block">
       <span class="brand-mark" aria-hidden="true">CT</span>
       <p class="brand-name">Chuy's Tacos</p>
@@ -17,8 +17,8 @@ const year = new Date().getFullYear();
     <div class="links">
       <h4>Visit</h4>
       <ul>
-        <li>365 West Bedford Ave, Suite 105</li>
-        <li>Fresno, CA 93711</li>
+        <li>{street}, {suite}</li>
+        <li>{city}, {state} {zip}</li>
         <li>
           <a href={`tel:${phone}`}>{phoneDisplay}</a>
         </li>
@@ -38,14 +38,22 @@ const year = new Date().getFullYear();
       </ul>
     </div>
 
-    <div class="links">
-      <h4>Follow</h4>
-      <ul>
-        {/* TODO: replace # with real social URLs */}
-        <li><a href="#">Instagram</a></li>
-        <li><a href="#">Facebook</a></li>
-      </ul>
-    </div>
+    {
+      social.length > 0 && (
+        <div class="links">
+          <h4>Follow</h4>
+          <ul>
+            {social.map((link) => (
+              <li>
+                <a href={link.href} target="_blank" rel="noopener noreferrer">
+                  {link.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
   </div>
 
   <div class="legal">
@@ -67,6 +75,10 @@ const year = new Date().getFullYear();
     grid-template-columns: 1.4fr 1fr 1fr 1fr;
     gap: 2.5rem;
     margin-bottom: 3rem;
+  }
+
+  .container.no-social {
+    grid-template-columns: 1.4fr 1fr 1fr;
   }
 
   .brand-mark {
@@ -139,14 +151,16 @@ const year = new Date().getFullYear();
   }
 
   @media (max-width: 768px) {
-    .container {
+    .container,
+    .container.no-social {
       grid-template-columns: 1fr 1fr;
       gap: 2rem;
     }
   }
 
   @media (max-width: 480px) {
-    .container {
+    .container,
+    .container.no-social {
       grid-template-columns: 1fr;
     }
   }

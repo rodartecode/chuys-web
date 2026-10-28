@@ -1,6 +1,7 @@
 ---
-const phone = "+15592854374";
-const phoneDisplay = "(559) 285-4374";
+import { business } from "@data/business";
+
+const { phone, phoneDisplay } = business;
 ---
 
 <section class="hero" id="top">
@@ -38,7 +39,7 @@ const phoneDisplay = "(559) 285-4374";
     isolation: isolate;
   }
 
-  /* TODO: swap .bg for an actual <Image /> when hero photo is provided. Solid gradient placeholder for now. */
+  /* TODO(owner): swap .bg for an actual <Image /> when hero photo is provided. Solid gradient placeholder for now. */
   .bg {
     position: absolute;
     inset: 0;

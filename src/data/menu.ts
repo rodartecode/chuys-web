@@ -4,7 +4,7 @@ export interface MenuItem {
   imagePath: string;
 }
 
-// Owner-supplied menu (CONTENT.md §4). TODO: photos still pending — styled
+// Owner-supplied menu. TODO(owner): photos still pending — styled
 // placeholder thumbs show until imagePath assets are added. Descriptions are
 // owner's words, lightly cleaned; flag if a longer copy pass is wanted.
 export const menuHighlights: MenuItem[] = [

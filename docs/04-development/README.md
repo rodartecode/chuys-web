@@ -99,7 +99,15 @@ Edit `src/data/menu.ts`. Push a new object to `menuHighlights`. The grid auto-fi
 
 ### Add a catering package
 
-Edit the `packages` array in the frontmatter of `src/components/Catering.astro`.
+Edit the `packages` array in the frontmatter of `src/components/Catering.astro`. Each package's `pricing` field is optional.
+
+### Change contact details, hours, or social links
+
+Edit `src/data/business.ts`. The Hero, Visit section, Footer and JSON-LD all pick up the change. Adding the first entry to `social` makes the footer's "Follow" column appear. `hours` (display rows) and `openingHours` (structured data) describe the same schedule, so keep them in sync.
+
+### Swap the Turnstile site key
+
+Replace `inquiry.turnstileSiteKey` in `src/data/business.ts`, and set the matching secret with `pnpm exec wrangler secret put TURNSTILE_SECRET_KEY`.
 
 ### Change brand colors
 
