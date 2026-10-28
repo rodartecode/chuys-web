@@ -20,7 +20,7 @@ The project is intentionally small. v1 ships a placeholder-content site that *ex
 
 ## Key facts
 
-- **Framework**: Astro 6, static output, Vercel adapter
+- **Framework**: Astro 7, static output, Vercel adapter
 - **Styling**: Tailwind v4 (CSS-first `@theme` tokens) + per-component `<style>` blocks
 - **Email**: Resend
 - **Tooling**: Biome (TS/JS/JSON/Astro), Stylelint (CSS / `<style>` blocks), TypeScript strict

@@ -72,7 +72,7 @@ src/
 
 ## Tech stack
 
-Astro 6 · Tailwind v4 · MDX · Resend · Biome · Stylelint · TypeScript strict · Vercel adapter · pnpm. See [`docs/01-architecture/README.md`](./docs/01-architecture/README.md) for rationale.
+Astro 7 · Tailwind v4 · Resend · Biome · Stylelint · TypeScript strict · Vercel adapter · pnpm. See [`docs/01-architecture/README.md`](./docs/01-architecture/README.md) for rationale.
 
 ---
 Last updated: 2026-04-29

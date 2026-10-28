@@ -4,8 +4,8 @@ Setup, scripts, and conventions.
 
 ## Prerequisites
 
-- Node ≥ 22 (the project's `engines.node`; volta-locked to 24.4.1 elsewhere in the workspace)
-- pnpm ≥ 10
+- Node 24 (`.node-version`; Astro 7 needs ≥ 22.23.4)
+- pnpm 11 (`packageManager` in `package.json`; build scripts are allow-listed in `pnpm-workspace.yaml`)
 - A Resend account if you want to test the inquiry form end-to-end
 
 ## First-time setup
@@ -43,6 +43,7 @@ pnpm typecheck && pnpm lint && pnpm lint:styles && pnpm build
 ### TypeScript
 
 - `astro/tsconfigs/strict` is the base. No `any` without a comment justifying it.
+- TypeScript is held at 6.x. `@astrojs/check` peers `^5 || ^6` and its language server can't run on the TS 7 native compiler yet ([withastro/astro#17268](https://github.com/withastro/astro/issues/17268)). Don't bump to 7 until that's resolved.
 - Path aliases: `@components/*`, `@layouts/*`, `@data/*`, `@styles/*`, `@/*`. Use them — don't reach into `src/` with relative parents.
 - Named exports preferred over default exports (per the user's TS conventions).
 
@@ -72,7 +73,7 @@ When real brand colors arrive, edit those values — not individual components.
 
 - **Biome** owns TS, JS, JSON, and Astro frontmatter / scripts.
 - **Stylelint** owns CSS files and Astro `<style>` blocks.
-- CSS is excluded from Biome (`files.includes` excludes `**/*.css`, plus `css.linter` and `css.formatter` are disabled). The reason: Biome 2.4 doesn't yet recognize Tailwind v4's `@theme` directive.
+- CSS is excluded from Biome (`files.includes` excludes `**/*.css`, plus `css.linter` and `css.formatter` are disabled). The reason: Biome (as of 2.4, when this was set up) didn't recognize Tailwind v4's `@theme` directive.
 
 ### Placeholders
 

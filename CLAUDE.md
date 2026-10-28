@@ -26,7 +26,7 @@ pnpm format                 # Biome format
 
 ## Architecture
 
-- **Astro 6, static output** with `@astrojs/vercel` adapter — every page prerenders to HTML; only `src/pages/api/inquiry.ts` runs as a serverless function (`export const prerender = false`).
+- **Astro 7, static output** with `@astrojs/vercel` adapter — every page prerenders to HTML; only `src/pages/api/inquiry.ts` runs as a serverless function (`export const prerender = false`).
 - **Tailwind v4** via `@tailwindcss/vite`. Theme tokens (warm earth palette, font stacks) live in `src/styles/global.css` under `@theme`. No external design-system package.
 - **Component-scoped styles** — most components use Astro's `<style>` block instead of Tailwind utilities, since each section is one-of-a-kind. Tokens flow through CSS custom properties (`var(--color-terracotta)` etc.).
 - **Form flow**: `InquiryForm.astro` posts JSON to `/api/inquiry`. The endpoint validates, runs a honeypot check, and calls `resend.emails.send`. No persistence.
@@ -49,7 +49,7 @@ chuys-tacos/
 │   ├── 00-overview/        # Quick start and project summary
 │   ├── 01-architecture/    # System design + tech stack
 │   └── 04-development/     # Setup, conventions, scripts
-├── astro.config.mjs        # Vercel adapter, MDX, sitemap, Tailwind vite plugin
+├── astro.config.mjs        # Vercel adapter, sitemap, Tailwind vite plugin
 ├── biome.json              # Lint/format — CSS handled by stylelint
 ├── stylelint.config.mjs
 ├── tsconfig.json           # Extends astro/tsconfigs/strict + path aliases

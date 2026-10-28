@@ -15,7 +15,7 @@ Everything except the inquiry endpoint is static. There is no database, no auth,
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| Framework | **Astro 6** (`output: "static"`) | Component-driven static site with islands available if ever needed; no JS shipped to the browser unless a component opts in. |
+| Framework | **Astro 7** (`output: "static"`) | Component-driven static site with islands available if ever needed; no JS shipped to the browser unless a component opts in. |
 | Adapter | **`@astrojs/vercel`** | Lets us mix prerendered pages with a single serverless function (`/api/inquiry`) on the same deploy. |
 | Styling | **Tailwind v4** via `@tailwindcss/vite`, with **CSS-first `@theme` tokens** in `src/styles/global.css` | v4's CSS-first configuration keeps the design tokens in the same file as the base layer. Sections that need bespoke layout use Astro's scoped `<style>` blocks and reference `var(--token)`. |
 | Type-safety | **TypeScript strict** via `astro/tsconfigs/strict` | Catches form field name drift between `InquiryForm.astro` and `api/inquiry.ts`. |
