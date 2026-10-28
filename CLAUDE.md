@@ -17,7 +17,7 @@ pnpm install                # install deps
 pnpm dev                    # http://localhost:4321
 pnpm build                  # dist/client (static assets) + dist/server (Worker)
 pnpm preview                # build + wrangler dev on :8787 (real Workers runtime)
-pnpm deploy                 # build + wrangler deploy (Workers Builds does this on push)
+pnpm cf:deploy              # build + wrangler deploy (Workers Builds does this on push)
 pnpm typecheck              # astro check
 pnpm lint                   # Biome lint (TS/JS/Astro/JSON)
 pnpm lint:fix               # Biome auto-fix

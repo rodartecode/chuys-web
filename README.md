@@ -36,7 +36,7 @@ Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secre
 | `pnpm dev` | Run the Astro dev server |
 | `pnpm build` | Build static assets to `dist/client` and the Worker to `dist/server` |
 | `pnpm preview` | Build, then run `wrangler dev` (real Workers runtime) on port 8787 |
-| `pnpm deploy` | Build, then `wrangler deploy` (Workers Builds does this on push to `main`) |
+| `pnpm cf:deploy` | Build, then `wrangler deploy` (Workers Builds does this on push to `main`) |
 | `pnpm cf:types` | Regenerate Worker runtime types with `wrangler types` |
 | `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
 | `pnpm lint` | Biome lint |

@@ -283,7 +283,12 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
   interface Turnstile {
     render: (
       el: HTMLElement,
-      opts: { sitekey: string; theme: "dark"; callback: () => void }
+      opts: {
+        sitekey: string;
+        theme: "dark";
+        callback: () => void;
+        "error-callback": () => boolean;
+      }
     ) => string;
     reset: (id: string) => void;
   }
@@ -306,6 +311,14 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
     let loadStarted = false;
     let submitWhenVerified = false;
 
+    // If the challenge can't load or run (blocked script, bad site key), don't leave a
+    // pending submit stuck on "Verifying…" — fall back to the email-us message.
+    const failPendingSubmit = () => {
+      if (!submitWhenVerified) return;
+      submitWhenVerified = false;
+      showStatus("error");
+    };
+
     const loadTurnstile = () => {
       if (loadStarted) return;
       loadStarted = true;
@@ -318,12 +331,22 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
             submitWhenVerified = false;
             form.requestSubmit();
           },
+          // Returning true tells Turnstile the error was handled (no console throw).
+          "error-callback": () => {
+            failPendingSubmit();
+            return true;
+          },
         });
       };
       const script = document.createElement("script");
       script.src =
         "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
       script.async = true;
+      script.onerror = () => {
+        loadStarted = false; // allow a retry on the next interaction
+        script.remove();
+        failPendingSubmit();
+      };
       // appendChild, not append: workers-types' global Element.append overload shadows the DOM one.
       document.head.appendChild(script);
     };

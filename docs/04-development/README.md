@@ -26,7 +26,7 @@ The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turns
 | `pnpm dev` | Astro dev server on port 4321 |
 | `pnpm build` | Produces `dist/client` (static assets) and `dist/server` (Worker + generated `wrangler.json`) |
 | `pnpm preview` | Builds, then runs `wrangler dev` on port 8787 (the real workerd runtime) |
-| `pnpm deploy` | Builds, then `wrangler deploy` (normally done by Workers Builds on push) |
+| `pnpm cf:deploy` | Builds, then `wrangler deploy` (normally done by Workers Builds on push) |
 | `pnpm cf:types` | `wrangler types` |
 | `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
 | `pnpm lint` | Biome lint over `src/` |
