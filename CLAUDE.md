@@ -98,6 +98,7 @@ Gotchas (learned on `paint-web`, which uses the same setup):
 
 - **`README.md`** — install, env vars, scripts, editing
 - **`API.md`** — inquiry endpoint reference
+- **`HUMAN.md`** — checklist of operator and owner tasks that Claude can't do (dashboards, secrets, DNS, owner content)
 - **`docs/00-overview/`** — what's documented and where
 - **`docs/01-architecture/`** — system design and tech stack rationale
 - **`docs/04-development/`** — setup, scripts, conventions
