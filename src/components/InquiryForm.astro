@@ -1,4 +1,6 @@
 ---
+import { business, inquiry } from "@data/business";
+
 const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fundraiser", "Other"];
 ---
 
@@ -57,10 +59,13 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
 
       <div class="field">
         <label for="message">Anything else we should know?</label>
-        <textarea id="message" name="message" rows="5"
+        <textarea id="message" name="message" rows="5" maxlength="5000"
           placeholder="Dietary needs, venue, time of day, anything fun about the event…"
         ></textarea>
       </div>
+
+      {/* Turnstile renders here on first interaction; it adds a cf-turnstile-response input */}
+      <div class="cf-turnstile" data-sitekey={inquiry.turnstileSiteKey}></div>
 
       <button type="submit" class="submit">
         <span class="submit-label">Send Inquiry</span>
@@ -69,8 +74,13 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
 
       <div class="status" role="status" aria-live="polite">
         <p class="status-success">Thanks! We've got your inquiry and will reply within 1 business day.</p>
+        <p class="status-pending">Verifying you're human…</p>
+        <p class="status-captcha">
+          We couldn't verify you're human. Please complete the check above and try again.
+        </p>
         <p class="status-error">
-          Something went wrong. Please try again or email us directly.
+          Something went wrong. Please try again or email us at
+          <a href={`mailto:${business.email}`}>{business.email}</a>.
         </p>
       </div>
     </form>
@@ -226,10 +236,25 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
     color: var(--color-cream);
   }
 
-  .status.show-error .status-error {
+  .status.show-pending .status-pending {
+    display: block;
+    background: color-mix(in srgb, var(--color-cream) 10%, transparent);
+    color: var(--color-cream);
+  }
+
+  .status.show-error .status-error,
+  .status.show-captcha .status-captcha {
     display: block;
     background: color-mix(in srgb, #b34a2a 35%, transparent);
     color: var(--color-cream);
+  }
+
+  .status-error a {
+    color: inherit;
+  }
+
+  .cf-turnstile:empty {
+    display: none;
   }
 
   .sr-only {
@@ -255,10 +280,65 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
 </style>
 
 <script>
+  interface Turnstile {
+    render: (
+      el: HTMLElement,
+      opts: { sitekey: string; theme: "dark"; callback: () => void }
+    ) => string;
+    reset: (id: string) => void;
+  }
+
   const form = document.querySelector(".inquiry-form") as HTMLFormElement | null;
   if (form) {
     const submit = form.querySelector(".submit") as HTMLButtonElement;
     const status = form.querySelector(".status") as HTMLElement;
+    const widget = form.querySelector(".cf-turnstile") as HTMLElement;
+
+    const showStatus = (state?: "success" | "error" | "captcha" | "pending") => {
+      status.classList.remove("show-success", "show-error", "show-captcha", "show-pending");
+      if (state) status.classList.add(`show-${state}`);
+    };
+
+    // Turnstile's script is several hundred KB, so load it on first interaction
+    // with the form instead of with the page, and render the widget explicitly.
+    const w = window as unknown as { turnstile?: Turnstile; onTurnstileLoad?: () => void };
+    let widgetId: string | undefined;
+    let loadStarted = false;
+    let submitWhenVerified = false;
+
+    const loadTurnstile = () => {
+      if (loadStarted) return;
+      loadStarted = true;
+      w.onTurnstileLoad = () => {
+        widgetId = w.turnstile?.render(widget, {
+          sitekey: widget.dataset.sitekey ?? "",
+          theme: "dark",
+          callback: () => {
+            if (!submitWhenVerified) return;
+            submitWhenVerified = false;
+            form.requestSubmit();
+          },
+        });
+      };
+      const script = document.createElement("script");
+      script.src =
+        "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad";
+      script.async = true;
+      // appendChild, not append: workers-types' global Element.append overload shadows the DOM one.
+      document.head.appendChild(script);
+    };
+
+    const turnstileToken = () =>
+      form.querySelector<HTMLInputElement>('[name="cf-turnstile-response"]')?.value ?? "";
+
+    form.addEventListener("focusin", loadTurnstile);
+
+    // Mirror the server's "no past dates" rule using the visitor's local date.
+    const eventDate = form.querySelector("#eventDate") as HTMLInputElement;
+    const now = new Date();
+    eventDate.min = new Date(now.getTime() - now.getTimezoneOffset() * 60_000)
+      .toISOString()
+      .slice(0, 10);
 
     const markValidity = (field: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement) => {
       if (!field.checkValidity()) {
@@ -277,7 +357,7 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-      status.classList.remove("show-success", "show-error");
+      showStatus();
 
       const required = form.querySelectorAll<HTMLInputElement>("[required]");
       let ok = true;
@@ -285,6 +365,14 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
         if (!markValidity(field)) ok = false;
       });
       if (!ok) return;
+
+      // No token yet: start (or wait for) the challenge and resubmit from its callback.
+      if (!turnstileToken()) {
+        submitWhenVerified = true;
+        loadTurnstile();
+        showStatus("pending");
+        return;
+      }
 
       const fd = new FormData(form);
       const payload = Object.fromEntries(fd.entries());
@@ -298,16 +386,22 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
-        const json = (await res.json().catch(() => ({}))) as { ok?: boolean };
-        if (!res.ok || !json.ok) throw new Error("inquiry failed");
-
-        status.classList.add("show-success");
-        form.reset();
+        const json = (await res.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+        if (json.error === "captcha") {
+          showStatus("captcha");
+        } else if (!res.ok || !json.ok) {
+          throw new Error("inquiry failed");
+        } else {
+          showStatus("success");
+          form.reset();
+        }
       } catch {
-        status.classList.add("show-error");
+        showStatus("error");
       } finally {
         submit.classList.remove("is-loading");
         submit.disabled = false;
+        // Tokens are single-use; get a fresh one for any further submission.
+        if (widgetId) w.turnstile?.reset(widgetId);
       }
     });
   }

@@ -1,11 +1,10 @@
 /// <reference types="astro/client" />
+/// <reference types="@cloudflare/workers-types" />
 
-interface ImportMetaEnv {
-  readonly RESEND_API_KEY: string;
-  readonly INQUIRY_TO_EMAIL: string;
-  readonly FROM_EMAIL: string;
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv;
+// Secrets set with `wrangler secret put`; available via `import { env } from "cloudflare:workers"`.
+declare namespace Cloudflare {
+  interface Env {
+    RESEND_API_KEY: string;
+    TURNSTILE_SECRET_KEY: string;
+  }
 }

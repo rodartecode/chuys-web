@@ -1,39 +1,43 @@
 # Chuy's Tacos
 
-Single-page landing site and catering-inquiry form for **Chuy's Tacos**, a family-owned taquería and catering business. Built with Astro, deployed to Vercel, with inquiries delivered via Resend.
+Single-page landing site and catering-inquiry form for **Chuy's Tacos**, a family-owned taquería and catering business. Built with Astro, deployed to Cloudflare Workers, with inquiries bot-checked by Turnstile and delivered via Resend.
 
 ## Highlights
 
 - Single-page anchor layout: Hero, Menu Highlights, About, Catering, Hours/Location, Inquiry Form
-- Resend-backed inquiry form with client-side validation and honeypot
+- Resend-backed inquiry form with client-side validation, honeypot, and lazy-loaded Cloudflare Turnstile
 - Warm earth-tone theme via Tailwind v4 `@theme` tokens
-- Static HTML output + a single serverless function for the inquiry endpoint
+- Static HTML served as Worker assets + a single Worker route for the inquiry endpoint
 
 ## Quick start
 
 ```bash
 pnpm install
-cp .env.example .env   # fill in Resend values to enable the inquiry form
-pnpm dev               # http://localhost:4321
+cp .dev.vars.example .dev.vars   # Resend key + Turnstile test secret
+pnpm dev                         # http://localhost:4321
+pnpm preview                     # build + real Workers runtime at http://localhost:8787
 ```
 
-The dev server runs without environment variables set — only `/api/inquiry` will return 500 until they're populated.
+The dev server runs without secrets set. Only `/api/inquiry` is affected: it skips Turnstile and returns 500 until `RESEND_API_KEY` is populated.
 
-## Environment variables
+## Secrets
 
-| Var | Required | Purpose |
+| Secret | Required | Purpose |
 | --- | --- | --- |
-| `RESEND_API_KEY` | yes | Resend API key — see [resend.com/api-keys](https://resend.com/api-keys) |
-| `INQUIRY_TO_EMAIL` | yes | Inbox that receives inquiry submissions |
-| `FROM_EMAIL` | yes | Sender address — must live on a domain you've verified in Resend |
+| `RESEND_API_KEY` | yes | Resend API key with sending access only. See [resend.com/api-keys](https://resend.com/api-keys) |
+| `TURNSTILE_SECRET_KEY` | yes in prod | Turnstile widget secret. `.dev.vars.example` ships Cloudflare's always-pass test key |
+
+Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secret put <NAME>`. The inquiry recipient, the sender address and the Turnstile site key aren't secret, so they live in `src/data/business.ts`.
 
 ## Scripts
 
 | Command | What it does |
 | --- | --- |
 | `pnpm dev` | Run the Astro dev server |
-| `pnpm build` | Build static site to `dist/` plus the Vercel function bundle |
-| `pnpm preview` | Preview the production build locally |
+| `pnpm build` | Build static assets to `dist/client` and the Worker to `dist/server` |
+| `pnpm preview` | Build, then run `wrangler dev` (real Workers runtime) on port 8787 |
+| `pnpm deploy` | Build, then `wrangler deploy` (Workers Builds does this on push to `main`) |
+| `pnpm cf:types` | Regenerate Worker runtime types with `wrangler types` |
 | `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
 | `pnpm lint` | Biome lint |
 | `pnpm lint:fix` | Biome auto-fix |
@@ -52,7 +56,7 @@ Search for `TODO` in the repo to find every placeholder.
 
 ## Deployment
 
-The project deploys to **Vercel**. `pnpm build` generates both `dist/` (static) and `.vercel/output/` (the serverless function bundle for `/api/inquiry`). Configure the Vercel project to run `pnpm install` and `pnpm build`, and set the three Resend env vars in project settings.
+The project deploys to **Cloudflare Workers** with static assets. Workers Builds runs `pnpm build`, then `pnpm exec wrangler deploy` on every push to `main`. One-time setup covers the zone, the Worker, secrets, Turnstile, the Resend domain and the custom domain, and is in [`docs/05-guides/cloudflare-setup.md`](./docs/05-guides/cloudflare-setup.md).
 
 ## Project structure
 
@@ -72,7 +76,7 @@ src/
 
 ## Tech stack
 
-Astro 7 · Tailwind v4 · Resend · Biome · Stylelint · TypeScript strict · Vercel adapter · pnpm. See [`docs/01-architecture/README.md`](./docs/01-architecture/README.md) for rationale.
+Astro 7 · Tailwind v4 · Cloudflare Workers + Turnstile · Resend · Biome · Stylelint · TypeScript strict · pnpm 11. See [`docs/01-architecture/README.md`](./docs/01-architecture/README.md) for rationale.
 
 ---
-Last updated: 2026-04-29
+Last updated: 2026-10-28

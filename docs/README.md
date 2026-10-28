@@ -9,6 +9,7 @@ The project's documentation tree, organized by the standard numbered convention.
 | [`00-overview/`](./00-overview/README.md) | What this project is and where to go next |
 | [`01-architecture/`](./01-architecture/README.md) | System design, tech stack, component model |
 | [`04-development/`](./04-development/README.md) | Setup, scripts, conventions, common tasks, troubleshooting |
+| [`05-guides/`](./05-guides/cloudflare-setup.md) | Cloudflare Workers, Turnstile, Resend, and DNS setup runbook |
 
 Other top-level docs:
 
@@ -18,7 +19,7 @@ Other top-level docs:
 
 ## Skipped (for now)
 
-`02-features/`, `03-api/`, `05-guides/`, `06-planning/` — not warranted for a single-page site with one endpoint. Promote a topic into its own directory when there's enough material to fill it.
+`02-features/`, `03-api/`, `06-planning/` — not warranted for a single-page site with one endpoint. Promote a topic into its own directory when there's enough material to fill it.
 
 ---
-Last updated: 2026-04-29
+Last updated: 2026-10-28

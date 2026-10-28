@@ -6,26 +6,28 @@ Setup, scripts, and conventions.
 
 - Node 24 (`.node-version`; Astro 7 needs ≥ 22.23.4)
 - pnpm 11 (`packageManager` in `package.json`; build scripts are allow-listed in `pnpm-workspace.yaml`)
-- A Resend account if you want to test the inquiry form end-to-end
+- A Resend API key if you want to test email delivery end-to-end (everything else works with the placeholder)
 
 ## First-time setup
 
 ```bash
 pnpm install
-cp .env.example .env
-# fill in RESEND_API_KEY, INQUIRY_TO_EMAIL, FROM_EMAIL
+cp .dev.vars.example .dev.vars
+# optional: put a real RESEND_API_KEY in .dev.vars to actually send email
 pnpm dev
 ```
 
-The dev server boots without env vars set. Only `/api/inquiry` is affected — it returns `500 {"error":"Server misconfigured"}` until they're populated.
+The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turnstile is skipped (with a warning) and the endpoint returns `500 {"error":"Server misconfigured"}` until `RESEND_API_KEY` is set. `.dev.vars.example` ships Cloudflare's always-pass Turnstile test secret, and `src/data/business.ts` uses the matching always-pass site key until the real one is set.
 
 ## Scripts
 
 | Command | What it does |
 | --- | --- |
 | `pnpm dev` | Astro dev server on port 4321 |
-| `pnpm build` | Produces `dist/` (static) and `.vercel/output/` (function) |
-| `pnpm preview` | Serves the production build locally |
+| `pnpm build` | Produces `dist/client` (static assets) and `dist/server` (Worker + generated `wrangler.json`) |
+| `pnpm preview` | Builds, then runs `wrangler dev` on port 8787 (the real workerd runtime) |
+| `pnpm deploy` | Builds, then `wrangler deploy` (normally done by Workers Builds on push) |
+| `pnpm cf:types` | `wrangler types` |
 | `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
 | `pnpm lint` | Biome lint over `src/` |
 | `pnpm lint:fix` | Biome auto-fix |
@@ -77,13 +79,17 @@ When real brand colors arrive, edit those values — not individual components.
 
 ### Placeholders
 
-Every editable string the owners need to replace is marked with a `TODO` comment in code. Before a real launch:
+Owner content that's still pending is marked with a `TODO(owner)` comment, and the component renders a graceful fallback in the meantime (the block is hidden or the copy reworded). Placeholder text never appears on the page. To find what's outstanding:
 
 ```bash
-grep -rn "TODO" src/ public/ docs/ astro.config.mjs
+grep -rn "TODO(owner)" src/
 ```
 
-…and resolve each one.
+After any content change, check that no placeholder leaks into the build:
+
+```bash
+pnpm build && grep -nE "TODO|TBD" dist/client/index.html   # should print nothing
+```
 
 ## Common tasks
 
@@ -108,7 +114,7 @@ Edit `@theme` tokens in `src/styles/global.css`.
 ### Add a new form field
 
 1. Add the input to `src/components/InquiryForm.astro`.
-2. Add the field to the `InquiryPayload` interface and validation in `src/pages/api/inquiry.ts`.
+2. Read it with `clean(body.field, max)` and add any validation rule in `src/pages/api/inquiry.ts`, then include it in the email HTML (escaped).
 3. Update [`API.md`](../../API.md) — the request schema is the source of truth.
 
 ## Troubleshooting
@@ -117,32 +123,23 @@ Edit `@theme` tokens in `src/styles/global.css`.
 
 Run `pnpm install` first. If those errors persist after install, delete `node_modules` and `.astro/`, then reinstall.
 
-### Editor flags `import.meta.env` errors (TS1343) but `pnpm typecheck` is clean
-
-`astro check` is the source of truth. The editor's TypeScript language server isn't picking up `"module": "ESNext"` from Astro's preset (it lives in `node_modules/astro/tsconfigs/base.json`, two `extends` levels deep). First try restarting the TS server and `pnpm exec astro sync`. If the noise persists, set the value directly in `tsconfig.json` to override Astro's preset for the LSP:
-
-```json
-{
-  "extends": "astro/tsconfigs/strict",
-  "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "Bundler"
-    // …existing options
-  }
-}
-```
-
-This duplicates settings that `astro check` already gets right, so only do it if the editor warning is bothering you.
-
 ### Inquiry form returns `500 {"error":"Server misconfigured"}`
 
-One of the three Resend env vars is missing. Check `.env` (locally) or Vercel project settings (in production).
+`RESEND_API_KEY` is missing. Check `.dev.vars` locally. In production, run `pnpm exec wrangler secret list`, and re-run `wrangler secret put` from an interactive terminal if needed, because a non-TTY run can store an empty value.
+
+### Inquiry form shows "We couldn't verify you're human"
+
+The endpoint returned `{"error":"captcha"}`. Either the token was missing or expired, or the site key and secret don't belong to the same Turnstile widget. Also check that the widget's hostname list includes the host you're testing on (`localhost`, the `workers.dev` host, or `chuystacos.com`).
+
+### Form POST returns a blank 405 in production
+
+`assets.run_worker_first` is missing `/api/*` in `wrangler.jsonc`. The asset layer answered the request before the Worker saw it.
 
 ### Inquiry form 200s but no email arrives
 
 - The honeypot triggered (you posted a non-empty `company` field).
-- Resend rejected the message — check the function logs in Vercel.
-- `FROM_EMAIL` is on a domain you haven't verified in Resend — Resend will accept the API call and silently drop the message.
+- Resend rejected the message. Check the Worker logs: dashboard → Workers → `chuys-tacos` → Logs (observability is enabled), or run `pnpm exec wrangler tail`.
+- `inquiry.from` in `src/data/business.ts` isn't on a domain verified in Resend (`mail.chuystacos.com`).
 
 ---
-Last updated: 2026-04-29
+Last updated: 2026-10-28

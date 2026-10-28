@@ -1,0 +1,8 @@
+# Copy to .dev.vars (gitignored) for local `pnpm dev` / `pnpm preview`.
+# Production values are set with `pnpm exec wrangler secret put <NAME>`.
+
+# Resend API key — create one at https://resend.com/api-keys (sending access only)
+RESEND_API_KEY=re_xxxxxxxxx
+
+# Cloudflare's always-pass Turnstile test secret; the real one comes from the Turnstile widget
+TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
