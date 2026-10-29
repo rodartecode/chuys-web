@@ -16,7 +16,10 @@
 
 ### B-4 · Find what delays first paint on mobile
 **Why:** after B-2, nothing blocks render, and every request finishes by about 0.6 s. Even so, three Lighthouse mobile runs *observed* first paint at about 2.4 s, against 0.54 s on desktop. Simulated mobile FCP stays at 1.9 s and Speed Index at about 4.1 s, the only metrics not in the green. The gap predates B-2, since those numbers didn't change, so it isn't the fonts.
-**Where:** first, record a mobile-emulated Performance trace in DevTools (Moto G-class, 4× CPU) on production, and see what sits between the end of the response and first paint: style/layout, paint of the hero gradients, or the `page.*.js` script. Suspects to rule in or out are the Hero's layered gradients and any filter or blur, then the inline CSS size.
+**Where:** first, rule out this machine. All three runs were local headless Chrome on LAPTOP-ESEL9A3K, and Lantern's simulated Speed Index draws on the observed filmstrip, so a slow local paint alone would hold SI at about 4.1 s. Run the mobile test on https://pagespeed.web.dev/ (the anonymous PSI API was over its daily quota on 2026-10-29), and compare `observedFirstContentfulPaint` with 2.4 s.
+- **If PSI paints well under 2.4 s:** this is a local-emulation artifact. Move B-4 to **Not doing** and take mobile baselines from PSI from then on.
+- **If PSI reproduces it:** record a mobile-emulated DevTools Performance trace on production, and see what sits between the end of the response and first paint. Suspects: the Hero's layered gradients and any filter or blur, then the inline CSS size, then `page.*.js`.
+
 **Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
 
 ### B-3 · Add tests
