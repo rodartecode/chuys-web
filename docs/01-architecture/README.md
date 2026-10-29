@@ -93,9 +93,9 @@ If a future need calls for inquiries to land in the backend's database, the clea
 ## Performance posture
 
 - Static prerender + `compressHTML` + `inlineStylesheets: "always"`.
-- Google Fonts (Playfair Display) preconnected and lazily loaded.
+- Playfair Display is self-hosted through the Astro Fonts API (`fonts` in `astro.config.mjs`, `<Font>` in `BaseLayout.astro`). The build downloads one variable woff2 covering 600–700, and the page preloads it with `font-display: swap` plus a metric-matched fallback face. The adapter's `_headers` caches `/_assets/*` as immutable. There are no requests to Google.
 - Hero/menu visuals are CSS gradients in v1 — when real photos arrive, swap to Astro's `<Image />` component.
 - No client-side framework, no hydration. The only JS that ships is the small script inside `InquiryForm.astro`, plus Turnstile once someone interacts with the form.
 
 ---
-Last updated: 2026-10-28
+Last updated: 2026-10-29
