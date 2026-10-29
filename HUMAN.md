@@ -8,35 +8,13 @@
 
 ## ▶ Start here
 
-### [ ] Send a test inquiry from your phone · ⏱ 5 min
-**Why:** the site is live, but no inquiry has gone end to end yet. A broken form loses catering leads and doesn't warn anyone.
+### [x] Point Workers Builds at the right GitHub repo · ⏱ 10 min · added 2026-10-29
+**Why:** pushes to `main` don't deploy, so the `@astrojs/cloudflare` 14.4.3 bump isn't live. The `chuys-tacos` Worker's build trigger is connected to `rodartecode/chuys-tacos`, an empty repo from 2026-04-30 with one "Initial commit". It should point at `rodartecode/chuys-web`. It has never run a build. (Checked through the Cloudflare API on 2026-10-29.)
 
-1. On your phone, open https://chuystacos.com/#contact
-2. Fill in the form with your own email address and submit it.
-3. Open the `chuy@chuystacos.com` inbox and find the inquiry.
-4. Press Reply and check that the To address is the email you entered on the form.
-
-**Done when:** the inquiry is in `chuy@chuystacos.com`, and Reply goes to the address you entered. (This covers the runbook's §5 smoke test as well.)
-
-## ⚡ Quick wins (≤10 min)
-
-### [ ] Load the Cloudflare plugin and sign in to its MCP server · ⏱ 2 min · added 2026-10-29
-**Why:** the Cloudflare skills and MCP server are enabled in chuys-web and paint-web, but they don't load until the plugins reload, and the MCP server needs a one-time Cloudflare sign-in.
-
-1. In a Claude Code session in `C:\Users\jerod\code\chuys-web`, type `/reload-plugins`.
-2. Ask Claude something that uses a Cloudflare MCP tool, such as "list my Workers with the Cloudflare MCP".
-3. Approve the Cloudflare sign-in in the browser window that opens.
-4. Repeat step 1 in a session in `C:\Users\jerod\code\paint-web`.
-
-**Done when:** `/mcp` lists `cloudflare` as connected, and skills such as `cloudflare:wrangler` appear in the skills list.
-
-### [ ] Connect Workers Builds to the GitHub repo · ⏱ 10 min · added 2026-10-29
-**Why:** pushes to `main` don't deploy. All 4 deployments so far came from `wrangler` on your laptop, and the 2026-10-29 push didn't deploy, so the `@astrojs/cloudflare` 14.4.3 bump isn't live.
-
-1. Cloudflare dashboard → Workers & Pages → `chuys-web` → Settings → Build → Connect.
-2. Pick GitHub → `rodartecode/chuys-web`, branch `main`.
-3. Set the build command to `pnpm build` and the deploy command to `pnpm exec wrangler deploy`.
-4. Add a build variable: `PNPM_VERSION` = `11.21.0`.
+1. Cloudflare dashboard → Workers & Pages → `chuys-tacos` → Settings → Build.
+2. Disconnect the repo, then Connect → GitHub → `rodartecode/chuys-web`, branch `main`. If `chuys-web` isn't in the list, grant the Cloudflare GitHub app access to it.
+3. Build command: `pnpm build`. Deploy command: `pnpm exec wrangler deploy`. The current one, `npx exec wrangler deploy`, is wrong.
+4. Check that the build variable `PNPM_VERSION` = `11.21.0` is still set (it was before the disconnect).
 5. Save, then start a build from the Deployments tab (or ask Claude to push a commit).
 
 **Done when:** this command shows a deployment newer than `2026-10-29T18:00`:
@@ -44,7 +22,9 @@
 pnpm exec wrangler deployments list
 ```
 
-### [ ] Fix the `www` DNS record · ⏱ 10 min · added 2026-10-29
+## ⚡ Quick wins (≤10 min)
+
+### [x] Fix the `www` DNS record · ⏱ 10 min · added 2026-10-29
 **Why:** `www.chuystacos.com` doesn't exist in public DNS (NXDOMAIN on 1.1.1.1 on 2026-10-29), so anyone who types `www` gets an error page.
 
 1. Cloudflare dashboard → `chuystacos.com` → DNS → Records.
@@ -57,7 +37,7 @@ pnpm exec wrangler deployments list
 
 **Done when:** the curl shows `301` with `location: https://chuystacos.com/`.
 
-### [ ] Turn on Always Use HTTPS · ⏱ 2 min · added 2026-10-28
+### [x] Turn on Always Use HTTPS · ⏱ 2 min · added 2026-10-28
 **Why:** `http://chuystacos.com/` serves the page over plain HTTP (it returns 200) instead of redirecting to HTTPS.
 
 1. Cloudflare dashboard → `chuystacos.com` → SSL/TLS → Edge Certificates.
@@ -69,7 +49,7 @@ pnpm exec wrangler deployments list
 
 **Done when:** the curl shows `301`.
 
-### [ ] Add a rate limit on the inquiry endpoint (optional, §8) · ⏱ 10 min · added 2026-10-28
+### [x] Add a rate limit on the inquiry endpoint (optional, §8) · ⏱ 10 min · added 2026-10-28
 **Why:** Turnstile stops bots, but a rate limit caps how many emails a single IP can trigger.
 
 1. Cloudflare dashboard → `chuystacos.com` → Security → WAF → Rate limiting rules → Create rule.
@@ -103,11 +83,13 @@ pnpm exec wrangler deployments list
 
 ## ⏳ Waiting on something else
 
-- [ ] Ask Claude to set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`, then remove the `workers.dev` hostname from the Turnstile widget · waiting on the test inquiry and the `www`/HTTPS fixes · added 2026-10-28
+- [ ] Ask Claude to set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`, then remove the `workers.dev` hostname from the Turnstile widget · waiting on the `www`/HTTPS fixes · added 2026-10-28
 - [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, the Instagram and Facebook URLs, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
 
 ## ✅ Done recently
 
+- 2026-10-29 Sent a test inquiry from a phone: it reached `chuy@chuystacos.com`, and Reply goes to the sender (§5 smoke test)
+- 2026-10-29 Signed in to the Cloudflare MCP server and loaded the plugin in chuys-web (paint-web's `/reload-plugins` is still to do)
 - 2026-10-29 Deployed to the custom domain with `wrangler deploy --domain chuystacos.com` (§6)
 - 2026-10-29 Set `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` as Worker secrets (§5)
 - 2026-10-29 Verified `mail.chuystacos.com` in Resend (§4)
