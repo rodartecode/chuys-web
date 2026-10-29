@@ -8,55 +8,30 @@
 
 ## ▶ Start here
 
-### [x] Point Workers Builds at the right GitHub repo · ⏱ 10 min · added 2026-10-29
-**Why:** pushes to `main` don't deploy, so the `@astrojs/cloudflare` 14.4.3 bump isn't live. The `chuys-tacos` Worker's build trigger is connected to `rodartecode/chuys-tacos`, an empty repo from 2026-04-30 with one "Initial commit". It should point at `rodartecode/chuys-web`. It has never run a build. (Checked through the Cloudflare API on 2026-10-29.)
+### [ ] Remove the `workers.dev` hostname from the Turnstile widget (§6) · ⏱ 2 min · added 2026-10-29
+**Why:** `wrangler.jsonc` now sets `workers_dev: false` and `preview_urls: false`, so the `workers.dev` copy of the site stops serving once that commit deploys. The widget shouldn't accept tokens for a host that no longer exists.
 
-1. Cloudflare dashboard → Workers & Pages → `chuys-tacos` → Settings → Build.
-2. Disconnect the repo, then Connect → GitHub → `rodartecode/chuys-web`, branch `main`. If `chuys-web` isn't in the list, grant the Cloudflare GitHub app access to it.
-3. Build command: `pnpm build`. Deploy command: `pnpm exec wrangler deploy`. The current one, `npx exec wrangler deploy`, is wrong.
-4. Check that the build variable `PNPM_VERSION` = `11.21.0` is still set (it was before the disconnect).
-5. Save, then start a build from the Deployments tab (or ask Claude to push a commit).
+1. Wait until the deploy of the `workers_dev` commit has finished, then check that `https://chuys-tacos.jerodarte.workers.dev/` no longer serves the site.
+2. Cloudflare dashboard → Turnstile → the `chuystacos.com` widget → Settings → Hostnames.
+3. Remove `chuys-tacos.jerodarte.workers.dev`, and keep `chuystacos.com` and `www.chuystacos.com`.
 
-**Done when:** this command shows a deployment newer than `2026-10-29T18:00`:
-```bash
-pnpm exec wrangler deployments list
-```
+**Done when:** the widget lists only `chuystacos.com` and `www.chuystacos.com`.
 
 ## ⚡ Quick wins (≤10 min)
 
-### [x] Fix the `www` DNS record · ⏱ 10 min · added 2026-10-29
-**Why:** `www.chuystacos.com` doesn't exist in public DNS (NXDOMAIN on 1.1.1.1 on 2026-10-29), so anyone who types `www` gets an error page.
+### [ ] Load the Cloudflare plugin in paint-web · ⏱ 1 min · added 2026-10-29
+**Why:** the plugin and its MCP sign-in work in chuys-web. paint-web enables the same plugin, but it hasn't been reloaded there yet.
 
-1. Cloudflare dashboard → `chuystacos.com` → DNS → Records.
-2. Look for an `AAAA` record named `www`. If it's missing, add one: content `100::`, Proxy **on** (orange cloud).
-3. Rules → Redirect Rules: check that "Redirect from WWW to root" (301) is there and enabled.
-4. Check it:
-   ```bash
-   curl -sI https://www.chuystacos.com/
-   ```
+1. In a Claude Code session in `C:\Users\jerod\code\paint-web`, type `/reload-plugins`.
 
-**Done when:** the curl shows `301` with `location: https://chuystacos.com/`.
+**Done when:** `/mcp` in that session lists `cloudflare` as connected.
 
-### [x] Turn on Always Use HTTPS · ⏱ 2 min · added 2026-10-28
-**Why:** `http://chuystacos.com/` serves the page over plain HTTP (it returns 200) instead of redirecting to HTTPS.
+### [ ] Delete or archive the empty `rodartecode/chuys-tacos` repo (optional) · ⏱ 2 min · added 2026-10-29
+**Why:** it's a private placeholder from 2026-04-30 with one "Initial commit". The Workers Build trigger pointed at it by mistake until 2026-10-29. Nothing uses it now, and keeping it makes the same mix-up easy to repeat.
 
-1. Cloudflare dashboard → `chuystacos.com` → SSL/TLS → Edge Certificates.
-2. Switch **Always Use HTTPS** on.
-3. Check it:
-   ```bash
-   curl -sI http://chuystacos.com/
-   ```
+1. https://github.com/rodartecode/chuys-tacos → Settings → Danger Zone → Archive (or Delete).
 
-**Done when:** the curl shows `301`.
-
-### [x] Add a rate limit on the inquiry endpoint (optional, §8) · ⏱ 10 min · added 2026-10-28
-**Why:** Turnstile stops bots, but a rate limit caps how many emails a single IP can trigger.
-
-1. Cloudflare dashboard → `chuystacos.com` → Security → WAF → Rate limiting rules → Create rule.
-2. Match: URI path equals `/api/inquiry`, and request method equals `POST`.
-3. Rate: more than 5 requests per 1 minute, counted per IP. Action: Block.
-
-**Done when:** the rule shows as enabled in the list.
+**Done when:** the repo is archived or gone.
 
 ## 🎯 Needs a focus block
 
@@ -83,15 +58,16 @@ pnpm exec wrangler deployments list
 
 ## ⏳ Waiting on something else
 
-- [ ] Ask Claude to set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`, then remove the `workers.dev` hostname from the Turnstile widget · waiting on the `www`/HTTPS fixes · added 2026-10-28
 - [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, the Instagram and Facebook URLs, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
 
 ## ✅ Done recently
 
+- 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
+- 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)
 - 2026-10-29 Sent a test inquiry from a phone: it reached `chuy@chuystacos.com`, and Reply goes to the sender (§5 smoke test)
-- 2026-10-29 Signed in to the Cloudflare MCP server and loaded the plugin in chuys-web (paint-web's `/reload-plugins` is still to do)
+- 2026-10-29 Signed in to the Cloudflare MCP server and loaded the plugin in chuys-web
 - 2026-10-29 Deployed to the custom domain with `wrangler deploy --domain chuystacos.com` (§6)
 - 2026-10-29 Set `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` as Worker secrets (§5)
 - 2026-10-29 Verified `mail.chuystacos.com` in Resend (§4)
 - 2026-10-29 Created the Turnstile widget and put the production site key in the site; Claude committed it as `76ef0fb` (§3)
-- 2026-10-29 Moved DNS to Cloudflare and created the `chuys-web` Worker (§1–2)
+- 2026-10-29 Moved DNS to Cloudflare and created the `chuys-tacos` Worker (§1–2)
