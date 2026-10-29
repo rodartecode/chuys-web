@@ -37,7 +37,7 @@ The build image defaults to pnpm 10, which ignores the pnpm 11 settings in `pnpm
 
 Turnstile → Add widget:
 
-- **Hostnames**: `chuystacos.com`, `www.chuystacos.com`, and `chuys-tacos.<account>.workers.dev` for testing before cutover
+- **Hostnames**: `chuystacos.com`, `www.chuystacos.com`, and `chuys-tacos.<account>.workers.dev` for testing before cutover. The Worker is named `chuys-tacos`, not `chuys-web`.
 - **Mode**: Managed
 
 Put the **site key** in `src/data/business.ts` (`inquiry.turnstileSiteKey`) as the production branch, then commit. The **secret key** goes in the Worker secret in step 5.

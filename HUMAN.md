@@ -8,14 +8,18 @@
 
 ## ▶ Start here
 
-### [ ] Remove the `workers.dev` hostname from the Turnstile widget (§6) · ⏱ 2 min · added 2026-10-29
-**Why:** `wrangler.jsonc` now sets `workers_dev: false` and `preview_urls: false`, so the `workers.dev` copy of the site stops serving once that commit deploys. The widget shouldn't accept tokens for a host that no longer exists.
+### [ ] Trim the Turnstile widget to the live hostnames (§6) · ⏱ 2 min · added 2026-10-29
+**Why:** the widget still accepts tokens from hosts the site no longer uses:
+- `chuys-web.jerodarte.workers.dev`. The workers.dev copy has been off since 2026-10-29 (it returns 404), and it was never this Worker's real name.
+- `localhost` and `127.0.0.1`. `pnpm dev` now uses Cloudflare's test key, so it doesn't need them.
 
-1. Wait until the deploy of the `workers_dev` commit has finished, then check that `https://chuys-tacos.jerodarte.workers.dev/` no longer serves the site.
-2. Cloudflare dashboard → Turnstile → the `chuystacos.com` widget → Settings → Hostnames.
-3. Remove `chuys-tacos.jerodarte.workers.dev`, and keep `chuystacos.com` and `www.chuystacos.com`.
+I read this list through the Cloudflare API on 2026-10-29.
 
-**Done when:** the widget lists only `chuystacos.com` and `www.chuystacos.com`.
+1. Cloudflare dashboard → Turnstile → the widget named `chuystacos.com +2 (Spin)` → Settings → Hostnames.
+2. Remove `chuys-web.jerodarte.workers.dev`, `localhost` and `127.0.0.1`.
+3. Keep `chuystacos.com` and `www.chuystacos.com`, then Save.
+
+**Done when:** the widget lists only `chuystacos.com` and `www.chuystacos.com`. (Claude can check this with the Cloudflare MCP.)
 
 ## ⚡ Quick wins (≤10 min)
 
@@ -71,14 +75,8 @@
 
 ## ✅ Done recently
 
-- 2026-10-29 Owner change list shipped: generic asada blurb, catering packages hidden, new phone number, Cc to jesse@, readable dropdown. A Lighthouse audit ran; its follow-ups are in [`BACKLOG.md`](BACKLOG.md)
-
 - 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
 - 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)
 - 2026-10-29 Sent a test inquiry from a phone: it reached `chuy@chuystacos.com`, and Reply goes to the sender (§5 smoke test)
 - 2026-10-29 Signed in to the Cloudflare MCP server and loaded the plugin in chuys-web
 - 2026-10-29 Deployed to the custom domain with `wrangler deploy --domain chuystacos.com` (§6)
-- 2026-10-29 Set `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` as Worker secrets (§5)
-- 2026-10-29 Verified `mail.chuystacos.com` in Resend (§4)
-- 2026-10-29 Created the Turnstile widget and put the production site key in the site; Claude committed it as `76ef0fb` (§3)
-- 2026-10-29 Moved DNS to Cloudflare and created the `chuys-tacos` Worker (§1–2)
