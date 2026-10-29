@@ -40,9 +40,9 @@ Turnstile → Add widget:
 - **Hostnames**: `chuystacos.com`, `www.chuystacos.com`, and `chuys-tacos.<account>.workers.dev` for testing before cutover
 - **Mode**: Managed
 
-Put the **site key** in `src/data/business.ts` (`inquiry.turnstileSiteKey`) in place of the always-pass test key, then commit. The **secret key** goes in the Worker secret in step 5.
+Put the **site key** in `src/data/business.ts` (`inquiry.turnstileSiteKey`) as the production branch, then commit. The **secret key** goes in the Worker secret in step 5.
 
-For local work, `.dev.vars.example` ships the always-pass test secret, which pairs with the test site key. Cloudflare publishes the full set of test keys on the Turnstile testing page.
+For local work, `pnpm dev` uses Cloudflare's always-pass test site key (the `import.meta.env.DEV` branch), and `.dev.vars.example` ships the matching test secret. So the widget doesn't need `localhost` in its hostname list. `pnpm preview` is a production build, so its widget uses the real key and fails on `localhost`; test the endpoint there with the curl in [`API.md`](../../API.md) instead. Cloudflare publishes the full set of test keys on the Turnstile testing page.
 
 ## 4. Resend
 

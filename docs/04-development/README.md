@@ -17,7 +17,7 @@ cp .dev.vars.example .dev.vars
 pnpm dev
 ```
 
-The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turnstile is skipped (with a warning) and the endpoint returns `500 {"error":"Server misconfigured"}` until `RESEND_API_KEY` is set. `.dev.vars.example` ships Cloudflare's always-pass Turnstile test secret, and `src/data/business.ts` uses the matching always-pass site key until the real one is set.
+The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turnstile is skipped (with a warning) and the endpoint returns `500 {"error":"Server misconfigured"}` until `RESEND_API_KEY` is set. `.dev.vars.example` ships Cloudflare's always-pass Turnstile test secret, and `src/data/business.ts` uses the matching always-pass site key under `pnpm dev` (the production key in builds).
 
 ## Scripts
 
@@ -107,7 +107,7 @@ Edit `src/data/business.ts`. The Hero, Visit section, Footer and JSON-LD all pic
 
 ### Swap the Turnstile site key
 
-Replace `inquiry.turnstileSiteKey` in `src/data/business.ts`, and set the matching secret with `pnpm exec wrangler secret put TURNSTILE_SECRET_KEY`.
+Replace the production branch of `inquiry.turnstileSiteKey` in `src/data/business.ts` (leave the dev test key), and set the matching secret with `pnpm exec wrangler secret put TURNSTILE_SECRET_KEY`.
 
 ### Change brand colors
 
@@ -137,7 +137,7 @@ Run `pnpm install` first. If those errors persist after install, delete `node_mo
 
 ### Inquiry form shows "We couldn't verify you're human"
 
-The endpoint returned `{"error":"captcha"}`. Either the token was missing or expired, or the site key and secret don't belong to the same Turnstile widget. Also check that the widget's hostname list includes the host you're testing on (`localhost`, the `workers.dev` host, or `chuystacos.com`).
+The endpoint returned `{"error":"captcha"}`. Either the token was missing or expired, or the site key and secret don't belong to the same Turnstile widget. Also check that the widget's hostname list includes the host you're testing on (`chuystacos.com`). `pnpm dev` uses the always-pass test keys, so it never needs `localhost` listed; `pnpm preview` uses the real key, so its widget fails on `localhost`.
 
 ### Form POST returns a blank 405 in production
 

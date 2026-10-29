@@ -46,6 +46,10 @@ export const inquiry = {
   to: "chuy@chuystacos.com",
   /** Sender address — must be on a domain verified in Resend. */
   from: "inquiries@mail.chuystacos.com",
-  /** Production Turnstile site key — must pair with the TURNSTILE_SECRET_KEY secret. */
-  turnstileSiteKey: "0x4AAAAAAFrc6ZH8nAnS3Org",
+  /**
+   * Turnstile site key. `pnpm dev` uses Cloudflare's always-pass test key, which pairs with the
+   * test secret in `.dev.vars.example`; builds use the production key, which pairs with the
+   * TURNSTILE_SECRET_KEY Worker secret.
+   */
+  turnstileSiteKey: import.meta.env.DEV ? "1x00000000000000000000AA" : "0x4AAAAAAFrc6ZH8nAnS3Org",
 };
