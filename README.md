@@ -39,6 +39,9 @@ Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secre
 | `pnpm cf:deploy` | Build, then `wrangler deploy` (Workers Builds does this on push to `main`) |
 | `pnpm cf:types` | Regenerate Worker runtime types with `wrangler types` |
 | `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
+| `pnpm test` | Unit tests, then the browser smoke test |
+| `pnpm test:unit` | Vitest over `/api/inquiry` (`tests/unit/`) |
+| `pnpm test:e2e` | Playwright smoke test of the inquiry form (`tests/e2e/`). Starts `pnpm dev` and uses your local Chrome |
 | `pnpm lint` | Biome lint |
 | `pnpm lint:fix` | Biome auto-fix |
 | `pnpm lint:styles` | Stylelint over `.css` and `.astro` `<style>` blocks |

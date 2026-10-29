@@ -25,7 +25,7 @@ The project is intentionally small. v1 ships a placeholder-content site that *ex
 - **Styling**: Tailwind v4 (CSS-first `@theme` tokens) + per-component `<style>` blocks
 - **Email**: Resend (bot-checked with Cloudflare Turnstile)
 - **Tooling**: Biome (TS/JS/JSON/Astro), Stylelint (CSS / `<style>` blocks), TypeScript strict
-- **Tests**: none in v1 (deferred)
+- **Tests**: Vitest unit tests for `/api/inquiry` and a Playwright smoke test of the form (`pnpm test`)
 - **Hosting**: Cloudflare Workers (static assets), `chuystacos.com`
 
 ## Out of scope for v1

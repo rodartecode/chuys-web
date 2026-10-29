@@ -42,7 +42,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "includes": ["src/**/*", "!**/*.css", "!**/dist/**", "!**/node_modules/**", "!**/.astro/**"]
+    "includes": [
+      "src/**/*",
+      "tests/**/*",
+      "*.config.ts",
+      "!**/*.css",
+      "!**/dist",
+      "!**/node_modules",
+      "!**/.astro"
+    ]
   },
   "css": {
     "linter": {

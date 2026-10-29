@@ -37,3 +37,7 @@ Thumbs.db
 # claude code (local settings, transcripts, etc.) — shared project settings are committed
 .claude/*
 !.claude/settings.json
+
+# test output
+test-results/
+playwright-report/

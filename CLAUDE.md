@@ -18,7 +18,10 @@ pnpm dev                    # http://localhost:4321
 pnpm build                  # dist/client (static assets) + dist/server (Worker)
 pnpm preview                # build + wrangler dev on :8787 (real Workers runtime)
 pnpm cf:deploy              # build + wrangler deploy (Workers Builds does this on push)
-pnpm typecheck              # astro check
+pnpm typecheck              # astro check (src/ and tests/)
+pnpm test                   # test:unit, then test:e2e
+pnpm test:unit              # Vitest: /api/inquiry with fetch + cloudflare:workers stubbed
+pnpm test:e2e               # Playwright smoke test of the form (starts pnpm dev, local Chrome)
 pnpm lint                   # Biome lint (TS/JS/Astro/JSON)
 pnpm lint:fix               # Biome auto-fix
 pnpm lint:styles            # Stylelint over .css / .astro
@@ -46,6 +49,10 @@ chuys-tacos/
 │   │   └── api/inquiry.ts  # POST handler — Turnstile + Resend
 │   ├── styles/global.css   # Tailwind import + @theme tokens + base layer
 │   └── env.d.ts            # Cloudflare.Env secret types
+├── tests/
+│   ├── unit/               # Vitest — /api/inquiry
+│   ├── e2e/                # Playwright — form smoke test
+│   └── stubs/              # cloudflare:workers stand-in for Vitest
 ├── public/                 # Static assets — favicon, future hero/menu photos
 ├── docs/
 │   ├── 00-overview/        # Quick start and project summary
@@ -56,6 +63,8 @@ chuys-tacos/
 ├── wrangler.jsonc          # Worker name, compat flags, assets + run_worker_first
 ├── biome.json              # Lint/format — CSS handled by stylelint
 ├── stylelint.config.mjs
+├── vitest.config.ts        # Aliases (incl. cloudflare:workers stub), tests/unit only
+├── playwright.config.ts    # tests/e2e, local Chrome, pnpm dev as webServer
 ├── tsconfig.json           # Extends astro/tsconfigs/strict + path aliases
 ├── API.md                  # /api/inquiry reference
 ├── BACKLOG.md              # Agent-doable code work (B-n IDs)
@@ -67,7 +76,7 @@ chuys-tacos/
 
 - **TypeScript strict** via `astro/tsconfigs/strict`. Path aliases: `@components/*`, `@layouts/*`, `@data/*`, `@styles/*`, `@/*`.
 - **Biome** handles JS/TS/JSON/Astro lint + format. CSS is excluded from Biome (Tailwind v4's `@theme` directive isn't recognized) and handled by stylelint.
-- **No tests** in v1. Add Vitest/Playwright when content stabilizes.
+- **Tests**: Vitest in `tests/unit/` runs the inquiry endpoint in Node. `cloudflare:workers` is aliased to `tests/stubs/`, and `fetch` is stubbed per test. One Playwright smoke test in `tests/e2e/` covers the form. Vitest doesn't read tsconfig paths, so new aliases go in `vitest.config.ts` too. See `docs/04-development/` for details.
 - **Astro components** prefer `<style>` blocks over Tailwind utility soup for section-level layout, with `var(--token)` references pulling from `global.css`.
 - **Placeholders are explicit** — owner content still pending is marked `TODO(owner)` in a code comment and renders a graceful fallback (hidden or reworded), never visible "TODO"/"TBD" text.
 
@@ -111,4 +120,4 @@ Gotchas (learned on `paint-web`, which uses the same setup):
 Tracked in the personal Obsidian vault at `C:/Users/jerod/vault/projects/chuys-tacos.md`. Add a dated one-liner to its activity log when finishing meaningful work.
 
 ---
-Last updated: 2026-10-28
+Last updated: 2026-10-29

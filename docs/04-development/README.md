@@ -28,8 +28,11 @@ The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turns
 | `pnpm preview` | Builds, then runs `wrangler dev` on port 8787 (the real workerd runtime) |
 | `pnpm cf:deploy` | Builds, then `wrangler deploy` (normally done by Workers Builds on push) |
 | `pnpm cf:types` | `wrangler types` |
-| `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts` |
-| `pnpm lint` | Biome lint over `src/` |
+| `pnpm typecheck` | `astro check` — type-checks `.astro` and `.ts`, including `tests/` |
+| `pnpm test` | `test:unit`, then `test:e2e` |
+| `pnpm test:unit` | Vitest over `tests/unit/` |
+| `pnpm test:e2e` | Playwright over `tests/e2e/`. Starts `pnpm dev` on 4321, or reuses one that's already running |
+| `pnpm lint` | Biome lint over `src/`, `tests/` and the root `*.config.ts` files |
 | `pnpm lint:fix` | Biome auto-fix |
 | `pnpm lint:styles` | Stylelint over `.css` and `.astro` `<style>` blocks |
 | `pnpm format` | Biome format |
@@ -37,7 +40,7 @@ The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turns
 Before committing, the minimum useful gate is:
 
 ```bash
-pnpm typecheck && pnpm lint && pnpm lint:styles && pnpm build
+pnpm typecheck && pnpm lint && pnpm lint:styles && pnpm test && pnpm build
 ```
 
 ## Conventions
@@ -70,6 +73,13 @@ Tokens live in `src/styles/global.css` under `@theme`. Edit them once, see them 
 ```
 
 When real brand colors arrive, edit those values — not individual components.
+
+### Tests
+
+- **Unit (Vitest, `tests/unit/`)** run `src/pages/api/inquiry.ts` in plain Node. They cover validation, the honeypot, Turnstile and the Resend payload. `vitest.config.ts` aliases `cloudflare:workers` to `tests/stubs/cloudflare-workers.ts`, whose `env` object the tests set per case, and each test stubs `fetch` by URL. Nothing leaves the machine. Vitest doesn't read tsconfig paths, so a new path alias used by the endpoint needs adding to `vitest.config.ts` too.
+- **Browser smoke (Playwright, `tests/e2e/`)** loads the dev server in your installed Chrome (`channel: "chrome"`), so there's no browser download. Without Chrome, run `pnpm exec playwright install chromium` and drop `channel` from `playwright.config.ts`. The test blocks requests to `challenges.cloudflare.com` and never submits the form, so it doesn't reach Turnstile or Resend.
+- Unit tests use a fixed clock (2026-11-15) because the endpoint rejects past event dates.
+- Keep tests out of `src/pages/`, where Astro would turn them into routes.
 
 ### Linting boundary
 
@@ -123,7 +133,8 @@ Edit `@theme` tokens in `src/styles/global.css`.
 
 1. Add the input to `src/components/InquiryForm.astro`.
 2. Read it with `clean(body.field, max)` and add any validation rule in `src/pages/api/inquiry.ts`, then include it in the email HTML (escaped).
-3. Update [`API.md`](../../API.md) — the request schema is the source of truth.
+3. Add cases for the new rule to `tests/unit/inquiry.test.ts`, and add the field to the `valid` payload there.
+4. Update [`API.md`](../../API.md) — the request schema is the source of truth.
 
 ## Troubleshooting
 
@@ -150,4 +161,4 @@ The endpoint returned `{"error":"captcha"}`. Either the token was missing or exp
 - `inquiry.from` in `src/data/business.ts` isn't on a domain verified in Resend (`mail.chuystacos.com`).
 
 ---
-Last updated: 2026-10-28
+Last updated: 2026-10-29
