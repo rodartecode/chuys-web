@@ -2,7 +2,7 @@
 
 > This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at the tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`), `HUMAN.md` and the runbook rather than restating them. If they disagree, the tracker and the code win.
 
-**As of:** 2026-10-29 · `3d4ed2e` + this handoff commit · no test suite; typecheck, lint, lint:styles and build were green at `e4c5fd3` · pushed
+**As of:** 2026-10-29 · `eb7daec` + this handoff commit · no test suite; typecheck, lint, lint:styles and build were green at `e4c5fd3` · pushed
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
@@ -10,7 +10,7 @@
 - The site is live at https://chuystacos.com. The user did runbook §1–6, apart from Always Use HTTPS and the `www` record.
 - `76ef0fb`: committed the production Turnstile site key. `main` now matches what's live, which came from a manual deploy of the uncommitted tree.
 - `e4c5fd3`: bumped `@astrojs/cloudflare` to 14.4.3. **It isn't deployed yet**; see "In flight".
-- `3d4ed2e`: added the Cloudflare `wrangler` skill under `.claude/skills/`, and `.gitignore` now commits `.claude/skills/` only. paint-web got the same skill in `a82ff46`. The install method is in the memory note `project-scoped-skills`.
+- `eb7daec`: enabled the official `cloudflare@cloudflare` plugin at project scope in the committed `.claude/settings.json`. It brings the Cloudflare skills and the Cloudflare MCP server. It replaces the `npx skills` wrangler copy from `3d4ed2e`, which an audit against Cloudflare's setup page ruled out. paint-web got the same change in `da0bad3` and `7a82c7b`. The method is in the memory note `project-scoped-skills`.
 
 ## Next steps (ordered)
 
