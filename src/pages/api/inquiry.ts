@@ -134,6 +134,7 @@ export const POST: APIRoute = async ({ request }) => {
       body: JSON.stringify({
         from: `${business.name} Inquiries <${inquiry.from}>`,
         to: [inquiry.to],
+        cc: inquiry.cc,
         reply_to: email,
         subject,
         html,

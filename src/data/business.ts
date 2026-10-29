@@ -44,6 +44,8 @@ export const business = {
 export const inquiry = {
   /** Where catering inquiries are delivered. */
   to: "chuy@chuystacos.com",
+  /** Copied on every inquiry. */
+  cc: ["jesse@chuystacos.com"],
   /** Sender address — must be on a domain verified in Resend. */
   from: "inquiries@mail.chuystacos.com",
   /**

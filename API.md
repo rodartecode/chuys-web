@@ -97,11 +97,12 @@ When validation passes and Resend accepts the request:
 
 - **From**: `Chuy's Tacos Inquiries <inquiry.from>`
 - **To**: `inquiry.to`
-- **Reply-To**: the `email` field from the submission
+- **Cc**: `inquiry.cc`
+- **Reply-To**: the `email` field from the submission, so Reply goes only to the customer (Reply all also includes the Cc)
 - **Subject**: `New catering inquiry: {name} — {eventDate}`
 - **Body**: HTML containing the name, email, optional phone, event date, guest count, optional event type and optional message. All user-supplied values are HTML-escaped server-side.
 
-`inquiry.to` and `inquiry.from` live in [`src/data/business.ts`](./src/data/business.ts). They're not secrets. The `from` address must be on a domain verified in Resend (`mail.chuystacos.com`).
+`inquiry.to`, `inquiry.cc` and `inquiry.from` live in [`src/data/business.ts`](./src/data/business.ts). They're not secrets. The `from` address must be on a domain verified in Resend (`mail.chuystacos.com`).
 
 ### Curl examples
 
