@@ -4,13 +4,13 @@ Work that only a person can do: dashboards, DNS, secrets, and content from the o
 
 ## Go live
 
-- [ ] **§1 DNS zone.** Export the current DNS records first, especially MX, SPF, DKIM and DMARC. Add `chuystacos.com` to Cloudflare, check that the mail records came across, switch the nameservers, then send a test email to `chuy@chuystacos.com`.
-- [ ] **§2 Worker.** Workers & Pages → Import a repository → `rodartecode/chuys-web`. Build `pnpm build`, deploy `pnpm exec wrangler deploy`, branch `main`, build variable `PNPM_VERSION=11.21.0`.
-- [ ] **§3 Turnstile widget.** Hostnames `chuystacos.com`, `www.chuystacos.com`, and the `workers.dev` host. Mode: Managed.
-  - [ ] Send the **site key** to Claude (or paste it into `inquiry.turnstileSiteKey` in `src/data/business.ts`), then commit and push.
+- [x] **§1 DNS zone.** Export the current DNS records first, especially MX, SPF, DKIM and DMARC. Add `chuystacos.com` to Cloudflare, check that the mail records came across, switch the nameservers, then send a test email to `chuy@chuystacos.com`.
+- [x] **§2 Worker.** Workers & Pages → Import a repository → `rodartecode/chuys-web`. Build `pnpm build`, deploy `pnpm exec wrangler deploy`, branch `main`, build variable `PNPM_VERSION=11.21.0`.
+- [x] **§3 Turnstile widget.** Hostnames `chuystacos.com`, `www.chuystacos.com`, and the `workers.dev` host. Mode: Managed.
+  - [x] Send the **site key** to Claude (or paste it into `inquiry.turnstileSiteKey` in `src/data/business.ts`), then commit and push.
   - ⚠️ The real site key must be live **before or together with** the real secret. A test site key paired with the real secret fails every inquiry, and nothing else warns you.
-- [ ] **§4 Resend.** Add the domain `mail.chuystacos.com`, add its records to Cloudflare as DNS-only (grey cloud), and wait for it to verify. Create an API key with sending access only.
-- [ ] **§5 Secrets.** In a real interactive terminal, not Claude's `!` prefix:
+- [x] **§4 Resend.** Add the domain `mail.chuystacos.com`, add its records to Cloudflare as DNS-only (grey cloud), and wait for it to verify. Create an API key with sending access only.
+- [x] **§5 Secrets.** In a real interactive terminal, not Claude's `!` prefix:
   ```bash
   pnpm exec wrangler secret put RESEND_API_KEY
   pnpm exec wrangler secret put TURNSTILE_SECRET_KEY
@@ -18,8 +18,8 @@ Work that only a person can do: dashboards, DNS, secrets, and content from the o
   ```
   - [ ] Smoke test: send an inquiry through the `workers.dev` URL and confirm it arrives.
 - [ ] **§6 Custom domain.**
-  - [ ] Run `pnpm build && pnpm exec wrangler deploy --domain chuystacos.com`. Use this command, not the dashboard button.
-  - [ ] `www`: add a proxied `AAAA` record with content `100::`, then add the "Redirect from WWW to root" rule (301).
+  - [x] Run `pnpm build && pnpm exec wrangler deploy --domain chuystacos.com`. Use this command, not the dashboard button.
+  - [x] `www`: add a proxied `AAAA` record with content `100::`, then add the "Redirect from WWW to root" rule (301).
   - [ ] Turn on Always Use HTTPS. Check with `curl -I http://chuystacos.com/`, which should return a 301.
 
 ## After cutover
