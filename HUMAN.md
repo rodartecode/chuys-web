@@ -20,6 +20,16 @@
 
 ## ⚡ Quick wins (≤10 min)
 
+### [ ] Load the Cloudflare plugin and sign in to its MCP server · ⏱ 2 min · added 2026-10-29
+**Why:** the Cloudflare skills and MCP server are enabled in chuys-web and paint-web, but they don't load until the plugins reload, and the MCP server needs a one-time Cloudflare sign-in.
+
+1. In a Claude Code session in `C:\Users\jerod\code\chuys-web`, type `/reload-plugins`.
+2. Ask Claude something that uses a Cloudflare MCP tool, such as "list my Workers with the Cloudflare MCP".
+3. Approve the Cloudflare sign-in in the browser window that opens.
+4. Repeat step 1 in a session in `C:\Users\jerod\code\paint-web`.
+
+**Done when:** `/mcp` lists `cloudflare` as connected, and skills such as `cloudflare:wrangler` appear in the skills list.
+
 ### [ ] Connect Workers Builds to the GitHub repo · ⏱ 10 min · added 2026-10-29
 **Why:** pushes to `main` don't deploy. All 4 deployments so far came from `wrangler` on your laptop, and the 2026-10-29 push didn't deploy, so the `@astrojs/cloudflare` 14.4.3 bump isn't live.
 
