@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="links">
-      <h4>Visit</h4>
+      <h3>Visit</h3>
       <ul>
         <li>{street}, {suite}</li>
         <li>{city}, {state} {zip}</li>
@@ -29,7 +29,7 @@ const year = new Date().getFullYear();
     </div>
 
     <div class="links">
-      <h4>Explore</h4>
+      <h3>Explore</h3>
       <ul>
         <li><a href="#menu">Menu</a></li>
         <li><a href="#about">About</a></li>
@@ -41,7 +41,7 @@ const year = new Date().getFullYear();
     {
       social.length > 0 && (
         <div class="links">
-          <h4>Follow</h4>
+          <h3>Follow</h3>
           <ul>
             {social.map((link) => (
               <li>
@@ -108,7 +108,7 @@ const year = new Date().getFullYear();
     font-style: italic;
   }
 
-  .links h4 {
+  .links h3 {
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.16em;
