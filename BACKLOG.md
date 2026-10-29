@@ -22,14 +22,6 @@
 
 **Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
 
-### B-3 · Add tests
-**Why:** CLAUDE.md says "No tests in v1". The inquiry endpoint is the only logic that can lose leads.
-**Where:**
-- Vitest for `src/pages/api/inquiry.ts`: validation, honeypot, a Turnstile failure, and the Resend payload including `cc`. Stub `fetch` and `cloudflare:workers`.
-- One Playwright smoke test that the form renders and blocks an empty submit.
-- Wire both into `package.json` scripts and the docs.
-**Done when:** `pnpm test` runs green locally, and CLAUDE.md's Conventions no longer says "No tests".
-
 ## Not doing
 
 - **Cloudflare Web Analytics beacon** (`static.cloudflareinsights.com/beacon.min.js`). Lighthouse flags its one-day cache and about 10 KiB of legacy JS. It's injected by Cloudflare rather than shipped by us, and it's small. Revisit only if Web Analytics gets turned off.
@@ -47,6 +39,7 @@ The mobile row is the same across three runs. Accessibility before B-2 was 98 be
 
 ## Done
 
+- 2026-10-29 · B-3: Vitest covers `/api/inquiry` with 30 tests: validation, the honeypot, Turnstile failures and the Resend payload including `cc`. A Playwright smoke test checks that the form renders and blocks an empty submit. `pnpm test` runs both, and lint and typecheck now cover `tests/` (`3096364`).
 - 2026-10-29 · B-2: self-hosted Playfair Display through the Astro Fonts API, as one preloaded variable woff2 with an immutable cache (`2d98587`). Google Fonts requests and the render-blocking flag are gone, and headings measure identically. Desktop LCP went from 0.7 s to 0.3 s.
 
 - 2026-10-29 · Footer column titles changed from `<h4>` to `<h3>` (Lighthouse `heading-order`)
