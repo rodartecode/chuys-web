@@ -46,7 +46,6 @@ export const inquiry = {
   to: "chuy@chuystacos.com",
   /** Sender address — must be on a domain verified in Resend. */
   from: "inquiries@mail.chuystacos.com",
-  // TODO(owner): replace with the real Turnstile site key. This is Cloudflare's
-  // always-pass test key; the widget works but blocks nothing until swapped.
-  turnstileSiteKey: "1x00000000000000000000AA",
+  /** Production Turnstile site key — must pair with the TURNSTILE_SECRET_KEY secret. */
+  turnstileSiteKey: "0x4AAAAAAFrc6ZH8nAnS3Org",
 };
