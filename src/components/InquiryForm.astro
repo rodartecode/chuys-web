@@ -92,6 +92,8 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
     padding: 5rem 1.5rem;
     background: var(--color-charcoal);
     color: var(--color-cream);
+    /* Native popups (select options, date picker) and input icons render dark-themed. */
+    color-scheme: dark;
   }
 
   .container {
@@ -164,6 +166,12 @@ const eventTypes = ["Wedding", "Corporate", "Private Party", "Quinceañera", "Fu
     font: inherit;
     font-size: 0.95rem;
     transition: border-color 150ms ease, background 150ms ease;
+  }
+
+  /* Some browsers ignore color-scheme for the option list; without this it's cream on white. */
+  option {
+    background-color: var(--color-charcoal);
+    color: var(--color-cream);
   }
 
   input:focus,
