@@ -10,7 +10,7 @@ export interface MenuItem {
 export const menuHighlights: MenuItem[] = [
   {
     name: "Carne Asada",
-    description: "Our special blend of tri-tip, brisket, and chuck.",
+    description: "Our special blend of steak, grilled and chopped fresh.",
     imagePath: "/images/menu-carne-asada.svg",
   },
   {

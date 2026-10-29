@@ -14,8 +14,8 @@ export interface OpeningHours {
 export const business = {
   name: "Chuy's Tacos",
   url: "https://chuystacos.com",
-  phone: "+15592854374",
-  phoneDisplay: "(559) 285-4374",
+  phone: "+15593856847",
+  phoneDisplay: "(559) 385-6847",
   email: "chuy@chuystacos.com",
   address: {
     street: "365 West Bedford Ave",
