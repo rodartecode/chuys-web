@@ -1,49 +1,105 @@
-# Human tasks
+# Waiting on you
 
-Work that only a person can do: dashboards, DNS, secrets, and content from the owners. Tick items off as they're done. The full detail for each go-live step is in [`docs/05-guides/cloudflare-setup.md`](docs/05-guides/cloudflare-setup.md); the section numbers below point there.
+> Tasks only you can do. Kept up to date by /document-and-clear and read by /catchup.
+> Check one off by telling the agent, or delete it yourself. Full detail for each step is in the
+> runbook [`docs/05-guides/cloudflare-setup.md`](docs/05-guides/cloudflare-setup.md); the § numbers point there.
 
-## Go live
+**Updated:** 2026-10-29 · LAPTOP-ESEL9A3K
 
-- [x] **§1 DNS zone.** Export the current DNS records first, especially MX, SPF, DKIM and DMARC. Add `chuystacos.com` to Cloudflare, check that the mail records came across, switch the nameservers, then send a test email to `chuy@chuystacos.com`.
-- [x] **§2 Worker.** Workers & Pages → Import a repository → `rodartecode/chuys-web`. Build `pnpm build`, deploy `pnpm exec wrangler deploy`, branch `main`, build variable `PNPM_VERSION=11.21.0`.
-- [x] **§3 Turnstile widget.** Hostnames `chuystacos.com`, `www.chuystacos.com`, and the `workers.dev` host. Mode: Managed.
-  - [x] Send the **site key** to Claude (or paste it into `inquiry.turnstileSiteKey` in `src/data/business.ts`), then commit and push.
-  - ⚠️ The real site key must be live **before or together with** the real secret. A test site key paired with the real secret fails every inquiry, and nothing else warns you.
-- [x] **§4 Resend.** Add the domain `mail.chuystacos.com`, add its records to Cloudflare as DNS-only (grey cloud), and wait for it to verify. Create an API key with sending access only.
-- [x] **§5 Secrets.** In a real interactive terminal, not Claude's `!` prefix:
-  ```bash
-  pnpm exec wrangler secret put RESEND_API_KEY
-  pnpm exec wrangler secret put TURNSTILE_SECRET_KEY
-  pnpm exec wrangler secret list
-  ```
-  - [ ] Smoke test: send an inquiry through the `workers.dev` URL and confirm it arrives.
-- [ ] **§6 Custom domain.**
-  - [x] Run `pnpm build && pnpm exec wrangler deploy --domain chuystacos.com`. Use this command, not the dashboard button.
-  - [x] `www`: add a proxied `AAAA` record with content `100::`, then add the "Redirect from WWW to root" rule (301).
-  - [ ] Turn on Always Use HTTPS. Check with `curl -I http://chuystacos.com/`, which should return a 301.
+## ▶ Start here
 
-## After cutover
+### [ ] Send a test inquiry from your phone · ⏱ 5 min
+**Why:** the site is live, but no inquiry has gone end to end yet. A broken form loses catering leads and doesn't warn anyone.
 
-- [ ] Send a real inquiry from a phone. Confirm it arrives at `chuy@chuystacos.com` and that Reply goes to the customer.
-- [ ] Ask Claude to set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`. Then remove the `workers.dev` hostname from the Turnstile widget.
-- [ ] **§7 Search.**
-  - [ ] Google Search Console: verify the domain by DNS, then submit `https://chuystacos.com/sitemap-index.xml`.
-  - [ ] Google Business Profile: the name, address, phone and hours must match `src/data/business.ts`. Set the website to `https://chuystacos.com`.
-  - [ ] Run the Rich Results Test on the homepage.
-  - [ ] Optional: import into Bing Webmaster Tools from Search Console.
-- [ ] **§8 (optional) Rate limit.** Add a WAF rule for `POST /api/inquiry` that blocks more than 5 requests per minute per IP.
+1. On your phone, open https://chuystacos.com/#contact
+2. Fill in the form with your own email address and submit it.
+3. Open the `chuy@chuystacos.com` inbox and find the inquiry.
+4. Press Reply and check that the To address is the email you entered on the form.
 
-## Owner content
+**Done when:** the inquiry is in `chuy@chuystacos.com`, and Reply goes to the address you entered. (This covers the runbook's §5 smoke test as well.)
 
-Collect these from the owners. Each one has a graceful fallback until it arrives, and `grep -rn "TODO(owner)" src/` lists where each one goes.
+## ⚡ Quick wins (≤10 min)
 
-- [ ] Family origin story and founding year (About)
-- [ ] A pull quote: an owner line or a customer review (About)
-- [ ] Confirmed catering package names and descriptions, plus pricing (Catering)
-- [ ] Instagram and Facebook URLs (Footer)
-- [ ] Hero photo
-- [ ] Menu item photos
-- [ ] Downloadable PDF menu
+### [ ] Connect Workers Builds to the GitHub repo · ⏱ 10 min · added 2026-10-29
+**Why:** pushes to `main` don't deploy. All 4 deployments so far came from `wrangler` on your laptop, and the 2026-10-29 push didn't deploy, so the `@astrojs/cloudflare` 14.4.3 bump isn't live.
 
----
-Last updated: 2026-10-28
+1. Cloudflare dashboard → Workers & Pages → `chuys-web` → Settings → Build → Connect.
+2. Pick GitHub → `rodartecode/chuys-web`, branch `main`.
+3. Set the build command to `pnpm build` and the deploy command to `pnpm exec wrangler deploy`.
+4. Add a build variable: `PNPM_VERSION` = `11.21.0`.
+5. Save, then start a build from the Deployments tab (or ask Claude to push a commit).
+
+**Done when:** this command shows a deployment newer than `2026-10-29T18:00`:
+```bash
+pnpm exec wrangler deployments list
+```
+
+### [ ] Fix the `www` DNS record · ⏱ 10 min · added 2026-10-29
+**Why:** `www.chuystacos.com` doesn't exist in public DNS (NXDOMAIN on 1.1.1.1 on 2026-10-29), so anyone who types `www` gets an error page.
+
+1. Cloudflare dashboard → `chuystacos.com` → DNS → Records.
+2. Look for an `AAAA` record named `www`. If it's missing, add one: content `100::`, Proxy **on** (orange cloud).
+3. Rules → Redirect Rules: check that "Redirect from WWW to root" (301) is there and enabled.
+4. Check it:
+   ```bash
+   curl -sI https://www.chuystacos.com/
+   ```
+
+**Done when:** the curl shows `301` with `location: https://chuystacos.com/`.
+
+### [ ] Turn on Always Use HTTPS · ⏱ 2 min · added 2026-10-28
+**Why:** `http://chuystacos.com/` serves the page over plain HTTP (it returns 200) instead of redirecting to HTTPS.
+
+1. Cloudflare dashboard → `chuystacos.com` → SSL/TLS → Edge Certificates.
+2. Switch **Always Use HTTPS** on.
+3. Check it:
+   ```bash
+   curl -sI http://chuystacos.com/
+   ```
+
+**Done when:** the curl shows `301`.
+
+### [ ] Add a rate limit on the inquiry endpoint (optional, §8) · ⏱ 10 min · added 2026-10-28
+**Why:** Turnstile stops bots, but a rate limit caps how many emails a single IP can trigger.
+
+1. Cloudflare dashboard → `chuystacos.com` → Security → WAF → Rate limiting rules → Create rule.
+2. Match: URI path equals `/api/inquiry`, and request method equals `POST`.
+3. Rate: more than 5 requests per 1 minute, counted per IP. Action: Block.
+
+**Done when:** the rule shows as enabled in the list.
+
+## 🎯 Needs a focus block
+
+### [ ] Set up Google Search Console (§7) · ⏱ 20 min · added 2026-10-28
+**Why:** Google finds and ranks the site sooner once the sitemap has been submitted.
+
+1. Go to https://search.google.com/search-console, then Add property → Domain → `chuystacos.com`.
+2. Copy the TXT record Google gives you, then add it in Cloudflare → DNS → Records with Proxy off.
+3. Back in Search Console, press Verify.
+4. Sitemaps → submit `https://chuystacos.com/sitemap-index.xml`.
+5. Run the homepage through https://search.google.com/test/rich-results.
+6. Optional: in Bing Webmaster Tools, import the site from Search Console.
+
+**Done when:** the sitemap shows "Success" and the Rich Results Test finds the restaurant data with no errors.
+
+### [ ] Update the Google Business Profile (§7) · ⏱ 20 min · added 2026-10-28
+**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours.
+
+1. Open the profile at https://business.google.com.
+2. Compare the name, address, phone and hours with `src/data/business.ts`, and fix any that differ.
+3. Set the website to `https://chuystacos.com`.
+
+**Done when:** every field matches `business.ts`, and the website field shows `https://chuystacos.com`.
+
+## ⏳ Waiting on something else
+
+- [ ] Ask Claude to set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`, then remove the `workers.dev` hostname from the Turnstile widget · waiting on the test inquiry and the `www`/HTTPS fixes · added 2026-10-28
+- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, the Instagram and Facebook URLs, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
+
+## ✅ Done recently
+
+- 2026-10-29 Deployed to the custom domain with `wrangler deploy --domain chuystacos.com` (§6)
+- 2026-10-29 Set `RESEND_API_KEY` and `TURNSTILE_SECRET_KEY` as Worker secrets (§5)
+- 2026-10-29 Verified `mail.chuystacos.com` in Resend (§4)
+- 2026-10-29 Created the Turnstile widget and put the production site key in the site; Claude committed it as `76ef0fb` (§3)
+- 2026-10-29 Moved DNS to Cloudflare and created the `chuys-web` Worker (§1–2)

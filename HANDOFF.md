@@ -2,33 +2,35 @@
 
 > This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at the tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`), `HUMAN.md` and the runbook rather than restating them. If they disagree, the tracker and the code win.
 
-**As of:** 2026-10-28 · `601ab43` + this handoff commit · no test suite; typecheck, lint, lint:styles and build were green at `c55f98c`, and nothing has changed in `src/` since · pushed
+**As of:** 2026-10-29 · `3d4ed2e` + this handoff commit · no test suite; typecheck, lint, lint:styles and build were green at `e4c5fd3` · pushed
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
 
-- All launch work is pushed to `origin/main` (`rodartecode/chuys-web`), `574e536..601ab43`. The commit-by-commit detail is in the tracker's Activity Log.
-- `601ab43` added `HUMAN.md`, a checkbox list of every task Claude can't do: the go-live steps from runbook §1–8, the after-cutover checks, and the owner content still to collect. `CLAUDE.md`'s Documentation list now points to it.
+- The site is live at https://chuystacos.com. The user did runbook §1–6, apart from Always Use HTTPS and the `www` record.
+- `76ef0fb`: committed the production Turnstile site key. `main` now matches what's live, which came from a manual deploy of the uncommitted tree.
+- `e4c5fd3`: bumped `@astrojs/cloudflare` to 14.4.3. **It isn't deployed yet**; see "In flight".
+- `3d4ed2e`: added the Cloudflare `wrangler` skill under `.claude/skills/`, and `.gitignore` now commits `.claude/skills/` only. paint-web got the same skill in `a82ff46`. The install method is in the memory note `project-scoped-skills`.
 
 ## Next steps (ordered)
 
-1. The user works through `HUMAN.md` → Go live (runbook §1–6). Connecting Workers Builds (§2) makes every later push to `main` a production deploy.
-2. **When the user supplies the real Turnstile site key:** put it in `inquiry.turnstileSiteKey` in `src/data/business.ts`, then commit and push. It must be live before or together with the real `TURNSTILE_SECRET_KEY`. `HUMAN.md` §3 carries the warning.
-3. **After the custom domain works:** set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`. `HUMAN.md` asks the user to request this.
-4. **From 2026-10-29:** bump `@astrojs/cloudflare` to 14.4.3, which is then outside pnpm's release-age window. Re-run typecheck, lint and build.
-5. Add owner content as it arrives. `HUMAN.md` → Owner content has the list, and `grep -rn "TODO(owner)" src/` shows where each item goes.
+1. **Get the 14.4.3 bump live.** Blocked on HUMAN.md: *Connect Workers Builds to the GitHub repo*. If the user wants it live sooner, run `pnpm cf:deploy`, but only with their OK, because it deploys to production.
+2. **Fix local Turnstile.** The real site key now ships in dev too, and it fails on `localhost` unless `localhost` is one of the widget's hostnames. `docs/05-guides/cloudflare-setup.md:45` still says the test secret pairs with the site key in the repo. See "Open decisions".
+3. **Turn off workers.dev and preview URLs:** set `workers_dev: false` and `preview_urls: false` in `wrangler.jsonc`. Blocked on HUMAN.md: *Send a test inquiry from your phone*, *Fix the `www` DNS record* and *Turn on Always Use HTTPS*.
+4. Add owner content as it arrives. HUMAN.md's "Waiting on something else" has the list.
 
 ## In flight / blocked
 
-- Steps 1–3 are blocked on the operator. Claude doesn't provision Cloudflare, Resend or DNS.
-- Real email delivery is unverified and needs the real Resend key.
+- **Workers Builds isn't deploying.** All 4 Worker deployments are `wrangler` uploads, secret puts and the 18:00 UTC `--domain` deploy. GitHub has no check runs on `ba7216e` or `3d4ed2e`, and the 18:20 UTC push didn't deploy. A likely cause, not verified: the Worker was created by `wrangler` before the dashboard Git import.
+- Inquiry delivery is still unverified end to end; this is HUMAN.md's Start here.
 
 ## Open decisions
 
-- None.
+- **Local Turnstile in dev.** Option (a): add `localhost` to the widget's hostnames, which is a dashboard step. Option (b): use the always-pass test site key when `import.meta.env.DEV`, which is a code change and keeps dev free of the real widget. Ask the user which; (b) matches what `.dev.vars.example` already assumes.
 
 ## Watch items
 
 - **TS 7 support.** TS is held at 6.x. See the tracker's Watch section and the memory note `ts7-support-watch`.
 - The `@vercel/functions` entries in the lockfile are optional peers pulled in by `unstorage` through Astro. They aren't Vercel leftovers.
-- **Vault:** `projects/jevy.md` has uncommitted edits from another session (the 2026-10-20 jevy log entries). This session left them alone.
+- **Vault:** this session's 2026-10-29 activity lines in `projects/chuys-tacos.md` and `projects/paint-web.md` are uncommitted. So are the older `projects/jevy.md` edits from another session.
+- paint-web's commit style is sentence case. `a82ff46` used the `chore(claude):` prefix, which is cosmetic and was left as is.
