@@ -14,10 +14,10 @@
 **Where:** `src/components/Catering.astro`. Update the `packages` array, add `pricing`, then set `showPackages = true`. The `.grid`/`.card` styles are still in place.
 **Done when:** the cards render with the owners' final copy, and "Request this package →" links to `#contact`.
 
-### B-2 · Self-host Playfair Display
-**Why:** the Google Fonts stylesheet is the only render-blocking request. Lighthouse (2026-10-29) estimated it at about 950 ms on mobile and 340 ms on desktop. Mobile FCP is 1.9 s and Speed Index is 4.1 s, the only metrics not in the green.
-**Where:** `src/layouts/BaseLayout.astro`, which has the `fonts.googleapis.com` preconnects and the stylesheet link. Serve the 600/700 weights from the site itself, through Astro's fonts support or `@fontsource/playfair-display`, preloaded with `font-display: swap`. Drop both Google preconnects.
-**Done when:** no requests go to `fonts.googleapis.com` or `fonts.gstatic.com`, Lighthouse no longer flags render-blocking requests, and the headings look the same.
+### B-4 · Find what delays first paint on mobile
+**Why:** after B-2, nothing blocks render, and every request finishes by about 0.6 s. Even so, three Lighthouse mobile runs *observed* first paint at about 2.4 s, against 0.54 s on desktop. Simulated mobile FCP stays at 1.9 s and Speed Index at about 4.1 s, the only metrics not in the green. The gap predates B-2, since those numbers didn't change, so it isn't the fonts.
+**Where:** first, record a mobile-emulated Performance trace in DevTools (Moto G-class, 4× CPU) on production, and see what sits between the end of the response and first paint: style/layout, paint of the hero gradients, or the `page.*.js` script. Suspects to rule in or out are the Hero's layered gradients and any filter or blur, then the inline CSS size.
+**Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
 
 ### B-3 · Add tests
 **Why:** CLAUDE.md says "No tests in v1". The inquiry endpoint is the only logic that can lose leads.
@@ -31,16 +31,20 @@
 
 - **Cloudflare Web Analytics beacon** (`static.cloudflareinsights.com/beacon.min.js`). Lighthouse flags its one-day cache and about 10 KiB of legacy JS. It's injected by Cloudflare rather than shipped by us, and it's small. Revisit only if Web Analytics gets turned off.
 
-## Lighthouse baseline (2026-10-29, production, Lighthouse 13.6.0)
+## Lighthouse baseline (production, Lighthouse 13.6.0)
 
-| Run | Performance | Accessibility | Best Practices | SEO | LCP | TBT | CLS |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Mobile | 96 | 98 | 100 | 100 | 1.9 s | 0 ms | 0 |
-| Desktop | 99 | 98 | 100 | 100 | 0.7 s | 0 ms | 0.001 |
+| Date · commit | Run | Performance | Accessibility | Best Practices | SEO | FCP | LCP | Speed Index | TBT | CLS |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-29 · `2d98587` (after B-2) | Mobile | 96 | 100 | 100 | 100 | 1.9 s | 1.9 s | 4.1 s | 0 ms | 0 |
+| 2026-10-29 · `2d98587` (after B-2) | Desktop | 100 | 100 | 100 | 100 | 0.3 s | 0.3 s | 0.5 s | 0 ms | 0 |
+| 2026-10-29 · before B-2 | Mobile | 96 | 98 | 100 | 100 | 1.9 s | 1.9 s | 4.1 s | 0 ms | 0 |
+| 2026-10-29 · before B-2 | Desktop | 99 | 98 | 100 | 100 | — | 0.7 s | — | 0 ms | 0.001 |
 
-Accessibility was 98 because of the two items fixed in Done below.
+The mobile row is the same across three runs. Accessibility before B-2 was 98 because of the two items fixed in Done below. Mobile FCP and Speed Index didn't move with B-2; see B-4.
 
 ## Done
+
+- 2026-10-29 · B-2: self-hosted Playfair Display through the Astro Fonts API, as one preloaded variable woff2 with an immutable cache (`2d98587`). Google Fonts requests and the render-blocking flag are gone, and headings measure identically. Desktop LCP went from 0.7 s to 0.3 s.
 
 - 2026-10-29 · Footer column titles changed from `<h4>` to `<h3>` (Lighthouse `heading-order`)
 - 2026-10-29 · Dropped the header logo link's `aria-label`, so its name matches the visible text (Lighthouse `label-content-name-mismatch`)
