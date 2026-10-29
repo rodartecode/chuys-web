@@ -13,7 +13,7 @@
 - `chuys-web.jerodarte.workers.dev`. The workers.dev copy has been off since 2026-10-29 (it returns 404), and it was never this Worker's real name.
 - `localhost` and `127.0.0.1`. `pnpm dev` now uses Cloudflare's test key, so it doesn't need them.
 
-I read this list through the Cloudflare API on 2026-10-29.
+I read this list through the Cloudflare API on 2026-10-29, and it was unchanged at the end of that day.
 
 1. Cloudflare dashboard → Turnstile → the widget named `chuystacos.com +2 (Spin)` → Settings → Hostnames.
 2. Remove `chuys-web.jerodarte.workers.dev`, `localhost` and `127.0.0.1`.
