@@ -19,6 +19,15 @@
 
 ## ⚡ Quick wins (≤10 min)
 
+### [ ] Check that inquiries Cc `jesse@chuystacos.com` · ⏱ 5 min · added 2026-10-29
+**Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). It only arrives if that mailbox exists at the apex's mail provider. Claude can't send a test, because production Turnstile blocks automated submits.
+
+1. Make sure `jesse@chuystacos.com` exists as a mailbox or alias with your mail provider.
+2. Send a test inquiry from https://chuystacos.com/#contact.
+3. Check that it arrives in both `chuy@` and `jesse@`. While the form is open, also check that the event-type options are readable.
+
+**Done when:** both inboxes have the inquiry, and Reply still goes to the address you entered.
+
 ### [ ] Load the Cloudflare plugin in paint-web · ⏱ 1 min · added 2026-10-29
 **Why:** the plugin and its MCP sign-in work in chuys-web. paint-web enables the same plugin, but it hasn't been reloaded there yet.
 
@@ -48,7 +57,7 @@
 **Done when:** the sitemap shows "Success" and the Rich Results Test finds the restaurant data with no errors.
 
 ### [ ] Update the Google Business Profile (§7) · ⏱ 20 min · added 2026-10-28
-**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours.
+**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours. The site's phone number changed to **(559) 385-6847** on 2026-10-29, so make sure the listing shows the new one.
 
 1. Open the profile at https://business.google.com.
 2. Compare the name, address, phone and hours with `src/data/business.ts`, and fix any that differ.
@@ -61,6 +70,8 @@
 - [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, the Instagram and Facebook URLs, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
 
 ## ✅ Done recently
+
+- 2026-10-29 Owner change list shipped: generic asada blurb, catering packages hidden, new phone number, Cc to jesse@, readable dropdown. A Lighthouse audit ran; its follow-ups are in [`BACKLOG.md`](BACKLOG.md)
 
 - 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
 - 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)

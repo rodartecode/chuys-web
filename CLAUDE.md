@@ -58,6 +58,7 @@ chuys-tacos/
 ├── stylelint.config.mjs
 ├── tsconfig.json           # Extends astro/tsconfigs/strict + path aliases
 ├── API.md                  # /api/inquiry reference
+├── BACKLOG.md              # Agent-doable code work (B-n IDs)
 ├── README.md
 └── CLAUDE.md
 ```
@@ -99,6 +100,7 @@ Gotchas (learned on `paint-web`, which uses the same setup):
 - **`README.md`** — install, env vars, scripts, editing
 - **`API.md`** — inquiry endpoint reference
 - **`HUMAN.md`** — checklist of operator and owner tasks that Claude can't do (dashboards, secrets, DNS, owner content)
+- **`BACKLOG.md`** — code work an agent can pick up, with stable `B-n` IDs that the handoff points at; includes the Lighthouse baseline
 - **`docs/00-overview/`** — what's documented and where
 - **`docs/01-architecture/`** — system design and tech stack rationale
 - **`docs/04-development/`** — setup, scripts, conventions
