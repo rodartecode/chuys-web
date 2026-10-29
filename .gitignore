@@ -34,6 +34,6 @@ Thumbs.db
 !.dev.vars.example
 .wrangler/
 
-# claude code (local settings, transcripts, etc.) — project skills are committed
+# claude code (local settings, transcripts, etc.) — shared project settings are committed
 .claude/*
-!.claude/skills/
+!.claude/settings.json
