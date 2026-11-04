@@ -30,14 +30,14 @@ export const business = {
   },
   // Display rows for the Hours card. Keep in sync with openingHours below.
   hours: [
-    { day: "Mon – Fri", value: "10:00 AM – 6:00 PM" },
+    { day: "Mon – Fri", value: "10:00 AM – 4:00 PM" },
     { day: "Sat – Sun", value: "Closed" },
   ],
   openingHours: [
     {
       days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
       opens: "10:00",
-      closes: "18:00",
+      closes: "16:00",
     },
   ] satisfies OpeningHours[],
   // Footer "Follow" column and JSON-LD sameAs. Both hide themselves when this is empty.
