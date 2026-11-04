@@ -14,30 +14,6 @@
 **Where:** `src/components/Catering.astro`. Update the `packages` array, add `pricing`, then set `showPackages = true`. The `.grid`/`.card` styles are still in place.
 **Done when:** the cards render with the owners' final copy, and "Request this package →" links to `#contact`.
 
-### B-6 · Expand the menu from the Square catalog
-**Why:** the site shows 7 signature tacos and tells visitors to "get in touch" for the full menu. The owners' Square catalog has 44 active items in 5 categories: Main 7, Specialty 8, Combo 7, Sides 2 and Drinks 20.
-**Where:**
-- **Source:** `docs/menu/square-catalog-2026-11-04.csv`, with the columns name, category and description.
-  - It is trimmed from the raw Square export, which is gitignored because this repo is public. The trim kept rows where `Archived = N` and `Square Online Item Visibility ≠ unavailable`. Five active items have a blank visibility value, so they're kept.
-  - Prices and Square IDs are dropped on purpose.
-  - To re-sync, re-export from Square and apply the same filter.
-- **Data:** in `src/data/menu.ts`, add a typed `fullMenu` grouped by category. Write it by hand as static data, and don't parse the CSV at build time. Leave `menuHighlights` as it is, since it's the owners' own copy.
-- **Rendering:** put it in `MenuHighlights.astro` or in a new section below it.
-  - Fold the 20 drinks into a few grouped lines (Jarritos, canned sodas, bottled drinks, agua fresca) rather than 20 rows.
-  - Only 13 items have descriptions. Show the others by name alone.
-  - **Show no prices** (decided 2026-11-04). Cash App is the source of truth for prices, so link each category, or the whole section, to `business.orderUrl`.
-  - Replace the "Want the full menu? Get in touch" line, and keep its `TODO(owner)` comment about a PDF menu.
-
-**Copy conflicts to raise with the owners, not to settle in code:**
-- The Barbacoa highlight says "cabeza, cachete, and labio", but Square says "cachete, lengua, and labio".
-- The highlights list "Birria", but Square sells "Quesabirria".
-
-**Done when:**
-- Every item in the CSV appears under its category, with no prices.
-- An e2e check covers the full menu.
-- Mobile Lighthouse holds the baseline. Local runs are trustworthy (B-4); prefer PSI for the record.
-- The Barbacoa wording is confirmed with the owners.
-
 ## Not doing
 
 - **Cloudflare Web Analytics beacon** (`static.cloudflareinsights.com/beacon.min.js`). Lighthouse flags its one-day cache and about 10 KiB of legacy JS. It's injected by Cloudflare rather than shipped by us, and it's small. Revisit only if Web Analytics gets turned off.
@@ -76,6 +52,7 @@ The 2026-11-04 row is PageSpeed Insights (Lighthouse 13.6.0); its simulated FCP 
 
 ## Done
 
+- 2026-11-04 · B-6: the full menu from the trimmed Square catalog. `fullMenu` in `src/data/menu.ts` holds all 44 items in 5 categories (the 20 drinks folded into 4 lines), with no prices, rendered under the signature cards. The menu note points to Cash App. The Barbacoa card now says cachete, lengua, and labio, as the user confirmed on 2026-11-04. Birria vs Quesabirria is still an owner question in HUMAN.md and doesn't block anything. `tests/unit/menu.test.ts` maps every CSV row to one exact entry and back. `tests/e2e/full-menu.spec.ts` checks every item and drink option renders, that there are no prices, and that nothing overflows at 375px. Local preview Lighthouse: mobile 99/100/99 Performance over 3 runs, desktop 100, and a11y, Best Practices and SEO at 100 (`d36ab8a`). A PSI row is owed after deploy.
 - 2026-11-04 · B-5: an Order Online link to `business.orderUrl` (Cash App) in the header bar and mobile menu, the Hero, the menu footer note and the footer, each opening in a new tab, plus an `OrderAction` in the Restaurant JSON-LD. The header now collapses to the hamburger at 900px, since two pills need about 880px. `tests/e2e/order-online.spec.ts` checks all five links, the mobile menu and the JSON-LD, and fails when the URL is misspelled. Local Lighthouse Accessibility, Best Practices and SEO stay at 100 on mobile and desktop (`cd16587`).
 - 2026-10-29 · B-3: Vitest covers `/api/inquiry` with 30 tests: validation, the honeypot, Turnstile failures and the Resend payload including `cc`. A Playwright smoke test checks that the form renders and blocks an empty submit. `pnpm test` runs both, and lint and typecheck now cover `tests/` (`3096364`).
 - 2026-10-29 · B-2: self-hosted Playfair Display through the Astro Fonts API, as one preloaded variable woff2 with an immutable cache (`2d98587`). Google Fonts requests and the render-blocking flag are gone, and headings measure identically. Desktop LCP went from 0.7 s to 0.3 s.

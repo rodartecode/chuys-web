@@ -23,14 +23,13 @@ I read this list through the Cloudflare API on 2026-10-29 and again on 2026-11-0
 
 ## ⚡ Quick wins (≤10 min)
 
-### [ ] Ask the owners about two menu wording mismatches · ⏱ 5 min · added 2026-11-04
-**Why:** the site's menu copy and the owners' Square catalog disagree in two places. The full menu (BACKLOG B-6) can't be finished until we know which wording is right.
+### [ ] Ask the owners: Birria or Quesabirria? · ⏱ 2 min · added 2026-11-04
+**Why:** the signature-taco card says "Birria", but Square sells it as "Quesabirria". The full menu (B-6, shipped) already lists Quesabirria. Only the card's name might change. (The Barbacoa question is settled: cachete, lengua and labio.)
 
-1. Ask: is the barbacoa made with **cabeza**, cachete and labio (the website) or with **lengua**, cachete and labio (Square)?
-2. Ask: is "Birria" on the website the same dish Square sells as "Quesabirria", or should the website say Quesabirria?
-3. Tell the agent both answers.
+1. Ask: is the "Birria" card the same dish as Square's "Quesabirria", and should the card say Quesabirria?
+2. Tell the agent the answer.
 
-**Done when:** the agent has both answers. It updates `src/data/menu.ts` to match.
+**Done when:** the agent has the answer and updates `menuHighlights` in `src/data/menu.ts` if needed.
 
 ### [ ] Check that inquiries Cc `jesse@chuystacos.com` · ⏱ 5 min · added 2026-10-29
 **Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). It only arrives if that mailbox exists at the apex's mail provider. Claude can't send a test, because production Turnstile blocks automated submits.
