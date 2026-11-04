@@ -55,7 +55,7 @@
 **Done when:** the sitemap shows "Success" and the Rich Results Test finds the restaurant data with no errors.
 
 ### [ ] Update the Google Business Profile (§7) · ⏱ 20 min · added 2026-10-28
-**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours. The site's phone number changed to **(559) 385-6847** on 2026-10-29, so make sure the listing shows the new one.
+**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours. The site's phone number changed to **(559) 385-6847** on 2026-10-29, so make sure the listing shows the new one. Winter hours started on 2026-11-04 (**Mon–Fri 10 AM – 4 PM**, weekends closed), so update the listing's hours too. When the hours change again, change them on the site (`business.ts`) and in the listing at the same time.
 
 1. Open the profile at https://business.google.com.
 2. Compare the name, address, phone and hours with `src/data/business.ts`, and fix any that differ.
