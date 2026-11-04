@@ -74,6 +74,3 @@
 - 2026-11-04 Trimmed the Turnstile widget to `chuystacos.com` and `www.chuystacos.com`. Claude did this through the API, with your OK. No other widget setting changed.
 - 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
 - 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)
-- 2026-10-29 Sent a test inquiry from a phone: it reached `chuy@chuystacos.com`, and Reply goes to the sender (§5 smoke test)
-- 2026-10-29 Signed in to the Cloudflare MCP server and loaded the plugin in chuys-web
-- 2026-10-29 Deployed to the custom domain with `wrangler deploy --domain chuystacos.com` (§6)
