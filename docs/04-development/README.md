@@ -105,7 +105,7 @@ pnpm build && grep -nE "TODO|TBD" dist/client/index.html   # should print nothin
 
 ### Add a menu item
 
-Edit `src/data/menu.ts`. Push a new object to `menuHighlights`. The grid auto-fills.
+Edit `src/data/menu.ts`. For a signature-taco card, push a new object to `menuHighlights`; the grid auto-fills. For the full menu, add the item to its category in `fullMenu`, and to `docs/menu/square-catalog-*.csv` if it is new in Square. The unit test fails until the two agree. Never add prices: Cash App is the source of truth.
 
 ### Add a catering package
 

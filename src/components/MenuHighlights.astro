@@ -1,6 +1,6 @@
 ---
 import { business } from "@data/business";
-import { menuHighlights } from "@data/menu";
+import { fullMenu, menuHighlights } from "@data/menu";
 ---
 
 <section id="menu" class="menu">
@@ -29,12 +29,39 @@ import { menuHighlights } from "@data/menu";
       }
     </ul>
 
+    <div class="full-menu">
+      <h3>The full menu</h3>
+      <div class="categories">
+        {
+          fullMenu.map((category) => (
+            <div class="category">
+              <h4>{category.title}</h4>
+              <ul data-testid={`menu-${category.square.toLowerCase()}`}>
+                {category.items.map((item) => (
+                  <li>
+                    <span class="item-name">{item.name}</span>
+                    {item.options && (
+                      <span class="item-detail">
+                        {/* One line on purpose: a line break here renders as a space before each comma. */}
+                        {item.options.map((option, i) => <>{i > 0 && ", "}<span>{option}</span></>)}
+                      </span>
+                    )}
+                    {item.description && <span class="item-detail">{item.description}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
     <p class="footer-note">
       {/* TODO(owner): link to a downloadable PDF menu when available */}
       Hungry now?
       <a href={business.orderUrl} target="_blank" rel="noopener noreferrer"
         >Order online<span class="sr-only"> (opens in a new tab)</span></a
-      >. Want the full menu? <a href="#contact">Get in touch</a> and we'll send it over.
+      >. Prices and ordering are on Cash App.
     </p>
   </div>
 </section>
@@ -132,6 +159,64 @@ import { menuHighlights } from "@data/menu";
     color: var(--color-muted);
     font-size: 0.95rem;
     line-height: 1.5;
+  }
+
+  .full-menu {
+    margin-top: 3.5rem;
+    padding: 2rem 1.5rem;
+    background: var(--color-cream-card);
+    border: 1px solid color-mix(in srgb, var(--color-charcoal) 6%, transparent);
+    border-radius: 1rem;
+  }
+
+  .full-menu h3 {
+    text-align: center;
+    font-size: clamp(1.5rem, 2.5vw, 1.9rem);
+    margin: 0 0 1.75rem;
+  }
+
+  /* Multi-column flow balances the uneven category lengths better than a grid. */
+  .categories {
+    columns: 3 17rem;
+    column-gap: 2.5rem;
+  }
+
+  .category {
+    break-inside: avoid;
+    margin-bottom: 1.75rem;
+  }
+
+  .category h4 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--color-terracotta);
+    margin: 0 0 0.6rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-terracotta) 25%, transparent);
+  }
+
+  .category ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .category li {
+    padding: 0.4rem 0;
+  }
+
+  .item-name {
+    display: block;
+    font-weight: 600;
+    color: var(--color-charcoal);
+  }
+
+  .item-detail {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
 
   .footer-note {

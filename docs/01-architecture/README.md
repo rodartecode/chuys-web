@@ -33,7 +33,7 @@ src/
 ├── components/        # One .astro file per page section, plus Header/Footer
 ├── data/
 │   ├── business.ts    # Contact, address, hours, social, inquiry to/from, Turnstile site key
-│   └── menu.ts        # Typed array of menu highlights — single-file edit surface
+│   └── menu.ts        # Menu highlights + full menu (no prices) — single-file edit surface
 ├── layouts/
 │   └── BaseLayout.astro
 ├── pages/
