@@ -51,7 +51,7 @@ const year = new Date().getFullYear();
             {social.map((link) => (
               <li>
                 <a href={link.href} target="_blank" rel="noopener noreferrer">
-                  {link.label}
+                  {link.label}<span class="sr-only"> (opens in a new tab)</span>
                 </a>
               </li>
             ))}

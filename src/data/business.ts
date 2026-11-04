@@ -40,8 +40,11 @@ export const business = {
       closes: "18:00",
     },
   ] satisfies OpeningHours[],
-  // TODO(owner): add Instagram/Facebook URLs — the footer's Follow column stays hidden while empty.
-  social: [] as SocialLink[],
+  // Footer "Follow" column and JSON-LD sameAs. Both hide themselves when this is empty.
+  social: [
+    { label: "Instagram", href: "https://www.instagram.com/chuys_tacos/" },
+    { label: "Facebook", href: "https://www.facebook.com/ChuysTacosFresno/" },
+  ] as SocialLink[],
 };
 
 export const inquiry = {
