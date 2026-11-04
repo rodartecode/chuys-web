@@ -4,7 +4,7 @@
 > Check one off by telling the agent, or delete it yourself. Full detail for each step is in the
 > runbook [`docs/05-guides/cloudflare-setup.md`](docs/05-guides/cloudflare-setup.md); the § numbers point there.
 
-**Updated:** 2026-10-29 · LAPTOP-ESEL9A3K
+**Updated:** 2026-11-04 · LAPTOP-ESEL9A3K
 
 ## ▶ Start here
 
@@ -13,7 +13,7 @@
 - `chuys-web.jerodarte.workers.dev`. The workers.dev copy has been off since 2026-10-29 (it returns 404), and it was never this Worker's real name.
 - `localhost` and `127.0.0.1`. `pnpm dev` now uses Cloudflare's test key, so it doesn't need them.
 
-I read this list through the Cloudflare API on 2026-10-29, and it was unchanged at the end of that day.
+I read this list through the Cloudflare API on 2026-10-29 and again on 2026-11-04. Nothing had changed.
 
 1. Cloudflare dashboard → Turnstile → the widget named `chuystacos.com +2 (Spin)` → Settings → Hostnames.
 2. Remove `chuys-web.jerodarte.workers.dev`, `localhost` and `127.0.0.1`.
@@ -22,6 +22,15 @@ I read this list through the Cloudflare API on 2026-10-29, and it was unchanged 
 **Done when:** the widget lists only `chuystacos.com` and `www.chuystacos.com`. (Claude can check this with the Cloudflare MCP.)
 
 ## ⚡ Quick wins (≤10 min)
+
+### [ ] Ask the owners about two menu wording mismatches · ⏱ 5 min · added 2026-11-04
+**Why:** the site's menu copy and the owners' Square catalog disagree in two places. The full menu (BACKLOG B-6) can't be finished until we know which wording is right.
+
+1. Ask: is the barbacoa made with **cabeza**, cachete and labio (the website) or with **lengua**, cachete and labio (Square)?
+2. Ask: is "Birria" on the website the same dish Square sells as "Quesabirria", or should the website say Quesabirria?
+3. Tell the agent both answers.
+
+**Done when:** the agent has both answers. It updates `src/data/menu.ts` to match.
 
 ### [ ] Check that inquiries Cc `jesse@chuystacos.com` · ⏱ 5 min · added 2026-10-29
 **Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). It only arrives if that mailbox exists at the apex's mail provider. Claude can't send a test, because production Turnstile blocks automated submits.
