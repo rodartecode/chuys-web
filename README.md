@@ -50,7 +50,7 @@ Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secre
 ## Editing content
 
 - **Section copy** — directly in the section's `.astro` file under `src/components/`.
-- **Menu**: `src/data/menu.ts`. `menuHighlights` holds the signature-taco cards, one entry per taco. `fullMenu` is the full menu by category, hand-copied from the Square catalog in `docs/menu/` with no prices. `pnpm test:unit` checks it against that CSV.
+- **Menu**: `src/data/menu.ts`. `menuHighlights` holds the meat cards ("Pick your meat"), one entry per meat. `fullMenu` is the full menu by category, hand-copied from the Square catalog in `docs/menu/` with no prices. `pnpm test:unit` checks it against that CSV. An item shown under a different name than Square's carries `squareName`.
 - **Catering packages**: the `packages` array in the frontmatter of `src/components/Catering.astro`. `pricing` is optional, and the line is hidden while it's unset.
 - **Contact, address, hours, social links**: `src/data/business.ts`. Hero, Visit, Footer and the `Restaurant` JSON-LD all read from it. If you change `hours`, update `openingHours` too.
 - **Pull quote**: `quote` in `src/components/About.astro`. The aside is hidden while it's `undefined`.

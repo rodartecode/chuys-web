@@ -8,37 +8,23 @@
 
 ## ▶ Start here
 
-### [ ] Trim the Turnstile widget to the live hostnames (§6) · ⏱ 2 min · added 2026-10-29
-**Why:** the widget still accepts tokens from hosts the site no longer uses:
-- `chuys-web.jerodarte.workers.dev`. The workers.dev copy has been off since 2026-10-29 (it returns 404), and it was never this Worker's real name.
-- `localhost` and `127.0.0.1`. `pnpm dev` now uses Cloudflare's test key, so it doesn't need them.
+### [ ] Send a test inquiry and check both inboxes · ⏱ 5 min · added 2026-10-29
+**Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). The mailbox exists in Google Workspace (confirmed 2026-11-04), but no inquiry has gone through since the Cc was added. This is also the first live check since the Turnstile hostnames were trimmed on 2026-11-04. Claude can't send the test, because production Turnstile blocks automated submits.
 
-I read this list through the Cloudflare API on 2026-10-29 and again on 2026-11-04. Nothing had changed.
+1. Send a test inquiry from https://chuystacos.com/#contact.
+2. Check that it arrives in both `chuy@` and `jesse@`. While the form is open, also check that the event-type options are readable.
 
-1. Cloudflare dashboard → Turnstile → the widget named `chuystacos.com +2 (Spin)` → Settings → Hostnames.
-2. Remove `chuys-web.jerodarte.workers.dev`, `localhost` and `127.0.0.1`.
-3. Keep `chuystacos.com` and `www.chuystacos.com`, then Save.
-
-**Done when:** the widget lists only `chuystacos.com` and `www.chuystacos.com`. (Claude can check this with the Cloudflare MCP.)
+**Done when:** both inboxes have the inquiry, and Reply still goes to the address you entered.
 
 ## ⚡ Quick wins (≤10 min)
 
-### [ ] Ask the owners: Birria or Quesabirria? · ⏱ 2 min · added 2026-11-04
-**Why:** the signature-taco card says "Birria", but Square sells it as "Quesabirria". The full menu (B-6, shipped) already lists Quesabirria. Only the card's name might change. (The Barbacoa question is settled: cachete, lengua and labio.)
+### [ ] Rename the barbacoa dishes in Square · ⏱ 5 min · added 2026-11-04
+**Why:** the site now calls them "Crispy Barbacoa Taco" and "3 Crispy Barbacoa Taco Plate", so nobody confuses them with the barbacoa meat. Square and the Cash App order page still say "Barbacoa Taco" and "3 Barbacoa Taco Plate", so the names differ between the site and checkout.
 
-1. Ask: is the "Birria" card the same dish as Square's "Quesabirria", and should the card say Quesabirria?
-2. Tell the agent the answer.
+1. Square Dashboard → Items → rename "Barbacoa Taco" to **Crispy Barbacoa Taco**, and "3 Barbacoa Taco Plate" to **3 Crispy Barbacoa Taco Plate**.
+2. Tell the agent. It will update `docs/menu/square-catalog-2026-11-04.csv` and remove `squareName` from both items in `src/data/menu.ts`.
 
-**Done when:** the agent has the answer and updates `menuHighlights` in `src/data/menu.ts` if needed.
-
-### [ ] Check that inquiries Cc `jesse@chuystacos.com` · ⏱ 5 min · added 2026-10-29
-**Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). It only arrives if that mailbox exists at the apex's mail provider. Claude can't send a test, because production Turnstile blocks automated submits.
-
-1. Make sure `jesse@chuystacos.com` exists as a mailbox or alias with your mail provider.
-2. Send a test inquiry from https://chuystacos.com/#contact.
-3. Check that it arrives in both `chuy@` and `jesse@`. While the form is open, also check that the event-type options are readable.
-
-**Done when:** both inboxes have the inquiry, and Reply still goes to the address you entered.
+**Done when:** the Cash App order page shows the Crispy names, and `menu.ts` has no `squareName` left.
 
 ### [ ] Load the Cloudflare plugin in paint-web · ⏱ 1 min · added 2026-10-29
 **Why:** the plugin and its MCP sign-in work in chuys-web. paint-web enables the same plugin, but it hasn't been reloaded there yet.
@@ -79,10 +65,13 @@ I read this list through the Cloudflare API on 2026-10-29 and again on 2026-11-0
 
 ## ⏳ Waiting on something else
 
-- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, the Instagram and Facebook URLs, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
+- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
 
 ## ✅ Done recently
 
+- 2026-11-04 Answered Birria vs Quesabirria: Birria and Barbacoa are meats, while the Quesabirria and Crispy Barbacoa Taco are dishes. The cards became "Pick your meat".
+- 2026-11-04 Supplied the Instagram and Facebook URLs, which are now in the footer and the JSON-LD
+- 2026-11-04 Trimmed the Turnstile widget to `chuystacos.com` and `www.chuystacos.com`. Claude did this through the API, with your OK. No other widget setting changed.
 - 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
 - 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)
 - 2026-10-29 Sent a test inquiry from a phone: it reached `chuy@chuystacos.com`, and Reply goes to the sender (§5 smoke test)
