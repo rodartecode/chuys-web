@@ -4,6 +4,8 @@ export interface MenuItem {
   imagePath: string;
 }
 
+// The meat choices ("Pick your meat"): each one goes in any taco, burrito, torta, etc.
+// Dishes built on one meat (Quesabirria, Crispy Barbacoa Taco) live in fullMenu instead.
 // Owner-supplied menu. TODO(owner): photos still pending — styled
 // placeholder thumbs show until imagePath assets are added. Descriptions are
 // owner's words, lightly cleaned; flag if a longer copy pass is wanted.
@@ -30,7 +32,7 @@ export const menuHighlights: MenuItem[] = [
   },
   {
     name: "Birria",
-    description: "Slow-stewed beef in our family chile broth. Served with consomé for dipping.",
+    description: "Slow-stewed beef in our family chile broth.",
     imagePath: "/images/menu-birria.svg",
   },
   {
@@ -47,6 +49,11 @@ export const menuHighlights: MenuItem[] = [
 
 export interface FullMenuItem {
   name: string;
+  /**
+   * Square's name, set only when the site shows a different one (a rename not yet made in
+   * Square). tests/unit/menu.test.ts matches the catalog on it.
+   */
+  squareName?: string;
   description?: string;
   /** Flavors or brands folded into one line (drinks). */
   options?: string[];
@@ -60,7 +67,8 @@ export interface MenuCategory {
 }
 
 // Full menu, hand-copied from docs/menu/square-catalog-2026-11-04.csv (BACKLOG B-6).
-// Names keep Square's spelling so they match the Cash App order page. Descriptions are
+// Names keep Square's spelling so they match the Cash App order page, unless `squareName`
+// is set: that marks a site-side rename the owners still have to make in Square. Descriptions are
 // Square's, lightly tightened. No prices on purpose: Cash App (business.orderUrl) is the
 // source of truth for those. To re-sync, re-export from Square, apply the filter described
 // in BACKLOG B-6, and update this list by hand; tests/unit/menu.test.ts fails until every
@@ -116,8 +124,10 @@ export const fullMenu: MenuCategory[] = [
           "Birria and melted cheese in a crisp, golden tortilla, with consomé for dipping.",
       },
       {
-        name: "Barbacoa Taco",
-        description: "Slow-cooked cachete, lengua, and labio, with beef consomé for dipping.",
+        name: "Crispy Barbacoa Taco",
+        squareName: "Barbacoa Taco",
+        description:
+          "Barbacoa (cachete, lengua, and labio) in a tortilla grilled crispy, with beef consomé for dipping.",
       },
       {
         name: "Quesataco",
@@ -146,7 +156,7 @@ export const fullMenu: MenuCategory[] = [
     title: "Combos",
     items: [
       { name: "4 Tacos + Rice and Bean Combo" },
-      { name: "3 Barbacoa Taco Plate" },
+      { name: "3 Crispy Barbacoa Taco Plate", squareName: "3 Barbacoa Taco Plate" },
       { name: "3 Quesabirria Plate" },
       { name: "Burrito Combo" },
       { name: "Torta Combo" },

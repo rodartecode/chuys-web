@@ -92,7 +92,7 @@ describe("fullMenu vs the Square catalog", () => {
       const line = category.items.find((item) => item.name === group);
       expect(line?.options, `"${group}" line in ${category.title}`).toContain(label);
     } else {
-      const item = category.items.find((i) => i.name === label);
+      const item = category.items.find((i) => (i.squareName ?? i.name) === label);
       expect(item, `"${label}" in ${category.title}`).toBeDefined();
       expect(item?.options).toBeUndefined();
     }
@@ -106,11 +106,17 @@ describe("fullMenu vs the Square catalog", () => {
           ? item.options.map((label) =>
               JSON.stringify([category.square, { group: item.name, label }])
             )
-          : [JSON.stringify([category.square, { label: item.name }])]
+          : [JSON.stringify([category.square, { label: item.squareName ?? item.name }])]
       )
     );
     expect(actual).toHaveLength(catalog.length);
     expect(new Set(actual)).toEqual(expected);
+  });
+
+  it("only sets squareName for a real rename", () => {
+    for (const item of fullMenu.flatMap((category) => category.items)) {
+      if (item.squareName !== undefined) expect(item.squareName).not.toBe(item.name);
+    }
   });
 
   it("shows no prices", () => {
