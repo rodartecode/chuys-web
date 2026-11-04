@@ -1,7 +1,7 @@
 ---
 import { business } from "@data/business";
 
-const { phone, phoneDisplay, email, social } = business;
+const { phone, phoneDisplay, email, social, orderUrl } = business;
 const { street, suite, city, state, zip } = business.address;
 const year = new Date().getFullYear();
 ---
@@ -32,6 +32,11 @@ const year = new Date().getFullYear();
       <h3>Explore</h3>
       <ul>
         <li><a href="#menu">Menu</a></li>
+        <li>
+          <a href={orderUrl} target="_blank" rel="noopener noreferrer">
+            Order Online<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </li>
         <li><a href="#about">About</a></li>
         <li><a href="#catering">Catering</a></li>
         <li><a href="#contact">Request a Quote</a></li>

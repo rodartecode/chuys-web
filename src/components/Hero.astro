@@ -1,7 +1,7 @@
 ---
 import { business } from "@data/business";
 
-const { phone, phoneDisplay } = business;
+const { phone, phoneDisplay, orderUrl } = business;
 ---
 
 <section class="hero" id="top">
@@ -21,6 +21,9 @@ const { phone, phoneDisplay } = business;
 
     <div class="cta-row">
       <a class="cta-primary" href="#contact">Request a Catering Quote</a>
+      <a class="cta-secondary" href={orderUrl} target="_blank" rel="noopener noreferrer">
+        Order Online<span class="sr-only"> (opens in a new tab)</span>
+      </a>
       <a class="cta-secondary" href={`tel:${phone}`}>
         <span aria-hidden="true">📞</span>
         {phoneDisplay}

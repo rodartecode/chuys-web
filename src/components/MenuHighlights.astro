@@ -1,4 +1,5 @@
 ---
+import { business } from "@data/business";
 import { menuHighlights } from "@data/menu";
 ---
 
@@ -30,7 +31,10 @@ import { menuHighlights } from "@data/menu";
 
     <p class="footer-note">
       {/* TODO(owner): link to a downloadable PDF menu when available */}
-      Want the full menu? <a href="#contact">Get in touch</a> and we'll send it over.
+      Hungry now?
+      <a href={business.orderUrl} target="_blank" rel="noopener noreferrer"
+        >Order online<span class="sr-only"> (opens in a new tab)</span></a
+      >. Want the full menu? <a href="#contact">Get in touch</a> and we'll send it over.
     </p>
   </div>
 </section>

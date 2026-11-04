@@ -17,6 +17,9 @@ export const business = {
   phone: "+15593856847",
   phoneDisplay: "(559) 385-6847",
   email: "chuy@chuystacos.com",
+  // Online ordering. The cashtag is spelled "taquizas" (Square's location says "Taquisas"); this
+  // is the URL that resolves, so don't "fix" it.
+  orderUrl: "https://cash.app/$chuystacosytaquizas",
   address: {
     street: "365 West Bedford Ave",
     suite: "Suite 105",

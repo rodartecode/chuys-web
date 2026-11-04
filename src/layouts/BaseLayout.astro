@@ -27,6 +27,10 @@ const structuredData = {
   email: business.email,
   servesCuisine: "Mexican",
   hasMenu: `${business.url}/#menu`,
+  potentialAction: {
+    "@type": "OrderAction",
+    target: { "@type": "EntryPoint", urlTemplate: business.orderUrl },
+  },
   address: {
     "@type": "PostalAddress",
     streetAddress: `${address.street}, ${address.suite}`,
