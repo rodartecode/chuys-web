@@ -2,27 +2,31 @@
 
 > This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) rather than restating them. If they disagree, those files and the code win.
 
-**As of:** 2026-11-04 · `ff72d11` + this handoff commit · `pnpm test` green (78 unit + 11 e2e); typecheck, lint, lint:styles and build green · `ff72d11` deployed to production (build succeeded, and a curl of the live page confirmed the changes) · pushed
+**As of:** 2026-11-04 · `edc9c1f` + this handoff commit · `pnpm test` green (78 unit + 11 e2e); typecheck, lint, lint:styles and build green · `edc9c1f` deployed to production, and a curl of the live page found the new copy and hours and none of the old · pushed
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
 
-- **Owner questions settled (`9dac7da`..`ff72d11`, deployed):**
-  - The menu cards are now "Pick your meat", since Birria and Barbacoa are meats.
-  - The full menu shows "Crispy Barbacoa Taco" and "3 Crispy Barbacoa Taco Plate". Each keeps Square's old name in a new optional `squareName` field in `src/data/menu.ts`, so the catalog test still passes.
-  - The Instagram and Facebook links are in the footer and the JSON-LD `sameAs`, and `tests/e2e/social.spec.ts` covers them.
-- **Turnstile widget trimmed through the API** to `chuystacos.com` and `www.chuystacos.com`. Every other setting is unchanged; I compared them before and after.
+- **Owner copy fixes (`da205ff`, deployed):**
+  - The menu blurb says "Tortillas sourced locally" instead of claiming masa is made in-house.
+  - The Visit heading is now "Come hungry." instead of "Find the trompo."
+  - Our Story says "behind the grill".
+  - The Catering intro offers the trompo on request, in both branches of `showPackages`.
+- **Winter hours (`93a61a3`, deployed):** Mon–Fri 10 AM – 4 PM in `business.ts`, covering both the `hours` display rows and the JSON-LD `openingHours`. There's no "winter" label on the site, at the user's request.
+- **HUMAN.md (`edc9c1f`):** the Google Business Profile task now includes the new hours.
 
 ## Next steps (ordered)
 
 1. **Drop `squareName` once Square is renamed.** Update `docs/menu/square-catalog-2026-11-04.csv` to the Crispy names and remove `squareName` from both items. Blocked on HUMAN.md: *Rename the barbacoa dishes in Square*.
 2. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` after, because the page changes.
-3. **Optional, needs the user's go-ahead first:** make `verifyTurnstile` in `src/pages/api/inquiry.ts` log siteverify's `error-codes` on failure. Then a bad Worker secret (`invalid-input-secret`) would show up in Worker logs instead of looking like a bot rejection. It isn't in BACKLOG; file it as a B-n if the user wants it.
+3. **Restore the regular hours when winter ends.** Blocked on HUMAN.md: *Tell the agent when the winter hours end*.
+4. **Optional, needs the user's go-ahead first:** make `verifyTurnstile` in `src/pages/api/inquiry.ts` log siteverify's `error-codes` on failure. Then a bad Worker secret (`invalid-input-secret`) would show up in Worker logs instead of looking like a bot rejection. It isn't in BACKLOG; file it as a B-n if the user wants it.
 
 ## In flight / blocked
 
-- Nothing is uncommitted. The vault tracker entry for this session is committed and pushed (`b19726c` in `rodartecode/vault`).
-- **The live form is unverified since the Turnstile change.** The widget PUT shouldn't rotate the secret, but nobody can prove that from here. Blocked on HUMAN.md: *Send a test inquiry and check both inboxes* (which also covers the jesse@ Cc).
+- Nothing is uncommitted. The vault tracker entry for this session is committed and pushed (`1747a83` in `rodartecode/vault`).
+- **The live form is unverified since the Turnstile change.** Blocked on HUMAN.md: *Send a test inquiry and check both inboxes*.
+- **The Google listing still shows the old hours** until HUMAN.md: *Update the Google Business Profile* is done.
 - The raw Square export, `docs/ML17GN6ZVCE1X_catalog-2026-11-04-2132.csv`, exists only on LAPTOP-ESEL9A3K because it's gitignored. Nothing needs it.
 
 ## Open decisions

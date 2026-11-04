@@ -66,11 +66,12 @@
 ## ⏳ Waiting on something else
 
 - [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
+- [ ] Tell the agent when the winter hours end, with the new hours. It will update `business.ts`, and you'll update the Google Business Profile the same day · waiting on spring · added 2026-11-04
 
 ## ✅ Done recently
 
+- 2026-11-04 Flagged the masa and trompo copy and set the winter hours (Mon–Fri 10 AM – 4 PM). All three are live on the site.
 - 2026-11-04 Answered Birria vs Quesabirria: Birria and Barbacoa are meats, while the Quesabirria and Crispy Barbacoa Taco are dishes. The cards became "Pick your meat".
 - 2026-11-04 Supplied the Instagram and Facebook URLs, which are now in the footer and the JSON-LD
 - 2026-11-04 Trimmed the Turnstile widget to `chuystacos.com` and `www.chuystacos.com`. Claude did this through the API, with your OK. No other widget setting changed.
 - 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
-- 2026-10-29 Added the `www` record and redirect, turned on Always Use HTTPS, and added the `/api/inquiry` rate limit (§6, §8)
