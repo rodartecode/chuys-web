@@ -38,6 +38,9 @@ Thumbs.db
 .claude/*
 !.claude/settings.json
 
+# raw Square catalog exports stay local (public repo); the trimmed copy lives in docs/menu/
+docs/*_catalog-*.csv
+
 # test output
 test-results/
 playwright-report/

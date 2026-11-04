@@ -5,7 +5,7 @@
 > `TODO(owner)` comments in the code. The TypeScript 7 watch lives in the vault tracker.
 > When an item ships, move it to **Done** with the date and commit.
 
-**Updated:** 2026-10-29
+**Updated:** 2026-11-04
 
 ## Open
 
@@ -21,6 +21,43 @@
 - **If PSI reproduces it:** record a mobile-emulated DevTools Performance trace on production, and see what sits between the end of the response and first paint. Suspects: the Hero's layered gradients and any filter or blur, then the inline CSS size, then `page.*.js`.
 
 **Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
+
+### B-5 · Link to online ordering (Cash App)
+**Why:** customers can order online at `https://cash.app/$chuystacosytaquizas`. On 2026-11-04 that URL returned 200 with the page title "Chuy's Tacos y Taquizas". The site never links to it, and every CTA points at catering (`#contact`) or the phone.
+**Where:** add `orderUrl` to `business` in `src/data/business.ts` so the URL has a single source, then render it in these places:
+- `Header.astro`: an "Order Online" link next to "Request a Quote", in both the desktop bar and the mobile menu.
+- `Hero.astro`: beside the catering CTA.
+- `MenuHighlights.astro`: in the footer note.
+- `Footer.astro`.
+
+Open it in a new tab with `target="_blank" rel="noopener noreferrer"`, as the footer's social links do. Optionally, add a schema.org `potentialAction` (`OrderAction`) to the Restaurant JSON-LD in `BaseLayout.astro`.
+
+The cashtag is spelled "taquizas", while the Square location is named "Taquisas". Use the URL above, because it is the one that resolves.
+**Done when:** the link renders in each place above, a Playwright assertion in `tests/e2e/` checks its `href`, and Lighthouse Accessibility and Best Practices stay at 100.
+
+### B-6 · Expand the menu from the Square catalog · builds on B-5
+**Why:** the site shows 7 signature tacos and tells visitors to "get in touch" for the full menu. The owners' Square catalog has 44 active items in 5 categories: Main 7, Specialty 8, Combo 7, Sides 2 and Drinks 20.
+**Where:**
+- **Source:** `docs/menu/square-catalog-2026-11-04.csv`, with the columns name, category and description.
+  - It is trimmed from the raw Square export, which is gitignored because this repo is public. The trim kept rows where `Archived = N` and `Square Online Item Visibility ≠ unavailable`. Five active items have a blank visibility value, so they're kept.
+  - Prices and Square IDs are dropped on purpose.
+  - To re-sync, re-export from Square and apply the same filter.
+- **Data:** in `src/data/menu.ts`, add a typed `fullMenu` grouped by category. Write it by hand as static data, and don't parse the CSV at build time. Leave `menuHighlights` as it is, since it's the owners' own copy.
+- **Rendering:** put it in `MenuHighlights.astro` or in a new section below it.
+  - Fold the 20 drinks into a few grouped lines (Jarritos, canned sodas, bottled drinks, agua fresca) rather than 20 rows.
+  - Only 13 items have descriptions. Show the others by name alone.
+  - **Show no prices** (decided 2026-11-04). Cash App is the source of truth for prices, so link each category, or the whole section, to `business.orderUrl`.
+  - Replace the "Want the full menu? Get in touch" line, and keep its `TODO(owner)` comment about a PDF menu.
+
+**Copy conflicts to raise with the owners, not to settle in code:**
+- The Barbacoa highlight says "cabeza, cachete, and labio", but Square says "cachete, lengua, and labio".
+- The highlights list "Birria", but Square sells "Quesabirria".
+
+**Done when:**
+- Every item in the CSV appears under its category, with no prices.
+- An e2e check covers the full menu.
+- Mobile Lighthouse holds the baseline. Take the numbers from PSI if B-4 rules out local runs.
+- The Barbacoa wording is confirmed with the owners.
 
 ## Not doing
 

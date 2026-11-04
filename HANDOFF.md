@@ -2,7 +2,7 @@
 
 > This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) rather than restating them. If they disagree, those files and the code win.
 
-**As of:** 2026-10-29 · `6d35975` + this handoff commit · `pnpm test` green (30 unit + 2 e2e); typecheck, lint, lint:styles and build green; Workers build for `6d35975` deployed · pushed
+**As of:** 2026-11-04 · `3d15ee7` + this commit, which only adds B-5 and B-6 to the roadmap; the code is unchanged since 2026-10-29 · `pnpm test` green (30 unit + 2 e2e); typecheck, lint, lint:styles and build green; Workers build for `6d35975` deployed · pushed
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
@@ -17,12 +17,14 @@
 ## Next steps (ordered)
 
 1. **BACKLOG B-4, first step only:** run a mobile PageSpeed Insights test of `https://chuystacos.com/`, either through Claude in Chrome or the PSI API once its daily quota resets. Compare the observed FCP with the local 2.4 s. The item's two branches say what to do with the result.
-2. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. When it lands, the inquiry tests are unaffected, but run `pnpm test:e2e` because the page changes.
-3. **Check the Turnstile hostnames once you've trimmed them:** read `GET /accounts/{id}/challenges/widgets` through the Cloudflare MCP and tick the task. On 2026-10-29 at 20:20 UTC the widget still listed `127.0.0.1`, `localhost` and `chuys-web.jerodarte.workers.dev`. Blocked on HUMAN.md: *Trim the Turnstile widget to the live hostnames*.
+2. **BACKLOG B-5:** link to online ordering (Cash App). It needs no owner content and is small, so it can come before B-4 if you'd rather ship it first.
+3. **BACKLOG B-6:** build the full menu (no prices) from `docs/menu/square-catalog-2026-11-04.csv`. It depends on B-5's `orderUrl`. Raise the Barbacoa and Birria copy conflicts listed in the item with the owners.
+4. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. When it lands, the inquiry tests are unaffected, but run `pnpm test:e2e` because the page changes.
+5. **Check the Turnstile hostnames once you've trimmed them:** read `GET /accounts/{id}/challenges/widgets` through the Cloudflare MCP and tick the task. On 2026-10-29 at 20:20 UTC the widget still listed `127.0.0.1`, `localhost` and `chuys-web.jerodarte.workers.dev`. Blocked on HUMAN.md: *Trim the Turnstile widget to the live hostnames*.
 
 ## In flight / blocked
 
-- Nothing is uncommitted in this repo.
+- Nothing is uncommitted in this repo. The raw Square export (`docs/ML17GN6ZVCE1X_catalog-*.csv`) is on LAPTOP-ESEL9A3K only, because exports like it are gitignored. The trimmed copy in `docs/menu/` is enough for B-6.
 - The Cc to jesse@ is now covered by a unit test (the Resend payload), but nobody has checked delivery end to end. Blocked on HUMAN.md: *Check that inquiries Cc `jesse@chuystacos.com`*.
 
 ## Open decisions
