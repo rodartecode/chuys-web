@@ -22,20 +22,7 @@
 
 **Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
 
-### B-5 · Link to online ordering (Cash App)
-**Why:** customers can order online at `https://cash.app/$chuystacosytaquizas`. On 2026-11-04 that URL returned 200 with the page title "Chuy's Tacos y Taquizas". The site never links to it, and every CTA points at catering (`#contact`) or the phone.
-**Where:** add `orderUrl` to `business` in `src/data/business.ts` so the URL has a single source, then render it in these places:
-- `Header.astro`: an "Order Online" link next to "Request a Quote", in both the desktop bar and the mobile menu.
-- `Hero.astro`: beside the catering CTA.
-- `MenuHighlights.astro`: in the footer note.
-- `Footer.astro`.
-
-Open it in a new tab with `target="_blank" rel="noopener noreferrer"`, as the footer's social links do. Optionally, add a schema.org `potentialAction` (`OrderAction`) to the Restaurant JSON-LD in `BaseLayout.astro`.
-
-The cashtag is spelled "taquizas", while the Square location is named "Taquisas". Use the URL above, because it is the one that resolves.
-**Done when:** the link renders in each place above, a Playwright assertion in `tests/e2e/` checks its `href`, and Lighthouse Accessibility and Best Practices stay at 100.
-
-### B-6 · Expand the menu from the Square catalog · builds on B-5
+### B-6 · Expand the menu from the Square catalog
 **Why:** the site shows 7 signature tacos and tells visitors to "get in touch" for the full menu. The owners' Square catalog has 44 active items in 5 categories: Main 7, Specialty 8, Combo 7, Sides 2 and Drinks 20.
 **Where:**
 - **Source:** `docs/menu/square-catalog-2026-11-04.csv`, with the columns name, category and description.
@@ -76,6 +63,7 @@ The mobile row is the same across three runs. Accessibility before B-2 was 98 be
 
 ## Done
 
+- 2026-11-04 · B-5: an Order Online link to `business.orderUrl` (Cash App) in the header bar and mobile menu, the Hero, the menu footer note and the footer, each opening in a new tab, plus an `OrderAction` in the Restaurant JSON-LD. The header now collapses to the hamburger at 900px, since two pills need about 880px. `tests/e2e/order-online.spec.ts` checks all five links, the mobile menu and the JSON-LD, and fails when the URL is misspelled. Local Lighthouse Accessibility, Best Practices and SEO stay at 100 on mobile and desktop (`cd16587`).
 - 2026-10-29 · B-3: Vitest covers `/api/inquiry` with 30 tests: validation, the honeypot, Turnstile failures and the Resend payload including `cc`. A Playwright smoke test checks that the form renders and blocks an empty submit. `pnpm test` runs both, and lint and typecheck now cover `tests/` (`3096364`).
 - 2026-10-29 · B-2: self-hosted Playfair Display through the Astro Fonts API, as one preloaded variable woff2 with an immutable cache (`2d98587`). Google Fonts requests and the render-blocking flag are gone, and headings measure identically. Desktop LCP went from 0.7 s to 0.3 s.
 
