@@ -15,10 +15,22 @@
 **Done when:** the cards render with the owners' final copy, and "Request this package →" links to `#contact`.
 
 ### B-4 · Find what delays first paint on mobile
-**Why:** after B-2, nothing blocks render, and every request finishes by about 0.6 s. Even so, three Lighthouse mobile runs *observed* first paint at about 2.4 s, against 0.54 s on desktop. Simulated mobile FCP stays at 1.9 s and Speed Index at about 4.1 s, the only metrics not in the green. The gap predates B-2, since those numbers didn't change, so it isn't the fonts.
-**Where:** first, rule out this machine. All three runs were local headless Chrome on LAPTOP-ESEL9A3K, and Lantern's simulated Speed Index draws on the observed filmstrip, so a slow local paint alone would hold SI at about 4.1 s. Run the mobile test on https://pagespeed.web.dev/ (the anonymous PSI API was over its daily quota on 2026-10-29), and compare `observedFirstContentfulPaint` with 2.4 s.
-- **If PSI paints well under 2.4 s:** this is a local-emulation artifact. Move B-4 to **Not doing** and take mobile baselines from PSI from then on.
-- **If PSI reproduces it:** record a mobile-emulated DevTools Performance trace on production, and see what sits between the end of the response and first paint. Suspects: the Hero's layered gradients and any filter or blur, then the inline CSS size, then `page.*.js`.
+**Why:** on mobile, Lighthouse observes the first paint at about 2.35 s, against about 0.55 s on desktop. Simulated FCP is 1.6–1.9 s and Speed Index about 3.9–4.1 s, the only metrics not in the green. Every request finishes and the main thread goes idle by about 0.45 s.
+
+**Ruled out (2026-11-04):**
+- **This machine.** PSI reproduces it: observed FP, FCP and first visual change are all 2,350 ms, and observed load is 340 ms ([report](https://pagespeed.web.dev/analysis/https-chuystacos-com/1hvgyz54y9?form_factor=mobile)). Local Lighthouse 13.6.0 is a faithful reproduction.
+- **Fonts and real work.** The trace shows the renderer idle from load until about 1.24 s, when the first `BeginMainThreadFrame` (and `pagereveal`) arrives. The next frame comes at about 2.24 s and is presented at 2.38 s. Rendering is held back, not slowed down.
+- **The Cloudflare Web Analytics beacon.** Blocking it leaves the observed paint at about 2.4 s. It does add about 0.3 s to the *simulated* FCP: 1.6 s without it, 1.9 s with it.
+- **Emulation settings that don't matter:** the mobile user agent, DPR 1.75 (DPR 1 is just as slow), and the full-page screenshot.
+- **Not every page.** `https://example.com/` under the same mobile config paints at about 0.2 s.
+
+**What it takes:** Lighthouse mobile emulation *and* a narrow viewport.
+- The mobile preset at 1350×940 paints at 0.63 s.
+- The desktop preset at 412×823 paints at 0.59 s.
+- Playwright with the same metrics (412×823, DPR 1.75, `isMobile`) paints at about 0.45 s on production.
+- It's intermittent locally: two `pnpm preview` runs painted at 0.29 s and 2.34 s.
+
+**Next suspects, if this gets picked up again:** the narrow-viewport-only CSS (the `<details>` mobile nav under 900px, the sticky header's `backdrop-filter`), then the font preload (Chrome's render-blocking-fonts behavior). Each needs about three Lighthouse runs per variant against an edited `dist/` build, because a single run can be a lucky one.
 
 **Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
 
@@ -43,7 +55,7 @@
 **Done when:**
 - Every item in the CSV appears under its category, with no prices.
 - An e2e check covers the full menu.
-- Mobile Lighthouse holds the baseline. Take the numbers from PSI if B-4 rules out local runs.
+- Mobile Lighthouse holds the baseline. Local runs are trustworthy (B-4); prefer PSI for the record.
 - The Barbacoa wording is confirmed with the owners.
 
 ## Not doing
@@ -54,12 +66,13 @@
 
 | Date · commit | Run | Performance | Accessibility | Best Practices | SEO | FCP | LCP | Speed Index | TBT | CLS |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-11-04 · `92d2ace` (after B-5), PSI | Mobile | 97 | 100 | 100 | 100 | 1.6 s | 1.6 s | 3.9 s | 0 ms | 0 |
 | 2026-10-29 · `2d98587` (after B-2) | Mobile | 96 | 100 | 100 | 100 | 1.9 s | 1.9 s | 4.1 s | 0 ms | 0 |
 | 2026-10-29 · `2d98587` (after B-2) | Desktop | 100 | 100 | 100 | 100 | 0.3 s | 0.3 s | 0.5 s | 0 ms | 0 |
 | 2026-10-29 · before B-2 | Mobile | 96 | 98 | 100 | 100 | 1.9 s | 1.9 s | 4.1 s | 0 ms | 0 |
 | 2026-10-29 · before B-2 | Desktop | 99 | 98 | 100 | 100 | — | 0.7 s | — | 0 ms | 0.001 |
 
-The mobile row is the same across three runs. Accessibility before B-2 was 98 because of the two items fixed in Done below. Mobile FCP and Speed Index didn't move with B-2; see B-4.
+The 2026-11-04 row is PageSpeed Insights (Lighthouse 13.6.0); its simulated FCP is 0.3 s lower than local runs of the same build (1.9 s). Local runs with the Cloudflare beacon blocked also give 1.6 s; why PSI matches that with the beacon loaded is unknown. The 2026-10-29 mobile row is the same across three local runs. Accessibility before B-2 was 98 because of the two items fixed in Done below. Mobile FCP and Speed Index didn't move with B-2; see B-4.
 
 ## Done
 
