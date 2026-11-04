@@ -64,7 +64,8 @@ export interface MenuCategory {
 // Square's, lightly tightened. No prices on purpose: Cash App (business.orderUrl) is the
 // source of truth for those. To re-sync, re-export from Square, apply the filter described
 // in BACKLOG B-6, and update this list by hand; tests/unit/menu.test.ts fails until every
-// CSV row is accounted for.
+// CSV row is accounted for. The test reads the file named in its CSV_PATH, so either
+// overwrite that CSV or update CSV_PATH when the new export lands.
 export const fullMenu: MenuCategory[] = [
   {
     square: "Main",
