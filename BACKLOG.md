@@ -14,26 +14,6 @@
 **Where:** `src/components/Catering.astro`. Update the `packages` array, add `pricing`, then set `showPackages = true`. The `.grid`/`.card` styles are still in place.
 **Done when:** the cards render with the owners' final copy, and "Request this package →" links to `#contact`.
 
-### B-4 · Find what delays first paint on mobile
-**Why:** on mobile, Lighthouse observes the first paint at about 2.35 s, against about 0.55 s on desktop. Simulated FCP is 1.6–1.9 s and Speed Index about 3.9–4.1 s, the only metrics not in the green. Every request finishes and the main thread goes idle by about 0.45 s.
-
-**Ruled out (2026-11-04):**
-- **This machine.** PSI reproduces it: observed FP, FCP and first visual change are all 2,350 ms, and observed load is 340 ms ([report](https://pagespeed.web.dev/analysis/https-chuystacos-com/1hvgyz54y9?form_factor=mobile)). Local Lighthouse 13.6.0 is a faithful reproduction.
-- **Fonts and real work.** The trace shows the renderer idle from load until about 1.24 s, when the first `BeginMainThreadFrame` (and `pagereveal`) arrives. The next frame comes at about 2.24 s and is presented at 2.38 s. Rendering is held back, not slowed down.
-- **The Cloudflare Web Analytics beacon.** Blocking it leaves the observed paint at about 2.4 s. It does add about 0.3 s to the *simulated* FCP: 1.6 s without it, 1.9 s with it.
-- **Emulation settings that don't matter:** the mobile user agent, DPR 1.75 (DPR 1 is just as slow), and the full-page screenshot.
-- **Not every page.** `https://example.com/` under the same mobile config paints at about 0.2 s.
-
-**What it takes:** Lighthouse mobile emulation *and* a narrow viewport.
-- The mobile preset at 1350×940 paints at 0.63 s.
-- The desktop preset at 412×823 paints at 0.59 s.
-- Playwright with the same metrics (412×823, DPR 1.75, `isMobile`) paints at about 0.45 s on production.
-- It's intermittent locally: two `pnpm preview` runs painted at 0.29 s and 2.34 s.
-
-**Next suspects, if this gets picked up again:** the narrow-viewport-only CSS (the `<details>` mobile nav under 900px, the sticky header's `backdrop-filter`), then the font preload (Chrome's render-blocking-fonts behavior). Each needs about three Lighthouse runs per variant against an edited `dist/` build, because a single run can be a lucky one.
-
-**Done when:** the cause is named here, and either fixed with a new mobile baseline row, or moved to **Not doing** with the reason.
-
 ### B-6 · Expand the menu from the Square catalog
 **Why:** the site shows 7 signature tacos and tells visitors to "get in touch" for the full menu. The owners' Square catalog has 44 active items in 5 categories: Main 7, Specialty 8, Combo 7, Sides 2 and Drinks 20.
 **Where:**
@@ -61,6 +41,26 @@
 ## Not doing
 
 - **Cloudflare Web Analytics beacon** (`static.cloudflareinsights.com/beacon.min.js`). Lighthouse flags its one-day cache and about 10 KiB of legacy JS. It's injected by Cloudflare rather than shipped by us, and it's small. Revisit only if Web Analytics gets turned off.
+
+### B-4 · Find what delays first paint on mobile · parked 2026-11-04
+**Why:** on mobile, Lighthouse observes the first paint at about 2.35 s, against about 0.55 s on desktop. Simulated FCP is 1.6–1.9 s and Speed Index about 3.9–4.1 s, the only metrics not in the green. Every request finishes and the main thread goes idle by about 0.45 s.
+
+**Ruled out (2026-11-04):**
+- **This machine.** PSI reproduces it: observed FP, FCP and first visual change are all 2,350 ms, and observed load is 340 ms ([report](https://pagespeed.web.dev/analysis/https-chuystacos-com/1hvgyz54y9?form_factor=mobile)). Local Lighthouse 13.6.0 is a faithful reproduction.
+- **Fonts and real work.** The trace shows the renderer idle from load until about 1.24 s, when the first `BeginMainThreadFrame` (and `pagereveal`) arrives. The next frame comes at about 2.24 s and is presented at 2.38 s. Rendering is held back, not slowed down.
+- **The Cloudflare Web Analytics beacon.** Blocking it leaves the observed paint at about 2.4 s. It does add about 0.3 s to the *simulated* FCP: 1.6 s without it, 1.9 s with it.
+- **Emulation settings that don't matter:** the mobile user agent, DPR 1.75 (DPR 1 is just as slow), and the full-page screenshot.
+- **Not every page.** `https://example.com/` under the same mobile config paints at about 0.2 s.
+
+**What it takes:** Lighthouse mobile emulation *and* a narrow viewport.
+- The mobile preset at 1350×940 paints at 0.63 s.
+- The desktop preset at 412×823 paints at 0.59 s.
+- Playwright with the same metrics (412×823, DPR 1.75, `isMobile`) paints at about 0.45 s on production.
+- It's intermittent locally: two `pnpm preview` runs painted at 0.29 s and 2.34 s.
+
+**Next suspects, if this gets picked up again:** the narrow-viewport-only CSS (the `<details>` mobile nav under 900px, the sticky header's `backdrop-filter`), then the font preload (Chrome's render-blocking-fonts behavior). Each needs about three Lighthouse runs per variant against an edited `dist/` build, because a single run can be a lucky one.
+
+**Parked because:** the cause isn't isolated, and the delay appears only under Lighthouse's mobile emulation. Playwright with the same phone metrics paints at about 0.45 s, and mobile Performance is already 96–97. **Revisit** if CrUX field data shows a slow mobile FCP for chuystacos.com (PSI showed "No Data" on 2026-11-04), or if a change pushes mobile Performance below 90.
 
 ## Lighthouse baseline (production, Lighthouse 13.6.0)
 
