@@ -4,9 +4,7 @@ import { fullMenu, type MenuCategory } from "@data/menu";
 import { describe, expect, it } from "vitest";
 
 // The trimmed Square catalog that `fullMenu` is hand-copied from (BACKLOG B-6).
-const CSV_PATH = fileURLToPath(
-  new URL("../../docs/menu/square-catalog-2026-11-04.csv", import.meta.url)
-);
+const CSV_PATH = fileURLToPath(new URL("../../docs/menu/square-catalog.csv", import.meta.url));
 
 interface CatalogRow {
   name: string;
@@ -82,7 +80,7 @@ function locate(row: CatalogRow): { group?: string; label: string } {
 describe("fullMenu vs the Square catalog", () => {
   it("reads the trimmed catalog", () => {
     expect(header).toEqual(["Item Name", "Category", "Description"]);
-    expect(catalog).toHaveLength(44);
+    expect(catalog).toHaveLength(54);
   });
 
   it.each(catalog)("shows $name under $category", (row) => {
@@ -92,7 +90,9 @@ describe("fullMenu vs the Square catalog", () => {
       const line = category.items.find((item) => item.name === group);
       expect(line?.options, `"${group}" line in ${category.title}`).toContain(label);
     } else {
-      const item = category.items.find((i) => (i.squareName ?? i.name) === label);
+      const item = category.items.find(
+        (i) => (i.squareName ?? i.name) === label || i.squareVariants?.includes(label)
+      );
       expect(item, `"${label}" in ${category.title}`).toBeDefined();
       expect(item?.options).toBeUndefined();
     }
@@ -106,7 +106,9 @@ describe("fullMenu vs the Square catalog", () => {
           ? item.options.map((label) =>
               JSON.stringify([category.square, { group: item.name, label }])
             )
-          : [JSON.stringify([category.square, { label: item.squareName ?? item.name }])]
+          : [item.squareName ?? item.name, ...(item.squareVariants ?? [])].map((label) =>
+              JSON.stringify([category.square, { label }])
+            )
       )
     );
     expect(actual).toHaveLength(catalog.length);
@@ -116,6 +118,14 @@ describe("fullMenu vs the Square catalog", () => {
   it("only sets squareName for a real rename", () => {
     for (const item of fullMenu.flatMap((category) => category.items)) {
       if (item.squareName !== undefined) expect(item.squareName).not.toBe(item.name);
+    }
+  });
+
+  it("only folds style versions of the same item into squareVariants", () => {
+    for (const item of fullMenu.flatMap((category) => category.items)) {
+      for (const variant of item.squareVariants ?? []) {
+        expect([`Chuy's Style ${item.name}`, `Street Style ${item.name}`]).toContain(variant);
+      }
     }
   });
 

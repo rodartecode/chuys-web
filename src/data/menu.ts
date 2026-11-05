@@ -54,6 +54,12 @@ export interface FullMenuItem {
    * Square). tests/unit/menu.test.ts matches the catalog on it.
    */
   squareName?: string;
+  /**
+   * Other Square items this entry stands for and doesn't list separately: the "Chuy's Style" and
+   * "Street Style" versions, which the description already covers. tests/unit/menu.test.ts
+   * counts them as shown.
+   */
+  squareVariants?: string[];
   description?: string;
   /** Flavors or brands folded into one line (drinks). */
   options?: string[];
@@ -66,14 +72,13 @@ export interface MenuCategory {
   items: FullMenuItem[];
 }
 
-// Full menu, hand-copied from docs/menu/square-catalog-2026-11-04.csv (BACKLOG B-6).
+// Full menu, hand-copied from docs/menu/square-catalog.csv (BACKLOG B-6).
 // Names keep Square's spelling so they match the Cash App order page, unless `squareName`
 // is set: that marks a site-side rename the owners still have to make in Square. Descriptions are
 // Square's, lightly tightened. No prices on purpose: Cash App (business.orderUrl) is the
-// source of truth for those. To re-sync, re-export from Square, apply the filter described
-// in BACKLOG B-6, and update this list by hand; tests/unit/menu.test.ts fails until every
-// CSV row is accounted for. The test reads the file named in its CSV_PATH, so either
-// overwrite that CSV or update CSV_PATH when the new export lands.
+// source of truth for those. To re-sync, run `pnpm menu:pull` (needs `square auth login`),
+// which rewrites the CSV from the live catalog, then update this list by hand;
+// tests/unit/menu.test.ts fails until every CSV row is accounted for.
 export const fullMenu: MenuCategory[] = [
   {
     square: "Main",
@@ -81,26 +86,31 @@ export const fullMenu: MenuCategory[] = [
     items: [
       {
         name: "Taco",
+        squareVariants: ["Chuy's Style Taco", "Street Style Taco"],
         description:
           "Street style: two small tortillas with your choice of meat. Chuy's style: two larger tortillas with melted cheese between them, plus extra meat, avocado, sour cream, and queso fresco.",
       },
       {
         name: "Burrito",
+        squareVariants: ["Chuy's Style Burrito", "Street Style Burrito"],
         description:
           "Rice, beans, seasoned meat, and cheese in a 12-inch tortilla. Chuy's style goes up to a 14-inch tortilla and adds avocado, sour cream, and queso fresco.",
       },
       {
         name: "Torta",
+        squareVariants: ["Chuy's Style Torta", "Street Style Torta"],
         description:
           "Your choice of meat with mayo and melted shredded cheese. Chuy's style adds sour cream, queso fresco, and avocado.",
       },
       {
         name: "Mini Torta",
+        squareVariants: ["Chuy's Style Mini Torta", "Street Style Mini Torta"],
         description:
           "A daily-baked mini bun with mayo, melted shredded cheese, and your choice of meat.",
       },
       {
         name: "Quesadilla",
+        squareVariants: ["Chuy's Style Quesadilla", "Street Style Quesadilla"],
         description:
           "A flour tortilla with melted cheese, griddled golden. Add your choice of meat or vegetables. Chuy's style uses a larger tortilla and adds avocado, queso fresco, and sour cream.",
       },
@@ -125,7 +135,6 @@ export const fullMenu: MenuCategory[] = [
       },
       {
         name: "Crispy Barbacoa Taco",
-        squareName: "Barbacoa Taco",
         description:
           "Barbacoa (cachete, lengua, and labio) in a tortilla grilled crispy, with beef consomé for dipping.",
       },
@@ -148,7 +157,11 @@ export const fullMenu: MenuCategory[] = [
         description:
           "Crispy fries topped with avocado, sour cream, queso fresco, shredded Mexican-blend cheese, and your choice of meat.",
       },
-      { name: "Surf & Turf Fries" },
+      {
+        name: "Surf & Turf Fries",
+        description:
+          "Crispy fries topped with shrimp, your choice of meat, avocado, sour cream, and queso fresco.",
+      },
       { name: "Chuy's Salad" },
     ],
   },

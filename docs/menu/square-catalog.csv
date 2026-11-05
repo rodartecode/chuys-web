@@ -27,19 +27,29 @@ Jarrito Pineapple,Drinks,
 Jarrito Tamarind,Drinks,
 Snapple,Drinks,
 Burrito,Main,"A hearty burrito filled with rice, beans, seasoned meat, and cheese. Chuy’s style adds creamy avocado, sour cream, and crumbly queso fresco."
+Chuy's Style Burrito,Main,"A generous burrito wrapped in a large 14-inch tortilla, filled with your choice of meat and fillings, creamy avocado, tangy sour cream, and crumbly queso fresco."
+Chuy's Style Mini Torta,Main,"A daily-baked mini bun layered with your choice of meat, mayonnaise, melted cheese, avocado, sour cream, and queso fresco."
+Chuy's Style Quesadilla,Main,"A grilled 14-inch flour tortilla is filled with your choice of savory filling and melted cheese. Served with avocado, sour cream, and queso fresco."
+Chuy's Style Taco,Main,"Two 5-inch tortillas are layered with melted cheese and topped with avocado, sour cream, and queso fresco. Choose your preferred meat and toppings."
+Chuy's Style Torta,Main,"A Mexican-style torta layered with your choice of savory meat, creamy avocado, tangy sour cream, and crumbly queso fresco."
 Mini Torta,Main,"A daily-baked mini torta bun is layered with a creamy mayo spread, melted shredded cheese, and your choice of meat."
 Quesadilla,Main,A warm flour tortilla filled with melted cheese and griddled until golden. Customize it with your choice of meat or vegetables.
 Rice and Bean Bowl,Main,"A hearty bowl of rice and beans, served with your choice of meat."
 "Rice, Bean, and Cheese Burrito",Main,"A flour tortilla filled with seasoned rice, tender beans, and melted cheese. The soft filling brings together savory, hearty flavors."
+Street Style Burrito,Main,"A 12-inch tortilla filled with rice, beans, cheese, and your choice of meat and fillings."
+Street Style Mini Torta,Main,"A mini torta filled with savory ingredients and street-style flavors, served on a soft roll."
+Street Style Quesadilla,Main,"A grilled 12-inch flour tortilla filled with your choice of savory filling and melted cheese. Crisp on the outside with a warm, cheesy center."
+Street Style Taco,Main,"A classic street-style taco with your choice of meat and toppings, served on two warm corn tortillas."
+Street Style Torta,Main,"A crusty bread roll layered with your choice of meat, melted cheese, and a creamy mayo spread, finished with Mexican-inspired flavors."
 Taco,Main,"Choose your meat for a street-style taco served on a plain tortilla, or try Chuy’s style with two larger tortillas layered with cheese, extra meat, avocado, sour cream, and queso fresco."
 Torta,Main,"A hearty torta filled with your choice of meat, mayonnaise, and melted shredded cheese. Choose Chuy’s style for added sour cream, queso fresco, and avocado."
 Rice and Bean Side,Sides,
 Side Fries,Sides,
-Barbacoa Taco,Specialty,"A barbacoa taco filled with tender, slow-cooked beef made with cachete, lengua, and labio, served with savory beef consommé for dipping."
 Breakfast Burrito,Specialty,"A hearty breakfast burrito filled with scrambled eggs, melted cheese, crispy fries, and your choice of ham, bacon, or chorizo, wrapped in a warm flour tortilla."
 Chuy's Salad,Specialty,
+Crispy Barbacoa Taco,Specialty,"A barbacoa taco filled with tender, slow-cooked beef made with cachete, lengua, and labio, served with savory beef consommé for dipping."
 Loaded Fries,Specialty,"Crispy fries are topped with avocado, sour cream, queso fresco, shredded Mexican-blend cheese, and your choice of meat."
 Quesabirria,Specialty,"Tender birria and melted cheese are folded into a crisp, golden tortilla. Served with rich consommé for dipping."
 Quesataco,Specialty,"A crispy tortilla filled with melted cheese and your choice of meat, cooked until golden and crisp."
 Spicy Shrimp Taco,Specialty,"Grilled shrimp coated in a spicy red salsa is served in a soft tortilla, Chuy’s style."
-Surf & Turf Fries,Specialty,
+Surf & Turf Fries,Specialty,"Crispy fries topped with shrimp, your choice of meat, creamy avocado, sour cream, and crumbled queso fresco. A savory surf-and-turf combination with rich, creamy, and crisp textures."
