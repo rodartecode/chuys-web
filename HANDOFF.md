@@ -4,8 +4,8 @@
 
 **As of:** 2026-11-05 · `4dda6ca` + this handoff commit
 **Checks:** `pnpm test` passes (108 unit + 13 e2e), and so do typecheck, lint, lint:styles and build.
-**Deploy:** `4dda6ca` (B-8 photos) is not deployed until it is pushed. `b576fe9` was the last verified live build.
-**Push:** not pushed yet; waiting on the user.
+**Deploy:** `94ca03b` is live (Workers Build succeeded 22:30 UTC and generated 38 webp variants on Linux). The live `#menu` has 8 gallery `<img>` tags with webp srcsets, served `immutable`.
+**Push:** pushed.
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
