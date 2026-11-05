@@ -38,7 +38,7 @@
 - **Menu re-sync.** `tests/unit/menu.test.ts` pins `CSV_PATH` to `square-catalog-2026-11-04.csv`, and it matches the catalog on `squareName ?? name`. A new Square export has to overwrite that file or update `CSV_PATH`.
 - **Drink option markup.** In `MenuHighlights.astro`, the options `.map` stays on one line on purpose, because a line break renders a space before each comma.
 - **Header breakpoint is 900px.** The other sections still use 768px.
-- **Hardcoded URLs in e2e specs.** `order-online.spec.ts` (`EXPECTED_LINKS`, 5 Cash App links) and `social.spec.ts` (`SOCIAL`) mirror `business.ts` by hand, because Playwright can't import a module that reads `import.meta.env`. Change both when the URLs change.
+- **Hardcoded URLs in e2e specs.** `order-online.spec.ts` (`EXPECTED_LINKS`, 6 Cash App links) and `social.spec.ts` (`SOCIAL`) mirror `business.ts` by hand, because Playwright can't import a module that reads `import.meta.env`. Change both when the URLs change.
 - **Mobile Lighthouse:** local runs are trustworthy (see B-4), but the paint delay is intermittent. The PSI API usually returns 429.
 - **`pnpm test:e2e` needs installed Chrome** (`channel: "chrome"`). See `docs/04-development/`.
 - **Vitest doesn't read tsconfig paths.** A new alias goes in `vitest.config.ts` too.

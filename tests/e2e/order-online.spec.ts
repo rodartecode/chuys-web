@@ -4,8 +4,8 @@ import { expect, test } from "@playwright/test";
 // `import.meta.env`, which Playwright's Node runner doesn't provide.
 const ORDER_URL = "https://cash.app/$chuystacosytaquizas";
 
-// Header bar, header mobile menu, Hero, menu footer note, site footer.
-const EXPECTED_LINKS = 5;
+// Header bar, header mobile menu, Hero, menu top, menu bottom, site footer.
+const EXPECTED_LINKS = 6;
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/");
@@ -20,6 +20,13 @@ test("every Order Online link points at Cash App and opens in a new tab", async 
     await expect(link).toHaveAttribute("rel", /\bnoopener\b/);
   }
   await expect(page.locator("#top").getByRole("link", { name: /^Order Online/ })).toBeVisible();
+});
+
+test("the menu shows an Order Online button above and below it", async ({ page }) => {
+  const buttons = page.locator("#menu").getByRole("link", { name: /^Order Online/ });
+  await expect(buttons).toHaveCount(2);
+  await expect(buttons.first()).toBeVisible();
+  await expect(buttons.last()).toBeVisible();
 });
 
 test("the mobile menu shows Order Online", async ({ page }) => {

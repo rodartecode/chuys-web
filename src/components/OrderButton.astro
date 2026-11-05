@@ -1,0 +1,107 @@
+---
+// The menu's Order Online call to action. MenuHighlights renders it above and below the menu.
+import { business } from "@data/business";
+
+const { orderUrl } = business;
+---
+
+<div class="order-cta">
+  <a class="pill" href={orderUrl} target="_blank" rel="noopener noreferrer">
+    <svg
+      class="bag"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M6 7h12l1 13H5L6 7Z"></path>
+      <path d="M9 10V6a3 3 0 0 1 6 0v4"></path>
+    </svg>
+    Order Online<span class="sr-only"> (opens in a new tab)</span>
+    <svg
+      class="arrow"
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.25"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M5 12h14"></path>
+      <path d="m13 6 6 6-6 6"></path>
+    </svg>
+  </a>
+  <p class="caption">Prices and ordering on Cash App</p>
+</div>
+
+<style>
+  .order-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 1rem 2rem;
+    border-radius: 999px;
+    background: var(--color-terracotta);
+    color: var(--color-cream);
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--color-terracotta) 70%, transparent);
+    transition:
+      transform 150ms ease,
+      background-color 150ms ease,
+      box-shadow 150ms ease;
+  }
+
+  .pill:hover {
+    background: var(--color-terracotta-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 34px -14px color-mix(in srgb, var(--color-terracotta-dark) 75%, transparent);
+  }
+
+  .pill:focus-visible {
+    border-radius: 999px;
+  }
+
+  .arrow {
+    transition: transform 150ms ease;
+  }
+
+  .pill:hover .arrow {
+    transform: translateX(3px);
+  }
+
+  .caption {
+    margin: 0;
+    color: var(--color-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pill,
+    .arrow {
+      transition: none;
+    }
+
+    .pill:hover,
+    .pill:hover .arrow {
+      transform: none;
+    }
+  }
+</style>

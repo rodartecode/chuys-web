@@ -1,5 +1,5 @@
 ---
-import { business } from "@data/business";
+import OrderButton from "@components/OrderButton.astro";
 import { fullMenu, menuHighlights } from "@data/menu";
 ---
 
@@ -12,6 +12,9 @@ import { fullMenu, menuHighlights } from "@data/menu";
         Any of them goes in a taco, burrito, torta, quesadilla, or bowl. Tortillas sourced locally,
         salsas made from scratch.
       </p>
+      <div class="order-top">
+        <OrderButton />
+      </div>
     </header>
 
     <ul class="grid">
@@ -57,13 +60,10 @@ import { fullMenu, menuHighlights } from "@data/menu";
       </div>
     </div>
 
-    <p class="footer-note">
-      {/* TODO(owner): link to a downloadable PDF menu when available */}
-      Hungry now?
-      <a href={business.orderUrl} target="_blank" rel="noopener noreferrer"
-        >Order online<span class="sr-only"> (opens in a new tab)</span></a
-      >. Prices and ordering are on Cash App.
-    </p>
+    {/* TODO(owner): link to a downloadable PDF menu when available */}
+    <div class="order-bottom">
+      <OrderButton />
+    </div>
   </div>
 </section>
 
@@ -220,14 +220,11 @@ import { fullMenu, menuHighlights } from "@data/menu";
     line-height: 1.45;
   }
 
-  .footer-note {
-    text-align: center;
-    margin-top: 2.5rem;
-    color: var(--color-muted);
+  .order-top {
+    margin-top: 1.75rem;
   }
 
-  .footer-note a {
-    color: var(--color-terracotta);
-    font-weight: 600;
+  .order-bottom {
+    margin-top: 2.5rem;
   }
 </style>
