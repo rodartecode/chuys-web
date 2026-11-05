@@ -2,14 +2,16 @@
 
 > This file is rewritten in full at each /document-and-clear, and /catchup reads it first. It points to `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) instead of restating them. If they disagree with this file, they win, and so does the code.
 
-**As of:** 2026-11-05 · `e23ee33` + this handoff commit
-**Checks:** `pnpm test` passes (91 unit + 12 e2e), and so do typecheck, lint, lint:styles and build. Only the 91 unit tests were re-run after `e23ee33`, which changed docs and one code comment.
-**Deploy:** `b576fe9` is live. Its Workers Build succeeded at 21:41 UTC. A curl of the live page showed `385-6843` three times, JSON-LD `+15593856843`, no `6847`, the new Surf & Turf copy and no separate style items.
-**Push:** pushed.
+**As of:** 2026-11-05 · `4dda6ca` + this handoff commit
+**Checks:** `pnpm test` passes (108 unit + 13 e2e), and so do typecheck, lint, lint:styles and build.
+**Deploy:** `4dda6ca` (B-8 photos) is not deployed until it is pushed. `b576fe9` was the last verified live build.
+**Push:** not pushed yet; waiting on the user.
 **Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
 
+- **B-8 dish photo gallery** (`4dda6ca`): 8 Square photos between the full menu and "Pick your meat", pulled by `pnpm menu:photos`. The meat cards are text-only now. BACKLOG Done has the details.
+- **B-7 verified on production**: a bogus token logged `invalid-input-response`, so the live Turnstile secret is valid.
 - **Square CLI adopted** (`6a8d33a`). BACKLOG Done (2026-11-05) has the summary, and `docs/04-development/` → Square CLI has the details.
   - `pnpm menu:pull` rebuilds `docs/menu/square-catalog.csv` from the live catalog, read-only. It replaces the hand export.
   - `pnpm skills:square` installs 6 of the CLI's ~107 agent skills. They're gitignored, so it runs once per machine.
@@ -31,9 +33,8 @@
 ## Next steps (ordered)
 
 1. **Drop the last `squareName`** (3 Crispy Barbacoa Taco Plate) once Square has the new name: run `pnpm menu:pull`, then remove it. Blocked on HUMAN.md: *Rename the barbacoa plate in Square*.
-2. **Use the menu photos from Square.** 36 of the 58 items have a photo there. If the owners agree, pull the image URLs with `square catalog catalog-object list --object-types IMAGE` and use them for the meat cards and dishes. Blocked on HUMAN.md: *Collect owner content*.
-3. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` afterwards.
-4. **Optional:** check B-7 on production. Run `pnpm exec wrangler tail`, then POST a bogus token with the curl from `API.md`. Expect `invalid-input-response` in the log.
+2. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` afterwards.
+3. **Hero photo** (`Hero.astro` TODO): left as a gradient on purpose, because a photo becomes the LCP element. If the owners want one, measure mobile Lighthouse before and after.
 
 ## In flight / blocked
 
@@ -53,6 +54,7 @@
 - **Re-syncing the menu:** run `pnpm menu:pull`, check `git diff docs/menu/`, then update `fullMenu` until `tests/unit/menu.test.ts` passes. The pull keeps items that aren't archived and that sell in an active channel other than Point of Sale. That rule matched the export on all 63 items.
 - **Two machines.** Sessions run on LAPTOP-ESEL9A3K and Harrier, and memory doesn't sync between them. A fresh checkout needs `pnpm install` before any check.
 - **Biome formats long test lines.** Run `pnpm format` before `pnpm lint`. Biome now covers `scripts/` as well.
+- **Dish gallery `sizes`.** `DISH_SIZES` in `MenuHighlights.astro` mirrors the `.dishes` grid CSS (15rem columns, 2 columns at ≤548px). Change both together, or phones fetch an image too big.
 - **Drink option markup.** In `MenuHighlights.astro`, the options `.map` stays on one line on purpose. A line break renders a space before each comma.
 - **Header breakpoint is 900px.** The other sections still use 768px.
 - **Hardcoded URLs in e2e specs.** `order-online.spec.ts` (`EXPECTED_LINKS`, 6 Cash App links) and `social.spec.ts` (`SOCIAL`) copy their URLs from `business.ts` by hand.
