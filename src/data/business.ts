@@ -9,7 +9,7 @@ export interface OpeningHours {
   closes: string;
 }
 
-// Single source for contact details — rendered by Hero, HoursLocation, Footer,
+// Single source for contact details — rendered by Hero, HoursLocation, Footer, the 404 page,
 // and the Restaurant JSON-LD in BaseLayout.
 export const business = {
   name: "Chuy's Tacos",

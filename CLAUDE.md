@@ -20,8 +20,8 @@ pnpm preview                # build + wrangler dev on :8787 (real Workers runtim
 pnpm cf:deploy              # build + wrangler deploy (Workers Builds does this on push)
 pnpm typecheck              # astro check (src/ and tests/)
 pnpm test                   # test:unit, then test:e2e
-pnpm test:unit              # Vitest: /api/inquiry with fetch + cloudflare:workers stubbed
-pnpm test:e2e               # Playwright smoke test of the form (starts pnpm dev, local Chrome)
+pnpm test:unit              # Vitest: /api/inquiry (fetch + cloudflare:workers stubbed), fullMenu vs Square CSV
+pnpm test:e2e               # Playwright: form, full menu, Order Online, social (starts pnpm dev, local Chrome)
 pnpm lint                   # Biome lint (TS/JS/Astro/JSON)
 pnpm lint:fix               # Biome auto-fix
 pnpm lint:styles            # Stylelint over .css / .astro
@@ -36,6 +36,7 @@ pnpm skills:square          # install the 6 Square CLI agent skills (gitignored;
 - **Tailwind v4** via `@tailwindcss/vite`. Theme tokens (warm earth palette, font stacks) live in `src/styles/global.css` under `@theme`. No external design-system package.
 - **Component-scoped styles** — most components use Astro's `<style>` block instead of Tailwind utilities, since each section is one-of-a-kind. Tokens flow through CSS custom properties (`var(--color-terracotta)` etc.).
 - **Form flow**: `InquiryForm.astro` posts JSON to `/api/inquiry`. A Turnstile widget lazy-loads on first focus and its token rides along in the payload. The endpoint runs honeypot → validation → Turnstile siteverify → Resend (plain `fetch`, no SDK). No persistence.
+- **Menu data**: `pnpm menu:pull` (local Square CLI) writes `docs/menu/square-catalog.csv`, with no prices. `fullMenu` in `menu.ts` is hand-written copy, and `tests/unit/menu.test.ts` checks every CSV row against one entry. The build never calls Square. Ordering links out to Cash App (`business.orderUrl`).
 
 ## Directory map
 
@@ -44,7 +45,7 @@ chuys-tacos/
 ├── src/
 │   ├── components/         # One .astro per page section (Header, Hero, …)
 │   ├── data/business.ts    # Contact, address, hours, social, inquiry to/from, Turnstile site key
-│   ├── data/menu.ts        # Menu-highlight items (typed array; easy to edit)
+│   ├── data/menu.ts        # menuHighlights (meat cards) + fullMenu (checked against docs/menu CSV)
 │   ├── layouts/BaseLayout.astro  # <html>, meta, fonts, slot
 │   ├── pages/
 │   │   ├── index.astro     # Composes section components in order
@@ -52,15 +53,17 @@ chuys-tacos/
 │   ├── styles/global.css   # Tailwind import + @theme tokens + base layer
 │   └── env.d.ts            # Cloudflare.Env secret types
 ├── tests/
-│   ├── unit/               # Vitest — /api/inquiry
-│   ├── e2e/                # Playwright — form smoke test
+│   ├── unit/               # Vitest — /api/inquiry, fullMenu vs the Square CSV
+│   ├── e2e/                # Playwright — form, full menu, Order Online, social
 │   └── stubs/              # cloudflare:workers stand-in for Vitest
+├── scripts/                # menu-pull.mjs, skills-square.mjs (local Square CLI tooling)
 ├── public/                 # Static assets — favicon, future hero/menu photos
 ├── docs/
 │   ├── 00-overview/        # Quick start and project summary
-│   ├── 01-architecture/    # System design + tech stack
-│   ├── 04-development/     # Setup, conventions, scripts
-│   └── 05-guides/          # Cloudflare / Resend / Turnstile setup runbook
+│   ├── 01-architecture/    # System design + tech stack + menu data flow
+│   ├── 04-development/     # Setup, conventions, scripts, Square CLI
+│   ├── 05-guides/          # Cloudflare / Resend / Turnstile setup runbook
+│   └── menu/square-catalog.csv  # Trimmed Square catalog (no prices); raw exports gitignored
 ├── astro.config.mjs        # Cloudflare adapter, sitemap, Tailwind vite plugin
 ├── wrangler.jsonc          # Worker name, compat flags, assets + run_worker_first
 ├── biome.json              # Lint/format — CSS handled by stylelint
@@ -70,6 +73,8 @@ chuys-tacos/
 ├── tsconfig.json           # Extends astro/tsconfigs/strict + path aliases
 ├── API.md                  # /api/inquiry reference
 ├── BACKLOG.md              # Agent-doable code work (B-n IDs)
+├── HUMAN.md                # Operator/owner tasks Claude can't do
+├── HANDOFF.md              # Session handoff (/document-and-clear, /catchup)
 ├── README.md
 └── CLAUDE.md
 ```
@@ -78,7 +83,7 @@ chuys-tacos/
 
 - **TypeScript strict** via `astro/tsconfigs/strict`. Path aliases: `@components/*`, `@layouts/*`, `@data/*`, `@styles/*`, `@/*`.
 - **Biome** handles JS/TS/JSON/Astro lint + format. CSS is excluded from Biome (Tailwind v4's `@theme` directive isn't recognized) and handled by stylelint.
-- **Tests**: Vitest in `tests/unit/` runs the inquiry endpoint in Node. `cloudflare:workers` is aliased to `tests/stubs/`, and `fetch` is stubbed per test. One Playwright smoke test in `tests/e2e/` covers the form. Vitest doesn't read tsconfig paths, so new aliases go in `vitest.config.ts` too. See `docs/04-development/` for details.
+- **Tests**: Vitest in `tests/unit/` runs the inquiry endpoint in Node, with `cloudflare:workers` aliased to `tests/stubs/` and `fetch` stubbed per test, and checks `fullMenu` against the Square CSV. Four Playwright specs in `tests/e2e/` cover the form, the full menu, the Order Online links and the social links. Vitest doesn't read tsconfig paths, so new aliases go in `vitest.config.ts` too. See `docs/04-development/` for details.
 - **Astro components** prefer `<style>` blocks over Tailwind utility soup for section-level layout, with `var(--token)` references pulling from `global.css`.
 - **Placeholders are explicit** — owner content still pending is marked `TODO(owner)` in a code comment and renders a graceful fallback (hidden or reworded), never visible "TODO"/"TBD" text.
 

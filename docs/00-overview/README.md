@@ -25,16 +25,18 @@ The project is intentionally small. v1 ships a placeholder-content site that *ex
 - **Styling**: Tailwind v4 (CSS-first `@theme` tokens) + per-component `<style>` blocks
 - **Email**: Resend (bot-checked with Cloudflare Turnstile)
 - **Tooling**: Biome (TS/JS/JSON/Astro), Stylelint (CSS / `<style>` blocks), TypeScript strict
-- **Tests**: Vitest unit tests for `/api/inquiry` and a Playwright smoke test of the form (`pnpm test`)
+- **Tests**: Vitest unit tests for `/api/inquiry` and for the full menu against the Square catalog, plus Playwright specs for the form, menu, Order Online and social links (`pnpm test`)
+- **Menu data**: the owners' Square catalog, pulled at dev time with the Square CLI (`pnpm menu:pull`) into a committed CSV. Nothing calls Square at runtime.
+- **Ordering**: links out to the owners' Cash App order page. The site has no cart or checkout.
 - **Hosting**: Cloudflare Workers (static assets), `chuystacos.com`
 
 ## Out of scope for v1
 
 - Multi-page routes, real photography, real brand colors
-- Online ordering or POS integration
+- On-site ordering, prices on the site, or a runtime POS integration (ordering stays on Cash App)
 - Persistence of inquiries (they're emailed, not stored)
 - Spanish localization
 - Integration with `catering-event-manager` (deliberately decoupled)
 
 ---
-Last updated: 2026-10-28
+Last updated: 2026-11-05

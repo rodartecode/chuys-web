@@ -16,10 +16,14 @@ Other top-level docs:
 - [`../README.md`](../README.md) — quick-start and editing guide
 - [`../CLAUDE.md`](../CLAUDE.md) — AI-agent context
 - [`../API.md`](../API.md) — `/api/inquiry` reference
+- [`../HUMAN.md`](../HUMAN.md) — operator and owner tasks the agent can't do
+- [`../BACKLOG.md`](../BACKLOG.md) — agent-doable code work (`B-n` IDs) and the Lighthouse baseline
+- [`../HANDOFF.md`](../HANDOFF.md) — where the last session left off
+- [`menu/square-catalog.csv`](./menu/square-catalog.csv) — trimmed Square catalog that `fullMenu` is checked against (`pnpm menu:pull`)
 
 ## Skipped (for now)
 
 `02-features/`, `03-api/`, `06-planning/` — not warranted for a single-page site with one endpoint. Promote a topic into its own directory when there's enough material to fill it.
 
 ---
-Last updated: 2026-10-28
+Last updated: 2026-11-05

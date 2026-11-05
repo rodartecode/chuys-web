@@ -77,6 +77,20 @@ Each section component owns its own markup and `<style>` block. There is no shar
 
 See [`API.md`](../../API.md) for the wire contract.
 
+## Menu data flow
+
+The full menu comes from the owners' Square catalog, but only at dev time:
+
+```
+Square catalog ──square CLI (local, browser OAuth)──► pnpm menu:pull ──► docs/menu/square-catalog.csv (committed)
+                                                                            │
+src/data/menu.ts (fullMenu, hand-written copy) ◄── tests/unit/menu.test.ts ─┘  every CSV row ↔ one menu entry
+```
+
+- `scripts/menu-pull.mjs` keeps items that aren't archived and are sold in an active channel other than Point of Sale. It writes name, category and description only, never prices. Cash App, linked from the site, shows the prices.
+- `fullMenu` copy is edited by hand: Square's descriptions, lightly tightened. The test only checks that the names line up. `squareName` covers a rename the owners haven't made in Square yet, and `squareVariants` folds Square's "Chuy's Style" and "Street Style" items into one entry.
+- The CLI can't run in Workers Builds, because it signs in through the browser only. So the build never talks to Square, and the CSV is the snapshot the build trusts.
+
 ## Decoupling from `catering-event-manager`
 
 There is a separate backend project, `catering-event-manager` (Next.js + Go Fiber + Postgres + tRPC), that handles event lifecycle management for the same business. **It is intentionally not integrated into this repo.**
@@ -98,4 +112,4 @@ If a future need calls for inquiries to land in the backend's database, the clea
 - No client-side framework, no hydration. The only JS that ships is the small script inside `InquiryForm.astro`, plus Turnstile once someone interacts with the form.
 
 ---
-Last updated: 2026-10-29
+Last updated: 2026-11-05

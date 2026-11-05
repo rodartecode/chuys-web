@@ -20,7 +20,7 @@
 ## Next steps (ordered)
 
 1. **Drop the last `squareName`** (3 Crispy Barbacoa Taco Plate) once Square is renamed: run `pnpm menu:pull`, then remove it. Blocked on HUMAN.md: *Rename the barbacoa plate in Square*.
-2. **Menu photos from Square.** 36 of the 58 items have Square photos. If the owners say yes, pull the image URLs (`catalog-object list --object-types IMAGE`) for the meat cards and dishes. Blocked on HUMAN.md: *Collect owner content*.
+2. **Menu photos from Square.** 36 of the 58 items have Square photos. If the owners say yes, pull the image URLs (`square catalog catalog-object list --object-types IMAGE`) for the meat cards and dishes. Blocked on HUMAN.md: *Collect owner content*.
 3. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` afterwards.
 4. **Optional:** check B-7 on production. Run `pnpm exec wrangler tail`, then POST a bogus token with the curl from `API.md`. You should see `invalid-input-response`.
 
