@@ -18,7 +18,9 @@
     "typecheck": "astro check",
     "test": "vitest run && playwright test",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "menu:pull": "node scripts/menu-pull.mjs",
+    "skills:square": "node scripts/skills-square.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.4.3",

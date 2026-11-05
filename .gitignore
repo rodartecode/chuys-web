@@ -41,6 +41,23 @@ Thumbs.db
 # raw Square catalog exports stay local (public repo); the trimmed copy lives in docs/menu/
 docs/*_catalog-*.csv
 
+# Square CLI agent skills: proprietary, so never committed. `pnpm skills:square` installs them
+# per machine (.agents/skills/, symlinked into .claude/skills/, which .claude/* already ignores).
+# Other agents' folders, in case the CLI detects one on a machine:
+.agents/
+.windsurf/
+.continue/
+.augment/
+.goose/
+.kiro/
+.roo/
+.trae/
+.junie/
+.kilocode/
+.openhands/
+.qwen/
+.crush/
+
 # test output
 test-results/
 playwright-report/
