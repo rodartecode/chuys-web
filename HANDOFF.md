@@ -2,14 +2,14 @@
 
 > This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) rather than restating them. If they disagree, those files and the code win.
 
-**As of:** 2026-11-04 · `05c701b` + this handoff commit · `pnpm test` green (80 unit + 12 e2e); typecheck, lint, lint:styles and build green · `05c701b` deployed to production; a curl of the live page found the new shrimp copy and 6 Cash App order links · pushed
+**As of:** 2026-11-04 · `58887ae` + this handoff commit · `pnpm test` green (80 unit + 12 e2e); typecheck, lint, lint:styles and build green · `58887ae` deployed to production; a curl of the live page found the new shrimp copy, the reordered menu and 6 Cash App order links · pushed
 **Written on:** Harrier
 
 ## Just shipped
 
 - **Spicy Shrimp Taco gets the Chuy's-style toppings (`170f8bb`, deployed).** The user confirmed it comes with all of them, so `src/data/menu.ts` now ends its description with "plus avocado, sour cream, and queso fresco". That settles the last session's open decision.
 - **BACKLOG B-7 (`584a3a8`, deployed).** It was filed and done in this session; see BACKLOG Done for what it logs. API.md documents the log lines.
-- **The full menu now comes before the meat cards (in the commit after this handoff's first version, not yet deployed).** In `MenuHighlights.astro`, the section's h2 is now "The full menu", and "Pick your meat" is an h3 that sits with its intro above the cards. Heading levels went down one step (the categories are h3, the card names h4) so heading-order doesn't skip a level. The card names set the display font explicitly, since `global.css` only applies it to h1–h3.
+- **The full menu now comes before the meat cards (`58887ae`, deployed; a curl of the live page shows h2 "The full menu", then the categories, then h3 "Pick your meat", plus 6 order links).** In `MenuHighlights.astro`, the section's h2 is now "The full menu", and "Pick your meat" is an h3 that sits with its intro above the cards. Heading levels went down one step (the categories are h3, the card names h4) so heading-order doesn't skip a level. The card names set the display font explicitly, since `global.css` only applies it to h1–h3.
 - **Winter hours run until further notice.** The user has planned no end date. Only the HUMAN.md wording changed; `business.ts` stays as it is.
 
 ## Next steps (ordered)
