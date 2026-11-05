@@ -1,29 +1,35 @@
 # Handoff
 
-> This session handoff is rewritten in full at each /document-and-clear, and /catchup reads it first. It points at `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) rather than restating them. If they disagree, those files and the code win.
+> This file is rewritten in full at each /document-and-clear, and /catchup reads it first. It points to `BACKLOG.md` (agent work, `B-n`), `HUMAN.md` (your tasks) and the vault tracker (`C:/Users/jerod/vault/projects/chuys-tacos.md`) instead of restating them. If they disagree with this file, they win, and so does the code.
 
-**As of:** 2026-11-04 · `58887ae` + this handoff commit · `pnpm test` green (80 unit + 12 e2e); typecheck, lint, lint:styles and build green · `58887ae` deployed to production; a curl of the live page found the new shrimp copy, the reordered menu and 6 Cash App order links · pushed
-**Written on:** Harrier
+**As of:** 2026-11-05 · `b576fe9` + this handoff commit · all green: `pnpm test` (91 unit + 12 e2e), typecheck, lint, lint:styles and build · `b576fe9` is deployed (Workers Build succeeded at 21:41 UTC), and a curl of the live page showed `385-6843` ×3, JSON-LD `+15593856843`, no `6847`, the new Surf & Turf copy and no separate style items · pushed
+**Written on:** LAPTOP-ESEL9A3K
 
 ## Just shipped
 
-- **Spicy Shrimp Taco gets the Chuy's-style toppings (`170f8bb`, deployed).** The user confirmed it comes with all of them, so `src/data/menu.ts` now ends its description with "plus avocado, sour cream, and queso fresco". That settles the last session's open decision.
-- **BACKLOG B-7 (`584a3a8`, deployed).** It was filed and done in this session; see BACKLOG Done for what it logs. API.md documents the log lines.
-- **The full menu now comes before the meat cards (`58887ae`, deployed; a curl of the live page shows h2 "The full menu", then the categories, then h3 "Pick your meat", plus 6 order links).** In `MenuHighlights.astro`, the section's h2 is now "The full menu", and "Pick your meat" is an h3 that sits with its intro above the cards. Heading levels went down one step (the categories are h3, the card names h4) so heading-order doesn't skip a level. The card names set the display font explicitly, since `global.css` only applies it to h1–h3.
-- **Winter hours run until further notice.** The user has planned no end date. Only the HUMAN.md wording changed; `business.ts` stays as it is.
+- **Square CLI adopted** (`6a8d33a`). Research findings and the plan are in BACKLOG Done (2026-11-05). Details are in `docs/04-development/` → Square CLI.
+  - `pnpm menu:pull` regenerates `docs/menu/square-catalog.csv` from the live catalog, read-only. It replaces the hand export.
+  - `pnpm skills:square` installs 6 of the CLI's ~107 agent skills. They're gitignored, so run it once per machine.
+  - `.claude/settings.json` allows Square read commands and asks before any write. Both the Bash and the PowerShell rules prompted when tested.
+- **Menu synced to the 2026-11-05 catalog** (`7630256`, deployed).
+  - The catalog has 54 items. The 10 new "Chuy's Style" and "Street Style" items fold into their base entries through `squareVariants`.
+  - Square now uses the name Crispy Barbacoa Taco, so that `squareName` is gone. The plate's is still there.
+  - Surf & Turf Fries has a description.
+- **Phone (559) 385-6843** (`e683f27`, deployed). It matches Square's location record, and the user confirmed it was the right one.
 
 ## Next steps (ordered)
 
-1. **Drop `squareName` once Square is renamed.** Update `docs/menu/square-catalog-2026-11-04.csv` to the Crispy names and remove `squareName` from both items. The user deferred this to 2026-11-05. Blocked on HUMAN.md: *Rename the barbacoa dishes in Square*.
-2. **BACKLOG B-1:** restore the catering packages. The user deferred this to 2026-11-05. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` afterwards, because the page changes.
-3. **Optional:** check B-7 on production. Run `pnpm exec wrangler tail` and POST a bogus token with the curl from `API.md`. A `Turnstile check failed` warning with `invalid-input-response` should appear.
+1. **Drop the last `squareName`** (3 Crispy Barbacoa Taco Plate) once Square is renamed: run `pnpm menu:pull`, then remove it. Blocked on HUMAN.md: *Rename the barbacoa plate in Square*.
+2. **Menu photos from Square.** 36 of the 58 items have Square photos. If the owners say yes, pull the image URLs (`catalog-object list --object-types IMAGE`) for the meat cards and dishes. Blocked on HUMAN.md: *Collect owner content*.
+3. **BACKLOG B-1:** restore the catering packages. Blocked on HUMAN.md: *Collect owner content*. Run `pnpm test:e2e` afterwards.
+4. **Optional:** check B-7 on production. Run `pnpm exec wrangler tail`, then POST a bogus token with the curl from `API.md`. You should see `invalid-input-response`.
 
 ## In flight / blocked
 
-- Nothing is uncommitted.
-- **The live form is unverified since the Turnstile change.** Blocked on HUMAN.md: *Send a test inquiry and check both inboxes*. If it fails, B-7's logs in `wrangler tail` now show whether the secret is at fault.
-- **The Google listing shows the old hours** until HUMAN.md: *Update the Google Business Profile* is done.
-- **Regular hours:** nothing is scheduled. Wait for HUMAN.md: *Tell the agent when the winter hours end*.
+- Nothing is uncommitted. The vault entry is pushed (`8ff6d13` in `rodartecode/vault`).
+- **The live form hasn't been checked since the Turnstile change.** Blocked on HUMAN.md: *Send a test inquiry and check both inboxes*.
+- **The Google listing may still show the old hours and phone** until HUMAN.md: *Update the Google Business Profile* is done. Square has an active "Google My Business" channel, so check whether Square already pushes them.
+- **Square CLI auth** expires 2026-12-05. After that, run `square auth login` before `pnpm menu:pull`.
 
 ## Open decisions
 
@@ -31,17 +37,19 @@
 
 ## Watch items
 
-- **Two machines.** Sessions run on LAPTOP-ESEL9A3K and Harrier. Memory files don't sync between them, so the laptop's `ts7-support-watch` note is missing on Harrier. A fresh checkout needs `pnpm install` before running any check.
-- **Biome formats long test lines.** Run `pnpm format` before `pnpm lint` after adding tests, or lint fails on line wrapping alone.
-- **Menu re-sync.** `tests/unit/menu.test.ts` pins `CSV_PATH` to `square-catalog-2026-11-04.csv` and matches catalog rows on `squareName ?? name`. It checks names only, not descriptions. A new Square export has to overwrite that file or update `CSV_PATH`.
-- **Drink option markup.** In `MenuHighlights.astro`, the options `.map` stays on one line on purpose, because a line break renders a space before each comma.
+- **Harrier needs `pnpm skills:square`** (and `npm i -g @square/cli` plus `square auth login` if those are missing). The skills are gitignored, so this machine's copies don't travel. After installing, check that `git status` shows nothing under `.agents/`.
+- **Square writes go live.** Catalog `update`, `upsert` and `delete` have no `--force` or preview. Never run one without the user's go-ahead. See CLAUDE.md Gotchas.
+- **Menu re-sync:** run `pnpm menu:pull`, then `git diff docs/menu/`, then update `fullMenu` until `tests/unit/menu.test.ts` passes. The pull keeps items that aren't archived and that sell in an active channel other than Point of Sale. That rule matched the export on all 63 items.
+- **Two machines.** Sessions run on LAPTOP-ESEL9A3K and Harrier, and memory doesn't sync between them. A fresh checkout needs `pnpm install` before any check.
+- **Biome formats long test lines.** Run `pnpm format` before `pnpm lint`. Biome now covers `scripts/` too.
+- **Drink option markup.** In `MenuHighlights.astro`, the options `.map` stays on one line on purpose. A line break renders a space before each comma.
 - **Header breakpoint is 900px.** The other sections still use 768px.
-- **Hardcoded URLs in e2e specs.** `order-online.spec.ts` (`EXPECTED_LINKS`, 6 Cash App links) and `social.spec.ts` (`SOCIAL`) copy their URLs from `business.ts` by hand, because Playwright can't import a module that reads `import.meta.env`. Change both when the URLs change, and change `EXPECTED_LINKS` when an order link is added or removed.
-- **Live copy checks.** The served HTML encodes apostrophes as `&#39;`, so a curl grep for copy like "Chuy's" has to search for `Chuy&#39;s`. To count order links, grep `href="https://cash.app/$chuystacosytaquizas"` in single quotes with `-F`. Counting the bare URL also picks up the JSON-LD `urlTemplate`.
-- **Mobile Lighthouse.** Local runs are trustworthy (see B-4), but the paint delay comes and goes. The PSI API usually returns 429.
-- **`pnpm test:e2e` needs Chrome installed** (`channel: "chrome"`). See `docs/04-development/`.
-- **Vitest doesn't read tsconfig paths.** A new alias goes in `vitest.config.ts` too.
-- **TS 7 support.** TypeScript is held at 6.x until `@astrojs/check` supports TS 7 (see CLAUDE.md).
+- **Hardcoded URLs in e2e specs.** `order-online.spec.ts` (`EXPECTED_LINKS`, 6 Cash App links) and `social.spec.ts` (`SOCIAL`) copy their URLs from `business.ts` by hand.
+- **Live copy checks.** Served HTML encodes apostrophes as `&#39;`. To count order links, grep `href="https://cash.app/$chuystacosytaquizas"` with `-F`.
+- **Mobile Lighthouse.** Local runs are trustworthy (see B-4), but the paint delay is intermittent. The PSI API usually returns 429.
+- **`pnpm test:e2e` needs Chrome installed** (`channel: "chrome"`).
+- **Vitest doesn't read tsconfig paths.** A new alias also goes in `vitest.config.ts`.
+- **TS 7 support.** TypeScript stays at 6.x until `@astrojs/check` supports TS 7.
 - **Turnstile in preview.** `pnpm preview` is a production build, so its widget fails on `localhost`. Use the curl from `API.md`.
-- **paint-web, outside this repo.** Its `clear-choice` Turnstile widget still lists `site-b.jerodarte.workers.dev` (last checked 2026-11-04). Make sure paint-web's workers.dev is off before removing it.
-- **chezmoi drift (laptop).** `~/.claude/settings.json` differs from the dotfiles source, so a `chezmoi apply` would overwrite it.
+- **paint-web, outside this repo.** Its `clear-choice` Turnstile widget still lists `site-b.jerodarte.workers.dev`.
+- **chezmoi drift (laptop).** `~/.claude/settings.json` differs from the dotfiles source.
