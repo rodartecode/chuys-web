@@ -9,7 +9,7 @@
 ## ▶ Start here
 
 ### [ ] Send a test inquiry and check both inboxes · ⏱ 5 min · added 2026-10-29
-**Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). The mailbox exists in Google Workspace (confirmed 2026-11-04), but no inquiry has gone through since the Cc was added. This is also the first live check since the Turnstile hostnames were trimmed on 2026-11-04. Claude can't send the test, because production Turnstile blocks automated submits.
+**Why:** from 2026-10-29, every inquiry email Cc's `jesse@chuystacos.com` (`inquiry.cc` in `src/data/business.ts`). The mailbox exists in Google Workspace (confirmed 2026-11-04), but no inquiry has gone through since the Cc was added. On 2026-11-05 Claude confirmed the live Turnstile secret works (B-7), but only a real send proves that emails get delivered. Claude can't send the test, because production Turnstile blocks automated submits.
 
 1. Send a test inquiry from https://chuystacos.com/#contact.
 2. Check that it arrives in both `chuy@` and `jesse@`. While the form is open, also check that the event-type options are readable.
@@ -25,6 +25,14 @@
 2. Tell the agent. It will run `pnpm menu:pull` and remove the last `squareName` from `src/data/menu.ts`.
 
 **Done when:** the Cash App order page shows the Crispy name, and `menu.ts` has no `squareName` left.
+
+### [ ] Tell the owners their Square photos are on the site · ⏱ 2 min · added 2026-11-05
+**Why:** the menu now shows 8 of their Square photos. You OK'd it, but the owners haven't heard yet, and they may want different shots or have photos of single meats for the "Pick your meat" cards.
+
+1. Send them https://chuystacos.com/#menu and ask whether the photos are OK.
+2. Tell the agent if they want any swapped or have new ones.
+
+**Done when:** the owners have seen the gallery and said yes or asked for changes.
 
 ### [ ] Load the Cloudflare plugin in paint-web · ⏱ 1 min · added 2026-10-29
 **Why:** the plugin and its MCP sign-in work in chuys-web. paint-web enables the same plugin, but it hasn't been reloaded there yet.
@@ -70,11 +78,8 @@
 
 ## ✅ Done recently
 
-- 2026-11-05 Said go ahead with the Square menu photos. 8 dish photos are now in the menu. You OK'd them, so it's worth letting the owners know their Square photos are on the site.
-
+- 2026-11-05 Said go ahead with the Square menu photos. 8 dish photos are now live in the menu.
 - 2026-11-05 Installed the Square CLI and signed it in. Square now has the Crispy Barbacoa Taco name and separate Chuy's Style and Street Style items, and the site matches. Confirmed (559) 385-6843 is the right phone (it's in Square).
 - 2026-11-04 Flagged the masa and trompo copy and set the winter hours (Mon–Fri 10 AM – 4 PM). All three are live on the site.
 - 2026-11-04 Answered Birria vs Quesabirria: Birria and Barbacoa are meats, while the Quesabirria and Crispy Barbacoa Taco are dishes. The cards became "Pick your meat".
 - 2026-11-04 Supplied the Instagram and Facebook URLs, which are now in the footer and the JSON-LD
-- 2026-11-04 Trimmed the Turnstile widget to `chuystacos.com` and `www.chuystacos.com`. Claude did this through the API, with your OK. No other widget setting changed.
-- 2026-10-29 Pointed Workers Builds at `rodartecode/chuys-web` and fixed its deploy command; the first build (`6b95b7a`) deployed at 19:15 UTC
