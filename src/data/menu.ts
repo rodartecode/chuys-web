@@ -82,12 +82,12 @@ export const fullMenu: MenuCategory[] = [
       {
         name: "Taco",
         description:
-          "Street-style on a plain tortilla with your choice of meat. Chuy's style doubles the tortillas and adds cheese, extra meat, avocado, sour cream, and queso fresco.",
+          "Street style: two small tortillas with your choice of meat. Chuy's style: two larger tortillas with melted cheese between them, plus extra meat, avocado, sour cream, and queso fresco.",
       },
       {
         name: "Burrito",
         description:
-          "Rice, beans, seasoned meat, and cheese. Chuy's style adds avocado, sour cream, and queso fresco.",
+          "Rice, beans, seasoned meat, and cheese in a 12-inch tortilla. Chuy's style goes up to a 14-inch tortilla and adds avocado, sour cream, and queso fresco.",
       },
       {
         name: "Torta",
@@ -102,7 +102,7 @@ export const fullMenu: MenuCategory[] = [
       {
         name: "Quesadilla",
         description:
-          "A flour tortilla with melted cheese, griddled golden. Add your choice of meat or vegetables.",
+          "A flour tortilla with melted cheese, griddled golden. Add your choice of meat or vegetables. Chuy's style uses a larger tortilla and adds avocado, queso fresco, and sour cream.",
       },
       {
         name: "Rice and Bean Bowl",
