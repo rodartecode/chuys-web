@@ -8,8 +8,8 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("every full-menu item and drink option shows under its category", async ({ page }) => {
+  await expect(page.locator("#menu").getByRole("heading", { name: "The full menu" })).toBeVisible();
   const menu = page.locator("#menu .full-menu");
-  await expect(menu.getByRole("heading", { name: "The full menu" })).toBeVisible();
 
   for (const category of fullMenu) {
     await expect(menu.getByRole("heading", { name: category.title, exact: true })).toBeVisible();

@@ -4,7 +4,7 @@ export interface MenuItem {
   imagePath: string;
 }
 
-// The meat choices ("Pick your meat"): each one goes in any taco, burrito, torta, etc.
+// The meat choices ("Pick your meat", below the full menu): each one goes in any taco, burrito, torta, etc.
 // Dishes built on one meat (Quesabirria, Crispy Barbacoa Taco) live in fullMenu instead.
 // Owner-supplied menu. TODO(owner): photos still pending — styled
 // placeholder thumbs show until imagePath assets are added. Descriptions are
