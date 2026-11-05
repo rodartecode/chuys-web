@@ -37,6 +37,7 @@ The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turns
 | `pnpm lint:styles` | Stylelint over `.css` and `.astro` `<style>` blocks |
 | `pnpm format` | Biome format |
 | `pnpm menu:pull` | Rewrites `docs/menu/square-catalog.csv` from the live Square catalog (read-only; needs the Square CLI signed in). See [Square CLI](#square-cli) |
+| `pnpm menu:photos` | Downloads the dish gallery photos from the live Square catalog into `src/assets/menu/`, resized to 1600 px (read-only; needs the Square CLI signed in). See [Square CLI](#square-cli) |
 | `pnpm skills:square` | Installs the Square CLI's agent skills for this project, trimmed to 6 (gitignored, once per machine) |
 
 Before committing, the minimum useful gate is:
@@ -110,6 +111,8 @@ pnpm build && grep -nE "TODO|TBD" dist/client/index.html   # should print nothin
 ### Add a menu item
 
 Edit `src/data/menu.ts`. For a meat card ("Pick your meat"), push a new object to `menuHighlights`; the grid auto-fills. Dishes built on one meat, such as the Quesabirria, belong in `fullMenu` instead. For the full menu, run `pnpm menu:pull` to bring `docs/menu/square-catalog.csv` up to date with Square, then add the item to its category in `fullMenu`. The unit test fails until the two agree. To show a name the owners haven't changed in Square yet, set `name` to the new one and `squareName` to Square's; once Square is renamed, re-pull and drop `squareName`. Square's separate "Chuy's Style X" and "Street Style X" items go in `squareVariants` on item X, whose description covers both styles, instead of getting their own entries. Never add prices: Cash App is the source of truth.
+
+For a dish photo, add the Square image name and a file name to `PHOTOS` in `scripts/menu-photos.mjs`, run `pnpm menu:photos`, then add a `dishPhotos` entry (its `fullMenu` dish, a caption, alt text, the file). The unit test checks the dish and the file exist. Only the gallery uses photos: Square has none of single meats, so the meat cards stay text.
 
 ### Square CLI
 

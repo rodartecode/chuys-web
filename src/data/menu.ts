@@ -1,49 +1,40 @@
 export interface MenuItem {
   name: string;
   description: string;
-  imagePath: string;
 }
 
 // The meat choices ("Pick your meat", below the full menu): each one goes in any taco, burrito, torta, etc.
 // Dishes built on one meat (Quesabirria, Crispy Barbacoa Taco) live in fullMenu instead.
-// Owner-supplied menu. TODO(owner): photos still pending — styled
-// placeholder thumbs show until imagePath assets are added. Descriptions are
-// owner's words, lightly cleaned; flag if a longer copy pass is wanted.
+// Owner-supplied menu. No photos: Square's photos show dishes, not single meats (see dishPhotos).
+// Descriptions are owner's words, lightly cleaned; flag if a longer copy pass is wanted.
 export const menuHighlights: MenuItem[] = [
   {
     name: "Carne Asada",
     description: "Our special blend of steak, grilled and chopped fresh.",
-    imagePath: "/images/menu-carne-asada.svg",
   },
   {
     name: "Al Pastor",
     description: "Marinated pork.",
-    imagePath: "/images/menu-al-pastor.svg",
   },
   {
     name: "Chorizo",
     description: "Locally sourced.",
-    imagePath: "/images/menu-chorizo.svg",
   },
   {
     name: "Pollo Asada",
     description: "Grilled chicken.",
-    imagePath: "/images/menu-pollo-asada.svg",
   },
   {
     name: "Birria",
     description: "Slow-stewed beef in our family chile broth.",
-    imagePath: "/images/menu-birria.svg",
   },
   {
     name: "Barbacoa",
     description: "Super tender stewed cachete, lengua, and labio.",
-    imagePath: "/images/menu-barbacoa.svg",
   },
   {
     name: "Shrimp",
     description: "Grilled shrimp — also available spicy, cooked with our homemade salsa.",
-    imagePath: "/images/menu-shrimp.svg",
   },
 ];
 
@@ -201,5 +192,68 @@ export const fullMenu: MenuCategory[] = [
         options: ["Coke", "Sprite", "Squirt", "Water", "Gatorade", "Snapple"],
       },
     ],
+  },
+];
+
+export interface DishPhoto {
+  /** The `fullMenu` item the photo shows; tests/unit/menu.test.ts checks it exists. */
+  dish: string;
+  caption: string;
+  alt: string;
+  /** File name under src/assets/menu/, written by `pnpm menu:photos` (scripts/menu-photos.mjs). */
+  file: string;
+}
+
+// The photo gallery between the full menu and "Pick your meat". The photos are the owners' own,
+// pulled from their Square catalog (they also show on the Cash App order page). Plain strings, no
+// image imports, so tests/e2e can load this file in Node; MenuHighlights.astro resolves `file`.
+export const dishPhotos: DishPhoto[] = [
+  {
+    dish: "Taco",
+    caption: "Chuy's Style Tacos",
+    alt: "Two Chuy's style tacos topped with avocado, sour cream, queso fresco and cilantro, with lime, radish and cucumber",
+    file: "chuys-style-tacos.jpg",
+  },
+  {
+    dish: "Taco",
+    caption: "Street Tacos",
+    alt: "Three street tacos with onion, cilantro and red salsa on checkered paper, with lime, radish and cucumber",
+    file: "street-tacos.jpg",
+  },
+  {
+    dish: "Burrito",
+    caption: "Burritos",
+    alt: "Two foil-wrapped burritos cut open to show rice and meat, with a cup of salsa, grilled jalapeños, avocado, lime and cucumber",
+    file: "burrito.jpg",
+  },
+  {
+    dish: "Quesabirria",
+    caption: "Quesabirria",
+    alt: "A golden, crispy quesabirria stuffed with birria, next to a cup of red consomé for dipping",
+    file: "quesabirria.jpg",
+  },
+  {
+    dish: "Crispy Barbacoa Taco",
+    caption: "Crispy Barbacoa Tacos",
+    alt: "Crispy barbacoa tacos piled with tender shredded beef, with a lidded cup of consomé",
+    file: "crispy-barbacoa-taco.jpg",
+  },
+  {
+    dish: "Surf & Turf Fries",
+    caption: "Surf & Turf Fries",
+    alt: "Fries in a to-go box topped with grilled shrimp, meat, avocado, sour cream, queso fresco and yellow chiles",
+    file: "surf-and-turf-fries.jpg",
+  },
+  {
+    dish: "Mini Torta",
+    caption: "Mini Torta",
+    alt: "A mini torta on a toasted bun, overflowing with meat and melted cheese, with radish, cucumber and cilantro",
+    file: "mini-torta.jpg",
+  },
+  {
+    dish: "Breakfast Burrito",
+    caption: "Breakfast Burrito",
+    alt: "A breakfast burrito cut in half to show scrambled eggs, crispy fries and meat",
+    file: "breakfast-burrito.jpg",
   },
 ];

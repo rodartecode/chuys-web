@@ -1,6 +1,6 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { fullMenu, type MenuCategory } from "@data/menu";
+import { dishPhotos, fullMenu, type MenuCategory } from "@data/menu";
 import { describe, expect, it } from "vitest";
 
 // The trimmed Square catalog that `fullMenu` is hand-copied from (BACKLOG B-6).
@@ -131,5 +131,25 @@ describe("fullMenu vs the Square catalog", () => {
 
   it("shows no prices", () => {
     expect(JSON.stringify(fullMenu)).not.toMatch(/\$|\d+\.\d{2}/);
+  });
+});
+
+describe("dishPhotos", () => {
+  const menuNames = new Set(
+    fullMenu.flatMap((category) => category.items.map((item) => item.name))
+  );
+
+  it.each(dishPhotos)("$caption shows a real fullMenu dish", (photo) => {
+    expect(menuNames, `"${photo.dish}" in fullMenu`).toContain(photo.dish);
+  });
+
+  it.each(dishPhotos)("$caption has alt text and a file in src/assets/menu", (photo) => {
+    expect(photo.alt.trim().length).toBeGreaterThan(20);
+    const path = fileURLToPath(new URL(`../../src/assets/menu/${photo.file}`, import.meta.url));
+    expect(existsSync(path), path).toBe(true);
+  });
+
+  it("uses each photo once", () => {
+    expect(new Set(dishPhotos.map((photo) => photo.file)).size).toBe(dishPhotos.length);
   });
 });

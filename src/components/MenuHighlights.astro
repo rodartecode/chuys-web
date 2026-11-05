@@ -1,6 +1,28 @@
 ---
+import { Image } from "astro:assets";
 import OrderButton from "@components/OrderButton.astro";
-import { fullMenu, menuHighlights } from "@data/menu";
+import { dishPhotos, fullMenu, menuHighlights } from "@data/menu";
+import type { ImageMetadata } from "astro";
+
+// dishPhotos holds file names only (tests load menu.ts in plain Node), so resolve them here.
+const photoFiles = import.meta.glob<{ default: ImageMetadata }>("../assets/menu/*.jpg", {
+  eager: true,
+});
+const photos = dishPhotos.map((photo) => {
+  const src = photoFiles[`../assets/menu/${photo.file}`]?.default;
+  if (!src) throw new Error(`dishPhotos: src/assets/menu/${photo.file} is missing`);
+  return { ...photo, src };
+});
+
+// Matches .dishes below: auto-fill 15rem columns, 1.25rem gaps, inside 1.5rem section padding,
+// with the container capped at 72rem; phones (≤548px) get two columns with a 0.75rem gap.
+// Keep the two in step, or phones fetch a size too big.
+const DISH_SIZES = [
+  "(min-width: 68.75rem) 17rem",
+  "(min-width: 51.5rem) calc((100vw - 5.5rem) / 3)",
+  "(min-width: 34.25rem) calc((100vw - 4.25rem) / 2)",
+  "calc((100vw - 3.75rem) / 2)",
+].join(", ");
 ---
 
 <section id="menu" class="menu">
@@ -39,6 +61,26 @@ import { fullMenu, menuHighlights } from "@data/menu";
       </div>
     </div>
 
+    <ul class="dishes" data-testid="dish-photos">
+      {
+        photos.map((photo) => (
+          <li class="card">
+            <figure>
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                widths={[320, 480, 640, 960]}
+                sizes={DISH_SIZES}
+                loading="lazy"
+                decoding="async"
+              />
+              <figcaption>{photo.caption}</figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ul>
+
     <div class="meats-head">
       <h3>Pick your meat</h3>
       <p class="sub">
@@ -50,14 +92,9 @@ import { fullMenu, menuHighlights } from "@data/menu";
     <ul class="grid">
       {
         menuHighlights.map((item) => (
-          <li class="card">
-            <div class="thumb" aria-hidden="true">
-              <span>{item.name.charAt(0)}</span>
-            </div>
-            <div class="body">
-              <h4>{item.name}</h4>
-              <p>{item.description}</p>
-            </div>
+          <li class="card meat">
+            <h4>{item.name}</h4>
+            <p>{item.description}</p>
           </li>
         ))
       }
@@ -117,13 +154,35 @@ import { fullMenu, menuHighlights } from "@data/menu";
     margin: 0;
   }
 
+  .dishes,
   .grid {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
     gap: 1.25rem;
+  }
+
+  .dishes {
+    margin-top: 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  }
+
+  /* Phones: two smaller photos per row instead of eight full-width ones stacked. */
+  @media (max-width: 548px) {
+    .dishes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .dishes figcaption {
+      font-size: 0.95rem;
+      padding: 0.6rem 0.75rem 0.7rem;
+    }
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
   }
 
   .card {
@@ -141,29 +200,32 @@ import { fullMenu, menuHighlights } from "@data/menu";
     box-shadow: 0 18px 40px -22px rgba(31, 22, 17, 0.35);
   }
 
-  /* TODO(owner): replace .thumb placeholder with <Image /> using item.imagePath */
-  .thumb {
+  figure {
+    margin: 0;
+  }
+
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
     aspect-ratio: 4 / 3;
-    background:
-      radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--color-mustard) 60%, transparent), transparent 60%),
-      linear-gradient(135deg, var(--color-terracotta) 0%, var(--color-terracotta-dark) 100%);
-    display: grid;
-    place-items: center;
+    object-fit: cover;
   }
 
-  .thumb span {
+  figcaption {
     font-family: var(--font-display);
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--color-cream);
-    opacity: 0.85;
+    letter-spacing: -0.01em;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-charcoal);
+    padding: 0.85rem 1.1rem 1rem;
   }
 
-  .body {
-    padding: 1.1rem 1.25rem 1.4rem;
+  .meat {
+    padding: 1.1rem 1.25rem 1.25rem;
   }
 
-  .body h4 {
+  .meat h4 {
     font-family: var(--font-display);
     letter-spacing: -0.01em;
     font-size: 1.25rem;
@@ -171,7 +233,7 @@ import { fullMenu, menuHighlights } from "@data/menu";
     color: var(--color-charcoal);
   }
 
-  .body p {
+  .meat p {
     margin: 0;
     color: var(--color-muted);
     font-size: 0.95rem;

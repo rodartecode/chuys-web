@@ -6,7 +6,7 @@ Guidance for Claude Code when working in this repository.
 
 Landing page and catering-inquiry site for **Chuy's Tacos**, a family-owned taquería + catering business. Single-page Astro site (anchor sections, no client-side routing) with one server endpoint for inquiry-form submissions, bot-checked with Cloudflare Turnstile and delivered via Resend. Hosted on Cloudflare Workers (static assets + one Worker route).
 
-The site is intentionally small and content-driven. Most edits are copy or asset swaps — search for `TODO(owner)` to find content still waiting on the owners (story, pricing, social URLs, photos, Turnstile site key). Contact details, hours, and inquiry addresses live in `src/data/business.ts`.
+The site is intentionally small and content-driven. Most edits are copy or asset swaps — search for `TODO(owner)` to find content still waiting on the owners (story, pricing, hero photo, PDF menu). Contact details, hours, and inquiry addresses live in `src/data/business.ts`.
 
 This project is **standalone** — it is not part of a monorepo and is intentionally decoupled from `catering-event-manager` (a separate Next.js + Go + Postgres backend on its own GitHub repo). The two share no code.
 
@@ -27,6 +27,7 @@ pnpm lint:fix               # Biome auto-fix
 pnpm lint:styles            # Stylelint over .css / .astro
 pnpm format                 # Biome format
 pnpm menu:pull              # docs/menu/square-catalog.csv from live Square (needs `square auth login`)
+pnpm menu:photos            # dish gallery photos from live Square → src/assets/menu/ (resized, committed)
 pnpm skills:square          # install the 6 Square CLI agent skills (gitignored; once per machine)
 ```
 
@@ -36,7 +37,7 @@ pnpm skills:square          # install the 6 Square CLI agent skills (gitignored;
 - **Tailwind v4** via `@tailwindcss/vite`. Theme tokens (warm earth palette, font stacks) live in `src/styles/global.css` under `@theme`. No external design-system package.
 - **Component-scoped styles** — most components use Astro's `<style>` block instead of Tailwind utilities, since each section is one-of-a-kind. Tokens flow through CSS custom properties (`var(--color-terracotta)` etc.).
 - **Form flow**: `InquiryForm.astro` posts JSON to `/api/inquiry`. A Turnstile widget lazy-loads on first focus and its token rides along in the payload. The endpoint runs honeypot → validation → Turnstile siteverify → Resend (plain `fetch`, no SDK). No persistence.
-- **Menu data**: `pnpm menu:pull` (local Square CLI) writes `docs/menu/square-catalog.csv`, with no prices. `fullMenu` in `menu.ts` is hand-written copy, and `tests/unit/menu.test.ts` checks every CSV row against one entry. The build never calls Square. Ordering links out to Cash App (`business.orderUrl`).
+- **Menu data**: `pnpm menu:pull` (local Square CLI) writes `docs/menu/square-catalog.csv`, with no prices. `fullMenu` in `menu.ts` is hand-written copy, and `tests/unit/menu.test.ts` checks every CSV row against one entry. `pnpm menu:photos` pulls the dish gallery photos (`dishPhotos`, file names only so tests can load `menu.ts` in Node) into `src/assets/menu/`, and `MenuHighlights.astro` resolves them with `import.meta.glob` for `<Image>` (webp srcsets at build). The build never calls Square. Ordering links out to Cash App (`business.orderUrl`).
 
 ## Directory map
 
@@ -45,7 +46,8 @@ chuys-tacos/
 ├── src/
 │   ├── components/         # One .astro per page section (Header, Hero, …)
 │   ├── data/business.ts    # Contact, address, hours, social, inquiry to/from, Turnstile site key
-│   ├── data/menu.ts        # menuHighlights (meat cards) + fullMenu (checked against docs/menu CSV)
+│   ├── assets/menu/        # Dish photos from Square (pnpm menu:photos), optimized by <Image> at build
+│   ├── data/menu.ts        # menuHighlights (meat cards), fullMenu (checked against docs/menu CSV), dishPhotos
 │   ├── layouts/BaseLayout.astro  # <html>, meta, fonts, slot
 │   ├── pages/
 │   │   ├── index.astro     # Composes section components in order
@@ -56,8 +58,8 @@ chuys-tacos/
 │   ├── unit/               # Vitest — /api/inquiry, fullMenu vs the Square CSV
 │   ├── e2e/                # Playwright — form, full menu, Order Online, social
 │   └── stubs/              # cloudflare:workers stand-in for Vitest
-├── scripts/                # menu-pull.mjs, skills-square.mjs (local Square CLI tooling)
-├── public/                 # Static assets — favicon, future hero/menu photos
+├── scripts/                # menu-pull.mjs, menu-photos.mjs, skills-square.mjs (local Square CLI tooling)
+├── public/                 # Static assets — favicon, OG image, robots.txt
 ├── docs/
 │   ├── 00-overview/        # Quick start and project summary
 │   ├── 01-architecture/    # System design + tech stack + menu data flow

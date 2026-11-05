@@ -65,10 +65,12 @@
 
 ## ⏳ Waiting on something else
 
-- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/`. **Photos may already exist:** 36 of 58 Square items have a photo, including the Taco, Burrito, Torta, Quesabirria, Crispy Barbacoa Taco, Surf & Turf Fries and the combos (checked 2026-11-05). Ask the owners whether the site can use those, and the agent can pull them with the Square CLI · waiting on the owners · added 2026-10-28
+- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/`. Menu photos are done: they come from Square (see Done recently). If the owners have photos of single meats (asada, pastor, and so on), the "Pick your meat" cards could use them too · waiting on the owners · added 2026-10-28
 - [ ] Tell the agent when the winter hours end, with the new hours. It will update `business.ts`, and you'll update the Google Business Profile the same day · winter hours run until further notice, no end date planned · added 2026-11-04
 
 ## ✅ Done recently
+
+- 2026-11-05 Said go ahead with the Square menu photos. 8 dish photos are now in the menu. You OK'd them, so it's worth letting the owners know their Square photos are on the site.
 
 - 2026-11-05 Installed the Square CLI and signed it in. Square now has the Crispy Barbacoa Taco name and separate Chuy's Style and Street Style items, and the site matches. Confirmed (559) 385-6843 is the right phone (it's in Square).
 - 2026-11-04 Flagged the masa and trompo copy and set the winter hours (Mon–Fri 10 AM – 4 PM). All three are live on the site.

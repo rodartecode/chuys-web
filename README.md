@@ -4,8 +4,8 @@ Single-page landing site and catering-inquiry form for **Chuy's Tacos**, a famil
 
 ## Highlights
 
-- Single-page anchor layout: Hero, Menu (full menu + "Pick your meat" cards), About, Catering, Hours/Location, Inquiry Form
-- Full menu kept in step with the owners' Square catalog (`pnpm menu:pull` + a unit test), with no prices. Order Online links go to the Cash App order page.
+- Single-page anchor layout: Hero, Menu (full menu + dish photos + "Pick your meat" cards), About, Catering, Hours/Location, Inquiry Form
+- Full menu kept in step with the owners' Square catalog (`pnpm menu:pull` + a unit test), with no prices. Dish photos come from the same catalog (`pnpm menu:photos`). Order Online links go to the Cash App order page.
 - Resend-backed inquiry form with client-side validation, honeypot, and lazy-loaded Cloudflare Turnstile
 - Warm earth-tone theme via Tailwind v4 `@theme` tokens
 - Static HTML served as Worker assets + a single Worker route for the inquiry endpoint
@@ -48,12 +48,13 @@ Set them locally in `.dev.vars` and in production with `pnpm exec wrangler secre
 | `pnpm lint:styles` | Stylelint over `.css` and `.astro` `<style>` blocks |
 | `pnpm format` | Biome format the repo |
 | `pnpm menu:pull` | Rewrite `docs/menu/square-catalog.csv` from the live Square catalog (read-only; needs the [Square CLI](./docs/04-development/README.md#square-cli) signed in) |
+| `pnpm menu:photos` | Download the dish gallery photos from the live Square catalog into `src/assets/menu/`, resized to 1600 px (read-only; needs the Square CLI signed in) |
 | `pnpm skills:square` | Install the Square CLI's agent skills for this project, trimmed to 6 (gitignored; once per machine) |
 
 ## Editing content
 
 - **Section copy** — directly in the section's `.astro` file under `src/components/`.
-- **Menu**: `src/data/menu.ts`. `menuHighlights` holds the meat cards ("Pick your meat"), one entry per meat. `fullMenu` is the full menu by category, with no prices. It's hand-copied from `docs/menu/square-catalog.csv`, which `pnpm menu:pull` regenerates from Square, and `pnpm test:unit` checks the two agree. An item shown under a different name than Square's carries `squareName`. Square's separate "Chuy's Style X" and "Street Style X" items are listed in `squareVariants` on item X, not shown on their own.
+- **Menu**: `src/data/menu.ts`. `menuHighlights` holds the meat cards ("Pick your meat"), one entry per meat. `fullMenu` is the full menu by category, with no prices. It's hand-copied from `docs/menu/square-catalog.csv`, which `pnpm menu:pull` regenerates from Square, and `pnpm test:unit` checks the two agree. An item shown under a different name than Square's carries `squareName`. Square's separate "Chuy's Style X" and "Street Style X" items are listed in `squareVariants` on item X, not shown on their own. `dishPhotos` is the photo gallery between the two: each entry names its `fullMenu` dish, a caption, alt text and a file in `src/assets/menu/`. To add one, add the Square image to `PHOTOS` in `scripts/menu-photos.mjs`, run `pnpm menu:photos`, then add the entry.
 - **Catering packages**: the `packages` array in the frontmatter of `src/components/Catering.astro`. `pricing` is optional, and the line is hidden while it's unset.
 - **Contact, address, hours, social links**: `src/data/business.ts`. Hero, Visit, Footer and the `Restaurant` JSON-LD all read from it. If you change `hours`, update `openingHours` too.
 - **Pull quote**: `quote` in `src/components/About.astro`. The aside is hidden while it's `undefined`.

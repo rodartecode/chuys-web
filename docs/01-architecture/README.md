@@ -89,6 +89,7 @@ src/data/menu.ts (fullMenu, hand-written copy) ◄── tests/unit/menu.test.ts
 
 - `scripts/menu-pull.mjs` keeps items that aren't archived and are sold in an active channel other than Point of Sale. It writes name, category and description only, never prices. Cash App, linked from the site, shows the prices.
 - `fullMenu` copy is edited by hand: Square's descriptions, lightly tightened. The test only checks that the names line up. `squareName` covers a rename the owners haven't made in Square yet, and `squareVariants` folds Square's "Chuy's Style" and "Street Style" items into one entry.
+- Dish photos take a parallel path: `pnpm menu:photos` (`scripts/menu-photos.mjs`) downloads the Square images listed in its `PHOTOS` map, resizes them to 1600 px JPEGs in `src/assets/menu/` (committed), and `<Image>` emits 320–960w webp srcsets at build. `dishPhotos` in `menu.ts` holds file names only, so the Playwright spec can still import `menu.ts` in plain Node; `MenuHighlights.astro` resolves them with `import.meta.glob`.
 - The CLI can't run in Workers Builds, because it signs in through the browser only. So the build never talks to Square, and the CSV is the snapshot the build trusts.
 
 ## Decoupling from `catering-event-manager`
@@ -108,7 +109,7 @@ If a future need calls for inquiries to land in the backend's database, the clea
 
 - Static prerender + `compressHTML` + `inlineStylesheets: "always"`.
 - Playfair Display is self-hosted through the Astro Fonts API (`fonts` in `astro.config.mjs`, `<Font>` in `BaseLayout.astro`). The build downloads one variable woff2 covering 600–700, and the page preloads it with `font-display: swap` plus a metric-matched fallback face. The adapter's `_headers` caches `/_assets/*` as immutable. There are no requests to Google.
-- Hero/menu visuals are CSS gradients in v1 — when real photos arrive, swap to Astro's `<Image />` component.
+- The hero is still a CSS gradient. Menu photos use Astro's `<Image />` (compile-time optimization, lazy-loaded below the fold). The gallery's `sizes` string mirrors its grid CSS, so change both together.
 - No client-side framework, no hydration. The only JS that ships is the small script inside `InquiryForm.astro`, plus Turnstile once someone interacts with the form.
 
 ---

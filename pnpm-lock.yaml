@@ -39,6 +39,9 @@ importers:
       postcss-html:
         specifier: ^1.8.1
         version: 1.8.1
+      sharp:
+        specifier: 0.35.5
+        version: 0.35.5(@types/node@25.6.0)
       stylelint:
         specifier: ^17.16.0
         version: 17.16.0(supports-color@10.2.2)(typescript@6.0.3)
