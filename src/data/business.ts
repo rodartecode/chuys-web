@@ -14,8 +14,9 @@ export interface OpeningHours {
 export const business = {
   name: "Chuy's Tacos",
   url: "https://chuystacos.com",
-  phone: "+15593856847",
-  phoneDisplay: "(559) 385-6847",
+  // Matches the Square location record (`square locations location get main`), checked 2026-11-05.
+  phone: "+15593856843",
+  phoneDisplay: "(559) 385-6843",
   email: "chuy@chuystacos.com",
   // Online ordering. The cashtag is spelled "taquizas" (Square's location says "Taquisas"); this
   // is the URL that resolves, so don't "fix" it.
