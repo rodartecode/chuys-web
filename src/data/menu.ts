@@ -135,7 +135,8 @@ export const fullMenu: MenuCategory[] = [
       },
       {
         name: "Spicy Shrimp Taco",
-        description: "Grilled shrimp in a spicy red salsa on a soft tortilla, Chuy's style.",
+        description:
+          "Grilled shrimp in a spicy red salsa, served Chuy's style on two larger tortillas with melted cheese between them.",
       },
       {
         name: "Breakfast Burrito",
