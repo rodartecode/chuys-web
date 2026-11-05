@@ -9,6 +9,7 @@
 
 - **Spicy Shrimp Taco gets the Chuy's-style toppings (`170f8bb`, deployed).** The user confirmed it comes with all of them, so `src/data/menu.ts` now ends its description with "plus avocado, sour cream, and queso fresco". That settles the last session's open decision.
 - **BACKLOG B-7 (`584a3a8`, deployed).** It was filed and done in this session; see BACKLOG Done for what it logs. API.md documents the log lines.
+- **The full menu now comes before the meat cards (in the commit after this handoff's first version, not yet deployed).** In `MenuHighlights.astro`, the section's h2 is now "The full menu", and "Pick your meat" is an h3 that sits with its intro above the cards. Heading levels went down one step (the categories are h3, the card names h4) so heading-order doesn't skip a level. The card names set the display font explicitly, since `global.css` only applies it to h1–h3.
 - **Winter hours run until further notice.** The user has planned no end date. Only the HUMAN.md wording changed; `business.ts` stays as it is.
 
 ## Next steps (ordered)
