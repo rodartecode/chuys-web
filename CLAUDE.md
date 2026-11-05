@@ -26,6 +26,8 @@ pnpm lint                   # Biome lint (TS/JS/Astro/JSON)
 pnpm lint:fix               # Biome auto-fix
 pnpm lint:styles            # Stylelint over .css / .astro
 pnpm format                 # Biome format
+pnpm menu:pull              # docs/menu/square-catalog.csv from live Square (needs `square auth login`)
+pnpm skills:square          # install the 6 Square CLI agent skills (gitignored; once per machine)
 ```
 
 ## Architecture
@@ -103,6 +105,7 @@ Gotchas (learned on `paint-web`, which uses the same setup):
 - pnpm 11 enforces a minimum release age, so a package published within the last day fails install. Pin the previous patch instead of adding `minimumReleaseAgeExclude`.
 - `@cloudflare/workers-types` adds a global `Element.append` overload that shadows the DOM one in client scripts. Use `appendChild`.
 - TypeScript is held at 6.x until `@astrojs/check` supports TS 7.
+- **Square CLI writes go live.** It talks to the owners' production Square account; there's no sandbox. `catalog … update`/`upsert`/`delete` change the POS and the Cash App order page immediately, with no `--force` or preview, so never run one without the user's go-ahead (`.claude/settings.json` makes them ask). Browser OAuth only, so it's local-only, never in CI. See `docs/04-development/` → Square CLI.
 
 ## Documentation
 
@@ -120,4 +123,4 @@ Gotchas (learned on `paint-web`, which uses the same setup):
 Tracked in the personal Obsidian vault at `C:/Users/jerod/vault/projects/chuys-tacos.md`. Add a dated one-liner to its activity log when finishing meaningful work.
 
 ---
-Last updated: 2026-10-29
+Last updated: 2026-11-05

@@ -4,7 +4,7 @@
 > Check one off by telling the agent, or delete it yourself. Full detail for each step is in the
 > runbook [`docs/05-guides/cloudflare-setup.md`](docs/05-guides/cloudflare-setup.md); the § numbers point there.
 
-**Updated:** 2026-11-04 · LAPTOP-ESEL9A3K
+**Updated:** 2026-11-05 · LAPTOP-ESEL9A3K
 
 ## ▶ Start here
 
@@ -18,13 +18,13 @@
 
 ## ⚡ Quick wins (≤10 min)
 
-### [ ] Rename the barbacoa dishes in Square · ⏱ 5 min · added 2026-11-04
-**Why:** the site now calls them "Crispy Barbacoa Taco" and "3 Crispy Barbacoa Taco Plate", so nobody confuses them with the barbacoa meat. Square and the Cash App order page still say "Barbacoa Taco" and "3 Barbacoa Taco Plate", so the names differ between the site and checkout.
+### [ ] Rename the barbacoa plate in Square · ⏱ 2 min · added 2026-11-04
+**Why:** the site calls it "3 Crispy Barbacoa Taco Plate", so nobody confuses it with the barbacoa meat. The single taco is already renamed in Square ("Crispy Barbacoa Taco", done 2026-11-05), but the plate still says "3 Barbacoa Taco Plate" in Square and on the Cash App order page.
 
-1. Square Dashboard → Items → rename "Barbacoa Taco" to **Crispy Barbacoa Taco**, and "3 Barbacoa Taco Plate" to **3 Crispy Barbacoa Taco Plate**.
-2. Tell the agent. It will update `docs/menu/square-catalog-2026-11-04.csv` and remove `squareName` from both items in `src/data/menu.ts`.
+1. Square Dashboard → Items → rename "3 Barbacoa Taco Plate" to **3 Crispy Barbacoa Taco Plate**.
+2. Tell the agent. It will run `pnpm menu:pull` and remove the last `squareName` from `src/data/menu.ts`.
 
-**Done when:** the Cash App order page shows the Crispy names, and `menu.ts` has no `squareName` left.
+**Done when:** the Cash App order page shows the Crispy name, and `menu.ts` has no `squareName` left.
 
 ### [ ] Load the Cloudflare plugin in paint-web · ⏱ 1 min · added 2026-10-29
 **Why:** the plugin and its MCP sign-in work in chuys-web. paint-web enables the same plugin, but it hasn't been reloaded there yet.
@@ -55,7 +55,7 @@
 **Done when:** the sitemap shows "Success" and the Rich Results Test finds the restaurant data with no errors.
 
 ### [ ] Update the Google Business Profile (§7) · ⏱ 20 min · added 2026-10-28
-**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours. The site's phone number changed to **(559) 385-6847** on 2026-10-29, so make sure the listing shows the new one. Winter hours started on 2026-11-04 (**Mon–Fri 10 AM – 4 PM**, weekends closed), so update the listing's hours too. When the hours change again, change them on the site (`business.ts`) and in the listing at the same time.
+**Why:** Google trusts the listing and the site more when they agree on name, address, phone and hours. The site's phone number is **(559) 385-6843**, which matches Square's location record (changed from …6847 on 2026-11-05), so make sure the listing shows that one. Winter hours started on 2026-11-04 (**Mon–Fri 10 AM – 4 PM**, weekends closed), so update the listing's hours too. When the hours change again, change them on the site (`business.ts`) and in the listing at the same time.
 
 1. Open the profile at https://business.google.com.
 2. Compare the name, address, phone and hours with `src/data/business.ts`, and fix any that differ.
@@ -65,11 +65,12 @@
 
 ## ⏳ Waiting on something else
 
-- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
+- [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/`. **Photos may already exist:** 36 of 58 Square items have a photo, including the Taco, Burrito, Torta, Quesabirria, Crispy Barbacoa Taco, Surf & Turf Fries and the combos (checked 2026-11-05). Ask the owners whether the site can use those, and the agent can pull them with the Square CLI · waiting on the owners · added 2026-10-28
 - [ ] Tell the agent when the winter hours end, with the new hours. It will update `business.ts`, and you'll update the Google Business Profile the same day · winter hours run until further notice, no end date planned · added 2026-11-04
 
 ## ✅ Done recently
 
+- 2026-11-05 Installed the Square CLI and signed it in. Square now has the Crispy Barbacoa Taco name and separate Chuy's Style and Street Style items, and the site matches. Confirmed (559) 385-6843 is the right phone (it's in Square).
 - 2026-11-04 Flagged the masa and trompo copy and set the winter hours (Mon–Fri 10 AM – 4 PM). All three are live on the site.
 - 2026-11-04 Answered Birria vs Quesabirria: Birria and Barbacoa are meats, while the Quesabirria and Crispy Barbacoa Taco are dishes. The cards became "Pick your meat".
 - 2026-11-04 Supplied the Instagram and Facebook URLs, which are now in the footer and the JSON-LD

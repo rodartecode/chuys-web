@@ -32,10 +32,12 @@ The dev server boots without `.dev.vars`. Only `/api/inquiry` is affected: Turns
 | `pnpm test` | `test:unit`, then `test:e2e` |
 | `pnpm test:unit` | Vitest over `tests/unit/` |
 | `pnpm test:e2e` | Playwright over `tests/e2e/`. Starts `pnpm dev` on 4321, or reuses one that's already running |
-| `pnpm lint` | Biome lint over `src/`, `tests/` and the root `*.config.ts` files |
+| `pnpm lint` | Biome lint over `src/`, `tests/`, `scripts/` and the root `*.config.ts` files |
 | `pnpm lint:fix` | Biome auto-fix |
 | `pnpm lint:styles` | Stylelint over `.css` and `.astro` `<style>` blocks |
 | `pnpm format` | Biome format |
+| `pnpm menu:pull` | Rewrites `docs/menu/square-catalog.csv` from the live Square catalog (read-only; needs the Square CLI signed in). See [Square CLI](#square-cli) |
+| `pnpm skills:square` | Installs the Square CLI's agent skills for this project, trimmed to 6 (gitignored, once per machine) |
 
 Before committing, the minimum useful gate is:
 
@@ -105,7 +107,16 @@ pnpm build && grep -nE "TODO|TBD" dist/client/index.html   # should print nothin
 
 ### Add a menu item
 
-Edit `src/data/menu.ts`. For a meat card ("Pick your meat"), push a new object to `menuHighlights`; the grid auto-fills. Dishes built on one meat, such as the Quesabirria, belong in `fullMenu` instead. For the full menu, add the item to its category in `fullMenu`, and to `docs/menu/square-catalog-*.csv` if it is new in Square. The unit test fails until the two agree. To show a name the owners haven't changed in Square yet, set `name` to the new one and `squareName` to Square's; once Square is renamed, update the CSV and drop `squareName`. Never add prices: Cash App is the source of truth.
+Edit `src/data/menu.ts`. For a meat card ("Pick your meat"), push a new object to `menuHighlights`; the grid auto-fills. Dishes built on one meat, such as the Quesabirria, belong in `fullMenu` instead. For the full menu, run `pnpm menu:pull` to bring `docs/menu/square-catalog.csv` up to date with Square, then add the item to its category in `fullMenu`. The unit test fails until the two agree. To show a name the owners haven't changed in Square yet, set `name` to the new one and `squareName` to Square's; once Square is renamed, re-pull and drop `squareName`. Square's separate "Chuy's Style X" and "Street Style X" items go in `squareVariants` on item X, whose description covers both styles, instead of getting their own entries. Never add prices: Cash App is the source of truth.
+
+### Square CLI
+
+The [Square CLI](https://developer.squareup.com/docs/cli) (`npm install -g @square/cli`) reads the owners' Square account: catalog, location hours and phone, channels, and sales reports.
+
+- **Sign in:** `square auth login` opens a browser for OAuth. The grant lasts about 30 days. It ignores access tokens, so it can't run in CI or Workers Builds. That's why `pnpm menu:pull` is a local step and the CSV is committed.
+- **Live account:** there's no sandbox. `catalog item update`, `upsert` and `delete` change the owners' POS and the Cash App order page immediately, with no `--force` or preview step. `.claude/settings.json` allows read commands and makes Claude ask before any write.
+- **Which items `menu:pull` keeps:** not archived, and sold in at least one active channel other than Point of Sale. That matches the export's "Square Online Item Visibility" column. Category is the reporting category.
+- **Agent skills:** `pnpm skills:square` runs `square skills add --no-global` and keeps `square`, `square-cli`, `square-catalog`, `square-locations`, `square-reporting` and `square-online` out of ~107. They land in `.agents/skills/`, symlinked into `.claude/skills/`. Both folders are gitignored, because the skills are Square's proprietary files and the repo is public. Re-run it on each machine and after upgrading the CLI. To keep a different set, edit `KEEP` in `scripts/skills-square.mjs`.
 
 ### Add a catering package
 
@@ -161,4 +172,4 @@ The endpoint returned `{"error":"captcha"}`. Either the token was missing or exp
 - `inquiry.from` in `src/data/business.ts` isn't on a domain verified in Resend (`mail.chuystacos.com`).
 
 ---
-Last updated: 2026-10-29
+Last updated: 2026-11-05
