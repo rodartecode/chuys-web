@@ -75,6 +75,8 @@ The `errors` array contains every failing rule from this set:
 
 The form shows "We couldn't verify you're human" and resets the widget.
 
+The Worker logs why, without the token or secret. When siteverify rejects our secret (`missing-input-secret` or `invalid-input-secret`), it logs `console.error("Turnstile secret rejected by siteverify", codes)`, so a misconfigured secret doesn't look like a bot rejection. Other failures, such as `invalid-input-response` or `timeout-or-duplicate`, go to `console.warn("Turnstile check failed", codes)`. A siteverify HTTP error logs its status. Watch the logs with `pnpm exec wrangler tail`.
+
 #### `400 Bad Request` — malformed JSON or a non-object body
 
 ```json

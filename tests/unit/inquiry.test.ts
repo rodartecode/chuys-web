@@ -236,6 +236,33 @@ describe("POST /api/inquiry", () => {
       expect(callsTo(fetchMock, RESEND)).toHaveLength(0);
     });
 
+    it("logs a rejected secret as an error, without sending email", async () => {
+      const fetchMock = stubFetch({
+        siteverify: () =>
+          Response.json({ success: false, "error-codes": ["invalid-input-secret"] }),
+      });
+      const res = await post(valid);
+
+      expect(res.status).toBe(400);
+      expect(await res.json()).toEqual({ ok: false, error: "captcha" });
+      expect(callsTo(fetchMock, RESEND)).toHaveLength(0);
+      expect(console.error).toHaveBeenCalledWith("Turnstile secret rejected by siteverify", [
+        "invalid-input-secret",
+      ]);
+    });
+
+    it("logs an ordinary token failure as a warning", async () => {
+      stubFetch({
+        siteverify: () =>
+          Response.json({ success: false, "error-codes": ["timeout-or-duplicate"] }),
+      });
+      const res = await post(valid);
+
+      expect(res.status).toBe(400);
+      expect(console.warn).toHaveBeenCalledWith("Turnstile check failed", ["timeout-or-duplicate"]);
+      expect(console.error).not.toHaveBeenCalled();
+    });
+
     it("treats a siteverify outage as a failed check", async () => {
       const fetchMock = stubFetch({ siteverify: () => new Response("busy", { status: 503 }) });
       const res = await post(valid);
@@ -243,6 +270,7 @@ describe("POST /api/inquiry", () => {
       expect(res.status).toBe(400);
       expect(await res.json()).toEqual({ ok: false, error: "captcha" });
       expect(callsTo(fetchMock, RESEND)).toHaveLength(0);
+      expect(console.error).toHaveBeenCalledWith("Turnstile siteverify returned HTTP 503");
     });
   });
 

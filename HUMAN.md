@@ -66,7 +66,7 @@
 ## ⏳ Waiting on something else
 
 - [ ] Collect owner content: the family story and founding year, a pull quote, catering package names, descriptions and pricing, a hero photo, menu photos and a PDF menu. To see where each one goes, run `grep -rn "TODO(owner)" src/` · waiting on the owners · added 2026-10-28
-- [ ] Tell the agent when the winter hours end, with the new hours. It will update `business.ts`, and you'll update the Google Business Profile the same day · waiting on spring · added 2026-11-04
+- [ ] Tell the agent when the winter hours end, with the new hours. It will update `business.ts`, and you'll update the Google Business Profile the same day · winter hours run until further notice, no end date planned · added 2026-11-04
 
 ## ✅ Done recently
 

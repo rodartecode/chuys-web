@@ -46,6 +46,9 @@ function isUpcomingDate(value: string): boolean {
   return value >= earliest;
 }
 
+/** siteverify error codes that mean our secret is wrong, not that the visitor is a bot. */
+const SECRET_ERRORS = new Set(["missing-input-secret", "invalid-input-secret"]);
+
 async function verifyTurnstile(secret: string, token: string, ip: string | null): Promise<boolean> {
   const body = new FormData();
   body.set("secret", secret);
@@ -55,9 +58,21 @@ async function verifyTurnstile(secret: string, token: string, ip: string | null)
     method: "POST",
     body,
   });
-  if (!res.ok) return false;
-  const outcome = (await res.json()) as { success?: boolean };
-  return outcome.success === true;
+  if (!res.ok) {
+    console.error(`Turnstile siteverify returned HTTP ${res.status}`);
+    return false;
+  }
+  const outcome = (await res.json()) as { success?: boolean; "error-codes"?: string[] };
+  if (outcome.success === true) return true;
+
+  // Log why, so a bad secret doesn't pass for a bot rejection. Never log the token or secret.
+  const codes = outcome["error-codes"] ?? [];
+  if (codes.some((code) => SECRET_ERRORS.has(code))) {
+    console.error("Turnstile secret rejected by siteverify", codes);
+  } else {
+    console.warn("Turnstile check failed", codes);
+  }
+  return false;
 }
 
 export const POST: APIRoute = async ({ request }) => {
